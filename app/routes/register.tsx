@@ -42,13 +42,24 @@ export async function action({ request, context }: ActionFunctionArgs) {
     email,
     password,
   });
+  
+  console.log('--- SUPABASE SIGNUP RESPONSE ---');
+  console.log('Data:', JSON.stringify(data, null, 2));
+  console.log('Error:', error);
+  console.log('--------------------------------');
 
   if (error || !data.user) {
     let errorMessage = 'Failed to create account. Please try again.';
     if (error?.message && error.message !== '{}') {
       errorMessage = error.message;
+    } else if (error?.error_description && error.error_description !== '{}') {
+      errorMessage = error.error_description;
+    } else if (error?.msg && error.msg !== '{}') {
+      errorMessage = error.msg;
     } else if (typeof error === 'string' && error !== '{}') {
       errorMessage = error;
+    } else if (error && typeof error === 'object' && Object.keys(error).length > 0) {
+      errorMessage = `System Error: ${JSON.stringify(error)}`;
     }
 
     return Response.json(

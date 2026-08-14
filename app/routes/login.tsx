@@ -38,8 +38,14 @@ export async function action({ request, context }: ActionFunctionArgs) {
     let errorMessage = 'Invalid email or password. Please try again.';
     if (error?.message && error.message !== '{}') {
       errorMessage = error.message;
+    } else if (error?.error_description && error.error_description !== '{}') {
+      errorMessage = error.error_description;
+    } else if (error?.msg && error.msg !== '{}') {
+      errorMessage = error.msg;
     } else if (typeof error === 'string' && error !== '{}') {
       errorMessage = error;
+    } else if (error && typeof error === 'object' && Object.keys(error).length > 0) {
+      errorMessage = `System Error: ${JSON.stringify(error)}`;
     }
     
     return Response.json(
