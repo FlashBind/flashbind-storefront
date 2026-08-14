@@ -12,13 +12,19 @@ import {
   useMatches,
 } from 'react-router';
 import type {Route} from './+types/root';
-import favicon from '~/assets/favicon.svg';
 import {FOOTER_QUERY, HEADER_QUERY} from '~/lib/fragments';
 import resetStyles from '~/styles/reset.css?url';
 import appStyles from '~/styles/app.css?url';
 import {PageLayout} from './components/PageLayout';
 
 export type RootLoader = typeof loader;
+
+export const meta: Route.MetaFunction = () => {
+  return [
+    {title: 'FlashBind'},
+    {name: 'description', content: 'Custom NFC solutions for businesses'},
+  ];
+};
 
 /**
  * This is important to avoid re-fetching root queries on sub-navigations
@@ -62,7 +68,7 @@ export function links() {
       rel: 'preconnect',
       href: 'https://shop.app',
     },
-    {rel: 'icon', type: 'image/svg+xml', href: favicon},
+    {rel: 'icon', type: 'image/png', href: '/flashbind-icon.png'},
   ];
 }
 

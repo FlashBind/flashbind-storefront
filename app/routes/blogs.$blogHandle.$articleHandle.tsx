@@ -4,7 +4,7 @@ import {Image} from '@shopify/hydrogen';
 import {redirectIfHandleIsLocalized} from '~/lib/redirect';
 
 export const meta: Route.MetaFunction = ({data}) => {
-  return [{title: `Hydrogen | ${data?.article.title ?? ''} article`}];
+  return [{title: `FlashBind | ${data?.article.title ?? ''} article`}];
 };
 
 export async function loader(args: Route.LoaderArgs) {
@@ -146,12 +146,12 @@ export default function Article() {
             <div className="text-gray-800 text-lg leading-relaxed space-y-6">
               <h2 className="text-2xl md:text-3xl font-bold text-gray-900">Redefining the Guest Experience</h2>
               <p>
-                The hospitality industry is built on seamless experiences. Yet, for the last few years, we've forced guests to navigate a clunky digital hurdle before they can even order a drink: the QR code. It’s time for an upgrade.
+                The hospitality industry is built on seamless experiences. Yet, for the last few years, we've forced guests to navigate a clunky digital hurdle before they can even order a drink: the QR code. Itâ€™s time for an upgrade.
               </p>
               
               <h2 className="text-2xl md:text-3xl font-bold text-gray-900 pt-6">The Problem with QR Code Fatigue</h2>
               <p>
-                We’ve all been there. You sit down at a dimly lit restaurant, pull out your phone, open the camera, and try to focus on a scratched sticker stuck to the table. Maybe the glare is too harsh, or the camera won't focus. When it finally works, you're prompted to accept cookies, download a PDF, or pinch-and-zoom around a poorly formatted webpage. 
+                Weâ€™ve all been there. You sit down at a dimly lit restaurant, pull out your phone, open the camera, and try to focus on a scratched sticker stuck to the table. Maybe the glare is too harsh, or the camera won't focus. When it finally works, you're prompted to accept cookies, download a PDF, or pinch-and-zoom around a poorly formatted webpage. 
               </p>
               <p>
                 While QR codes served a purpose during the shift to contactless dining, they introduce unnecessary friction. In an industry where every second of staff time counts, technology should be invisible and instantaneous.
@@ -181,14 +181,14 @@ export default function Article() {
 
               <h2 className="text-2xl md:text-3xl font-bold text-gray-900 pt-6">The Future is Frictionless</h2>
               <p>
-                Customers judge your brand by the quality of their interactions with it. Upgrading to NFC technology signals that a venue values its guests' time and embraces modern convenience. It’s no longer just about going digital; it’s about making the digital experience as effortless as possible.
+                Customers judge your brand by the quality of their interactions with it. Upgrading to NFC technology signals that a venue values its guests' time and embraces modern convenience. Itâ€™s no longer just about going digital; itâ€™s about making the digital experience as effortless as possible.
               </p>
             </div>
           ) : article.handle === 'google-review-seo' ? (
             <div className="text-gray-800 text-lg leading-relaxed space-y-6">
               <h2 className="text-2xl md:text-3xl font-bold text-gray-900">The Secret Weapon for Local Search</h2>
               <p>
-                If you run a local brick-and-mortar business, you already know that Google is the ultimate battleground. When a potential customer searches for "best coffee near me" or "dentist in town," they don't scroll past the first three results. They look at the "Local Pack"—the top three map listings—and they make their decision based on one metric: the stars.
+                If you run a local brick-and-mortar business, you already know that Google is the ultimate battleground. When a potential customer searches for "best coffee near me" or "dentist in town," they don't scroll past the first three results. They look at the "Local Pack"â€”the top three map listingsâ€”and they make their decision based on one metric: the stars.
               </p>
               <p>
                 But getting into those top three spots isn't just about having a website. Google's local search algorithm heavily prioritizes businesses with a high volume of recent, positive, and authentic reviews. 
@@ -267,7 +267,7 @@ export default function Article() {
             to="/blog" 
             className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-white/80 backdrop-blur shadow-sm border border-slate-200 text-slate-600 font-medium hover:text-[#1E3A8A] hover:border-[#1E3A8A]/30 hover:shadow-md transition-all duration-300 group"
           >
-            <span className="transform group-hover:-translate-x-1 transition-transform">←</span> 
+            <span className="transform group-hover:-translate-x-1 transition-transform">â†</span> 
             Back to Journal
           </Link>
         </div>

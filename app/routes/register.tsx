@@ -44,8 +44,15 @@ export async function action({ request, context }: ActionFunctionArgs) {
   });
 
   if (error || !data.user) {
+    let errorMessage = 'Failed to create account. Please try again.';
+    if (error?.message && error.message !== '{}') {
+      errorMessage = error.message;
+    } else if (typeof error === 'string' && error !== '{}') {
+      errorMessage = error;
+    }
+
     return Response.json(
-      { error: error?.message || 'Failed to create account. Please try again.' },
+      { error: errorMessage },
       { status: 400 }
     );
   }
