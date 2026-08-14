@@ -36,7 +36,9 @@ export async function action({ request, context }: ActionFunctionArgs) {
 
   if (error || !data.user) {
     let errorMessage = 'Invalid email or password. Please try again.';
-    if (error?.message && error.message !== '{}') {
+    if (error?.name === 'AuthRetryableFetchError') {
+      errorMessage = 'Unable to connect to the authentication server. Please check your internet connection or try again later.';
+    } else if (error?.message && error.message !== '{}') {
       errorMessage = error.message;
     } else if (error?.error_description && error.error_description !== '{}') {
       errorMessage = error.error_description;

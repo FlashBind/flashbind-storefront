@@ -68,7 +68,7 @@ export function links() {
       rel: 'preconnect',
       href: 'https://shop.app',
     },
-    {rel: 'icon', type: 'image/png', href: '/flashbind-icon.png'},
+    {rel: 'icon', type: 'image/png', href: '/flashbind-bolt-icon.png'},
   ];
 }
 
