@@ -215,7 +215,7 @@ export default function Homepage() {
                 <h3 className="text-2xl font-bold text-slate-900 mb-4">Google Reviews</h3>
                 <p className="text-slate-600 leading-relaxed mb-8 text-sm md:text-base">Direct customers instantly to your Google Review page with a single tap. Built for storefronts, cafes, and reception desks.</p>
                 <Link to={PRODUCT_ROUTES.googleReview} className="text-slate-900 font-bold text-sm inline-flex items-center gap-2 hover:text-[#1E3A8A] transition-colors">
-                  Learn more <span className="transform group-hover:translate-x-1 transition-transform">â†’</span>
+                  Learn more <span className="transform group-hover:translate-x-1 transition-transform">&rarr;</span>
                 </Link>
               </div>
               {/* Standardized Review Mockup */}
@@ -232,7 +232,7 @@ export default function Homepage() {
                 <h3 className="text-2xl font-bold text-slate-900 mb-4">Smart Pet Tags</h3>
                 <p className="text-slate-600 leading-relaxed mb-8 text-sm md:text-base">Keep your best friend safe. A quick tap by any smartphone reveals the owner's contact info and pet details instantly.</p>
                 <Link to={PRODUCT_ROUTES.petTag} className="text-slate-900 font-bold text-sm inline-flex items-center gap-2 hover:text-[#1E3A8A] transition-colors">
-                  Learn more <span className="transform group-hover:translate-x-1 transition-transform">â†’</span>
+                  Learn more <span className="transform group-hover:translate-x-1 transition-transform">&rarr;</span>
                 </Link>
               </div>
               {/* Standardized Cooper Preview */}
@@ -249,7 +249,7 @@ export default function Homepage() {
                 <h3 className="text-2xl font-bold text-slate-900 mb-4">Tap-to-View Menus</h3>
                 <p className="text-slate-600 leading-relaxed mb-8 text-sm md:text-base">Modernize your hospitality business. Let customers tap your tabletop stands to view your digital menu instantly.</p>
                 <Link to={PRODUCT_ROUTES.menu} className="text-slate-900 font-bold text-sm inline-flex items-center gap-2 hover:text-[#1E3A8A] transition-colors">
-                  Learn more <span className="transform group-hover:translate-x-1 transition-transform">â†’</span>
+                  Learn more <span className="transform group-hover:translate-x-1 transition-transform">&rarr;</span>
                 </Link>
               </div>
               {/* Standardized Menu Mockup */}
@@ -266,7 +266,7 @@ export default function Homepage() {
                 <h3 className="text-2xl font-bold text-slate-900 mb-4">Guest Wi-Fi</h3>
                 <p className="text-slate-600 leading-relaxed mb-8 text-sm md:text-base">No more spelling out complex passwords. Customers can instantly connect to your guest Wi-Fi with a single tap.</p>
                 <Link to={PRODUCT_ROUTES.wifi} className="text-slate-900 font-bold text-sm inline-flex items-center gap-2 hover:text-[#1E3A8A] transition-colors">
-                  Learn more <span className="transform group-hover:translate-x-1 transition-transform">â†’</span>
+                  Learn more <span className="transform group-hover:translate-x-1 transition-transform">&rarr;</span>
                 </Link>
               </div>
               {/* Standardized Wifi Mockup */}
