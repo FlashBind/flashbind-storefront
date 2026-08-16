@@ -72,7 +72,7 @@ export default function ContactPage() {
               </button>
             </div>
           ) : (
-            <form action="https://formspree.io/f/mzdlqrpl" method="POST" onSubmit={handleSubmit} className="space-y-6">
+            <form action="https://formspree.io/f/mzdlqrpl" method="POST" encType="multipart/form-data" onSubmit={handleSubmit} className="space-y-6">
               {status === 'error' && (
                 <div className="p-4 bg-red-50 border border-red-200 text-red-600 rounded-xl text-sm font-semibold">
                   Oops! There was a problem submitting your form. Please try again.
@@ -91,6 +91,54 @@ export default function ContactPage() {
                   className="w-full px-5 py-4 rounded-xl border border-slate-200 bg-white/50 focus:bg-white focus:border-[#1E3A8A] focus:ring-2 focus:ring-[#1E3A8A]/20 transition-all outline-none text-slate-900"
                 />
               </div>
+
+              <div className="space-y-3">
+                <label className="block text-sm font-bold text-slate-900">
+                  Do you already have a design ready?
+                </label>
+                <div className="flex gap-6">
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input 
+                      type="radio" 
+                      name="has_design" 
+                      value="yes" 
+                      checked={hasDesign === 'yes'}
+                      onChange={(e) => setHasDesign(e.target.value)}
+                      className="w-4 h-4 text-[#1E3A8A] focus:ring-[#1E3A8A] border-slate-300"
+                    />
+                    <span className="text-sm font-medium text-slate-700">Yes, I have a design</span>
+                  </label>
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input 
+                      type="radio" 
+                      name="has_design" 
+                      value="no" 
+                      checked={hasDesign === 'no'}
+                      onChange={(e) => setHasDesign(e.target.value)}
+                      className="w-4 h-4 text-[#1E3A8A] focus:ring-[#1E3A8A] border-slate-300"
+                    />
+                    <span className="text-sm font-medium text-slate-700">No, I need one</span>
+                  </label>
+                </div>
+              </div>
+
+              {hasDesign === 'yes' && (
+                <div className="animate-in fade-in slide-in-from-top-2 duration-300">
+                  <label htmlFor="design_attachment" className="block text-sm font-bold text-slate-900 mb-2">
+                    Attach Your Design
+                  </label>
+                  <input
+                    type="file"
+                    id="design_attachment"
+                    name="attachment"
+                    accept="image/*,.pdf,.ai,.eps,.psd"
+                    className="w-full text-sm text-slate-500 file:mr-4 file:py-3 file:px-6 file:rounded-xl file:border-0 file:text-sm file:font-bold file:bg-[#1E3A8A]/10 file:text-[#1E3A8A] hover:file:bg-[#1E3A8A]/20 transition-all cursor-pointer border border-slate-200 rounded-xl bg-white/50"
+                  />
+                  <p className="text-xs text-slate-500 mt-2 font-medium">
+                    Upload your logo or design (PNG, JPG, PDF, AI). 
+                  </p>
+                </div>
+              )}
 
               <div>
                 <label htmlFor="message" className="block text-sm font-bold text-slate-900 mb-2">
