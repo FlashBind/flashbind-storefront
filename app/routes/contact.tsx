@@ -7,6 +7,7 @@ export const meta: MetaFunction = () => {
 
 export default function ContactPage() {
   const [status, setStatus] = useState<'' | 'submitting' | 'succeeded' | 'error'>('');
+  const [hasDesign, setHasDesign] = useState<string>('no');
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
