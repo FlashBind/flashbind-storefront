@@ -34,7 +34,7 @@ export default function ServicesPage() {
             </div>
             <h2 className="relative z-10 text-3xl md:text-5xl font-extrabold text-slate-900 tracking-tight mb-6">Custom White-Labeling</h2>
             <p className="relative z-10 text-lg md:text-xl text-slate-600 leading-relaxed mb-10 max-w-2xl">Want your logo on our hardware? We offer custom UV printing for corporate orders and restaurant chains. Ensure every tap reflects your unique brand identity perfectly.</p>
-            <Link to="/contact" className="relative z-10 w-full sm:w-auto inline-block text-center px-10 py-4 bg-slate-900 text-white font-bold rounded-full hover:bg-[#1E3A8A] hover:scale-105 shadow-[0_10px_20px_rgba(0,0,0,0.1)] transition-all duration-300 text-lg">
+            <Link to="/quote" className="relative z-10 w-full sm:w-auto inline-block text-center px-10 py-4 bg-slate-900 text-white font-bold rounded-full hover:bg-[#1E3A8A] hover:scale-105 shadow-[0_10px_20px_rgba(0,0,0,0.1)] transition-all duration-300 text-lg">
               Request a Quote
             </Link>
           </div>
@@ -49,7 +49,7 @@ export default function ServicesPage() {
             </div>
             <h2 className="relative z-10 text-3xl md:text-5xl font-extrabold text-slate-900 tracking-tight mb-6">Bulk NFC Encoding</h2>
             <p className="relative z-10 text-lg md:text-xl text-slate-600 leading-relaxed mb-10 max-w-2xl">Save time. We can pre-program your entire order with your custom URLs or Wi-Fi payloads before shipping. Deploy thousands of units instantly with zero manual setup.</p>
-            <Link to="/contact" className="relative z-10 w-full sm:w-auto inline-block text-center px-10 py-4 bg-slate-900 text-white font-bold rounded-full hover:bg-[#1E3A8A] hover:scale-105 shadow-[0_10px_20px_rgba(0,0,0,0.1)] transition-all duration-300 text-lg">
+            <Link to="/quote" className="relative z-10 w-full sm:w-auto inline-block text-center px-10 py-4 bg-slate-900 text-white font-bold rounded-full hover:bg-[#1E3A8A] hover:scale-105 shadow-[0_10px_20px_rgba(0,0,0,0.1)] transition-all duration-300 text-lg">
               Contact Sales
             </Link>
           </div>
