@@ -10,9 +10,12 @@ export async function action({ request, context }: ActionFunctionArgs) {
     return data({ error: 'Email is required', success: false }, { status: 400 });
   }
 
+  const isLocalhost = request.url.includes('localhost') || request.url.includes('127.0.0.1');
+  const origin = isLocalhost ? 'http://localhost:3000' : 'https://flashbind.com';
+
   const supabase = getSupabase(context);
   const { error } = await supabase.auth.resetPasswordForEmail(email, {
-    redirectTo: `${new URL(request.url).origin}/reset-password`,
+    redirectTo: `${origin}/reset-password`,
   });
 
   if (error) {
