@@ -42,11 +42,6 @@ export async function action({ request, context }: ActionFunctionArgs) {
     email,
     password,
   });
-  
-  console.log('--- SUPABASE SIGNUP RESPONSE ---');
-  console.log('Data:', JSON.stringify(data, null, 2));
-  console.log('Error:', error);
-  console.log('--------------------------------');
 
   if (error || !data.user) {
     let errorMessage = 'Failed to create account. Please try again.';
