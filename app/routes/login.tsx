@@ -21,11 +21,32 @@ export async function action({ request, context }: ActionFunctionArgs) {
   const formData = await request.formData();
   const email = formData.get('email') as string;
   const password = formData.get('password') as string;
+  const intent = formData.get('intent') as string;
   const url = new URL(request.url);
   const redirectTo = url.searchParams.get('redirectTo') || '/dashboard';
 
+  if (intent === 'resend') {
+    if (!email) return Response.json({ error: 'Email is required to resend confirmation.' }, { status: 400 });
+    const isLocalhost = request.url.includes('localhost') || request.url.includes('127.0.0.1');
+    const origin = isLocalhost ? 'http://localhost:3000' : 'https://flashbind.com';
+
+    const supabase = getSupabase(context);
+    const { error } = await supabase.auth.resend({
+      type: 'signup',
+      email,
+      options: {
+        emailRedirectTo: `${origin}${redirectTo}`,
+      }
+    });
+
+    if (error) {
+      return Response.json({ error: 'Failed to resend confirmation email.' }, { status: 400 });
+    }
+    return Response.json({ success: 'Confirmation email resent! Please check your inbox (and spam folder).' });
+  }
+
   if (!email || !password) {
-    return { error: 'Please provide both email and password.' };
+    return Response.json({ error: 'Please provide both email and password.' }, { status: 400 });
   }
 
   const supabase = getSupabase(context);
@@ -36,22 +57,19 @@ export async function action({ request, context }: ActionFunctionArgs) {
 
   if (error || !data.user) {
     let errorMessage = 'Invalid email or password. Please try again.';
-    if (error?.name === 'AuthRetryableFetchError') {
+    let needsConfirmation = false;
+    
+    if (error?.message?.includes('Email not confirmed')) {
+      errorMessage = 'Your email address has not been confirmed yet.';
+      needsConfirmation = true;
+    } else if (error?.name === 'AuthRetryableFetchError') {
       errorMessage = 'Unable to connect to the authentication server. Please check your internet connection or try again later.';
     } else if (error?.message && error.message !== '{}') {
       errorMessage = error.message;
-    } else if (error?.error_description && error.error_description !== '{}') {
-      errorMessage = error.error_description;
-    } else if (error?.msg && error.msg !== '{}') {
-      errorMessage = error.msg;
-    } else if (typeof error === 'string' && error !== '{}') {
-      errorMessage = error;
-    } else if (error && typeof error === 'object' && Object.keys(error).length > 0) {
-      errorMessage = `System Error: ${JSON.stringify(error)}`;
     }
-    
+
     return Response.json(
-      { error: errorMessage },
+      { error: errorMessage, needsConfirmation, email },
       { status: 400 }
     );
   }
@@ -92,8 +110,23 @@ export default function LoginPage() {
         </div>
 
         {actionData?.error && (
-          <div className="mb-4 p-3 bg-red-50 text-red-600 rounded-xl text-sm font-semibold text-center">
-            {actionData.error}
+          <div className="mb-4 p-3 bg-red-50 text-red-600 rounded-xl text-sm font-semibold text-center flex flex-col items-center gap-2">
+            <span>{actionData.error}</span>
+            {actionData.needsConfirmation && (
+              <Form method="post" action={`/login?redirectTo=${encodeURIComponent(redirectTo)}`}>
+                <input type="hidden" name="intent" value="resend" />
+                <input type="hidden" name="email" value={actionData.email} />
+                <button type="submit" className="text-blue-700 hover:text-blue-800 hover:underline font-bold bg-transparent border-none p-0 cursor-pointer text-sm transition-colors">
+                  Resend Confirmation Email
+                </button>
+              </Form>
+            )}
+          </div>
+        )}
+
+        {actionData?.success && (
+          <div className="mb-4 p-3 bg-green-50 text-green-700 rounded-xl text-sm font-semibold text-center">
+            {actionData.success}
           </div>
         )}
 
