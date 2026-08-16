@@ -1,82 +1,56 @@
 import type {MetaFunction} from 'react-router';
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
+import {useSearchParams} from 'react-router';
 
 export const meta: MetaFunction = () => {
   return [{title: 'FlashBind | Contact Us'}];
 };
 
 export default function ContactPage() {
-  const [status, setStatus] = useState<'' | 'submitting' | 'succeeded' | 'error'>('');
+  const [searchParams] = useSearchParams();
+  const isSuccess = searchParams.get('success') === 'true';
+  const [status, setStatus] = useState<'' | 'succeeded'>(isSuccess ? 'succeeded' : '');
   const [hasDesign, setHasDesign] = useState<string>('no');
+  const [redirectUrl, setRedirectUrl] = useState('');
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setStatus('submitting');
-    const form = e.currentTarget;
-    const data = new FormData(form);
-    
-    fetch(form.action, {
-      method: form.method,
-      body: data,
-      headers: {
-        'Accept': 'application/json'
-      }
-    }).then(response => {
-      if (response.ok) {
-        setStatus('succeeded');
-        form.reset();
-      } else {
-        response.json().then(data => {
-            if (Object.prototype.hasOwnProperty.call(data, 'message')) {
-              alert("Error: " + data.message);
-            } else {
-              alert("Oops! There was a problem submitting your form.");
-            }
-            setStatus('error');
-          }).catch(() => {
-            alert("Error parsing response.");
-            setStatus('error');
-          });
-        }
-      }).catch(error => {
-        console.error("Fetch Network Error:", error);
-        alert("Network Error: Could not connect. Please check your internet connection.");
-        setStatus('error');
-      });
-    };
-    return (
-      <div className="min-h-screen bg-[#FDFCF8] relative overflow-hidden flex items-center justify-center py-24">
-        {/* Background glow */}
-        <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none -z-10">
-          <div className="absolute top-[10%] -left-[10%] w-[500px] h-[500px] bg-[#F5F4EE] rounded-full blur-[100px] opacity-80"></div>
-          <div className="absolute bottom-[10%] -right-[10%] w-[500px] h-[500px] bg-blue-50 rounded-full blur-[100px] opacity-60"></div>
-        </div>
-  
-        <div className="container mx-auto px-6 max-w-lg relative z-10">
-          <div className="bg-white/60 backdrop-blur-3xl rounded-[2.5rem] border-2 border-white shadow-[0_8px_30px_rgb(0,0,0,0.04)] p-10">
-            <div className="text-center mb-10">
-              <h1 className="text-4xl font-extrabold text-slate-900 tracking-tight mb-4">Contact Us</h1>
-              <p className="text-slate-500 text-lg">
-                Have questions about bulk encoding, white-labeling, or anything else? Send us a message and we'll get right back to you.
-              </p>
+  useEffect(() => {
+    setRedirectUrl(window.location.origin + '/contact?success=true');
+  }, []);
+
+  return (
+    <div className="min-h-screen bg-[#FDFCF8] relative overflow-hidden flex items-center justify-center py-24">
+      {/* Background glow */}
+      <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none -z-10">
+        <div className="absolute top-[10%] -left-[10%] w-[500px] h-[500px] bg-[#F5F4EE] rounded-full blur-[100px] opacity-80"></div>
+        <div className="absolute bottom-[10%] -right-[10%] w-[500px] h-[500px] bg-blue-50 rounded-full blur-[100px] opacity-60"></div>
+      </div>
+
+      <div className="container mx-auto px-6 max-w-lg relative z-10">
+        <div className="bg-white/60 backdrop-blur-3xl rounded-[2.5rem] border-2 border-white shadow-[0_8px_30px_rgb(0,0,0,0.04)] p-10">
+          <div className="text-center mb-10">
+            <h1 className="text-4xl font-extrabold text-slate-900 tracking-tight mb-4">Contact Us</h1>
+            <p className="text-slate-500 text-lg">
+              Have questions about bulk encoding, white-labeling, or anything else? Send us a message and we'll get right back to you.
+            </p>
+          </div>
+
+          {status === 'succeeded' ? (
+            <div className="bg-emerald-50 border border-emerald-200 text-emerald-800 p-8 rounded-2xl text-center">
+              <h2 className="text-2xl font-bold mb-2">Message Sent!</h2>
+              <p>Thanks for reaching out. We'll get back to you shortly.</p>
+              <a 
+                href="/contact"
+                className="mt-6 px-6 py-2 bg-emerald-600 text-white font-bold rounded-lg hover:bg-emerald-700 transition-colors inline-block"
+              >
+                Send another message
+              </a>
             </div>
-  
-            {status === 'succeeded' ? (
-              <div className="bg-emerald-50 border border-emerald-200 text-emerald-800 p-8 rounded-2xl text-center">
-                <h2 className="text-2xl font-bold mb-2">Message Sent!</h2>
-                <p>Thanks for reaching out. We'll get back to you shortly.</p>
-                <button 
-                  onClick={() => setStatus('')}
-                  className="mt-6 px-6 py-2 bg-emerald-600 text-white font-bold rounded-lg hover:bg-emerald-700 transition-colors"
-                >
-                  Send another message
-                </button>
-              </div>
-            ) : (
-              <form action="https://api.web3forms.com/submit" method="POST" encType="multipart/form-data" onSubmit={handleSubmit} className="space-y-6">
-                <input type="hidden" name="access_key" value="4fe03905-e3fa-46e8-a387-364c3763d0ad" />
-                <input type="hidden" name="subject" value="New Contact/Design Request from FlashBind" />
-                <input type="checkbox" name="botcheck" className="hidden" style={{ display: 'none' }} />
+          ) : (
+            <form action="https://api.web3forms.com/submit" method="POST" encType="multipart/form-data" className="space-y-6">
+              <input type="hidden" name="access_key" value="4fe03905-e3fa-46e8-a387-364c3763d0ad" />
+              <input type="hidden" name="subject" value="New Contact/Design Request from FlashBind" />
+              <input type="hidden" name="redirect" value={redirectUrl} />
+              <input type="checkbox" name="botcheck" className="hidden" style={{ display: 'none' }} />
                 
                 {status === 'error' && (
                   <div className="p-4 bg-red-50 border border-red-200 text-red-600 rounded-xl text-sm font-semibold">
