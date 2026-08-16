@@ -37,10 +37,16 @@ export async function action({ request, context }: ActionFunctionArgs) {
     return { error: 'Password must be at least 6 characters long.' };
   }
 
+  const isLocalhost = request.url.includes('localhost') || request.url.includes('127.0.0.1');
+  const origin = isLocalhost ? 'http://localhost:3000' : 'https://flashbind.com';
+
   const supabase = getSupabase(context);
   const { data, error } = await supabase.auth.signUp({
     email,
     password,
+    options: {
+      emailRedirectTo: `${origin}${redirectTo}`,
+    }
   });
 
   if (error || !data.user) {
