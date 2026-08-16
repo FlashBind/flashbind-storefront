@@ -39,10 +39,10 @@ export function PaginatedResourceSection<NodesType>({
                 className={resourcesClassName}
                 role={ariaLabel ? 'region' : undefined}
               >
-                {resourcesMarkup}
+                {resourcesMarkup as any}
               </div>
             ) : (
-              resourcesMarkup
+              <>{resourcesMarkup as any}</>
             )}
             <NextLink>
               {isLoading ? (

@@ -51,12 +51,7 @@ export default function ContactPage() {
               <input type="hidden" name="subject" value="New Contact/Design Request from FlashBind" />
               <input type="hidden" name="redirect" value={redirectUrl} />
               <input type="checkbox" name="botcheck" className="hidden" style={{ display: 'none' }} />
-                
-                {status === 'error' && (
-                  <div className="p-4 bg-red-50 border border-red-200 text-red-600 rounded-xl text-sm font-semibold">
-                    Oops! There was a problem submitting your form. Please try again.
-                  </div>
-                )}
+
               <div>
                 <label htmlFor="email" className="block text-sm font-bold text-slate-900 mb-2">
                   Email Address
@@ -135,10 +130,9 @@ export default function ContactPage() {
 
               <button
                 type="submit"
-                disabled={status === 'submitting'}
                 className="w-full px-8 py-4 bg-slate-900 text-white font-bold rounded-xl hover:bg-[#1E3A8A] hover:scale-[1.02] shadow-[0_10px_20px_rgba(0,0,0,0.1)] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
               >
-                {status === 'submitting' ? 'Sending...' : 'Send Message'}
+                Send Message
               </button>
             </form>
           )}

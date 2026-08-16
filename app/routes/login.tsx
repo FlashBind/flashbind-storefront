@@ -87,7 +87,7 @@ export async function action({ request, context }: ActionFunctionArgs) {
 }
 
 export default function LoginPage() {
-  const actionData = useActionData<typeof action>();
+  const actionData = useActionData<any>();
   const navigation = useNavigation();
   const [searchParams] = useSearchParams();
   const redirectTo = searchParams.get('redirectTo') || '';

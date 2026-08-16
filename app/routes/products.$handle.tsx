@@ -133,7 +133,7 @@ export default function Product() {
               <div className="w-full bg-white rounded-[2rem] overflow-hidden flex items-center justify-center border border-slate-100 relative group aspect-square shadow-[0_4px_20px_rgb(0,0,0,0.04)]">
                 <div className="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-10"></div>
                 <div className="w-full h-full transform transition-transform duration-700 ease-out group-hover:scale-105 flex items-center justify-center">
-                  <ProductImage image={activeImage} />
+                  <ProductImage image={activeImage as any} />
                 </div>
               </div>
               

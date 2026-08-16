@@ -55,10 +55,10 @@ export async function action({ request, context }: ActionFunctionArgs) {
       errorMessage = 'Unable to connect to the authentication server. Please check your internet connection or try again later.';
     } else if (error?.message && error.message !== '{}') {
       errorMessage = error.message;
-    } else if (error?.error_description && error.error_description !== '{}') {
-      errorMessage = error.error_description;
-    } else if (error?.msg && error.msg !== '{}') {
-      errorMessage = error.msg;
+    } else if ((error as any)?.error_description && (error as any).error_description !== '{}') {
+      errorMessage = (error as any).error_description;
+    } else if ((error as any)?.msg && (error as any).msg !== '{}') {
+      errorMessage = (error as any).msg;
     } else if (typeof error === 'string' && error !== '{}') {
       errorMessage = error;
     } else if (error && typeof error === 'object' && Object.keys(error).length > 0) {

@@ -12,7 +12,7 @@ export async function loader({ context }: LoaderFunctionArgs) {
     return redirect('/login?redirectTo=/admin/generate-tags');
   }
 
-  const adminEmail = context.env.ADMIN_EMAIL;
+  const adminEmail = (context.env as any).ADMIN_EMAIL;
   if (!adminEmail || userEmail !== adminEmail) {
     throw new Response('Not authorized', { status: 403 });
   }
@@ -26,7 +26,7 @@ export async function action({ request, context }: ActionFunctionArgs) {
     return redirect('/login?redirectTo=/admin/generate-tags');
   }
 
-  const adminEmail = context.env.ADMIN_EMAIL;
+  const adminEmail = (context.env as any).ADMIN_EMAIL;
   if (!adminEmail || userEmail !== adminEmail) {
     throw new Response('Not authorized', { status: 403 });
   }

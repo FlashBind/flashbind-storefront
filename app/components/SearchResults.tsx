@@ -121,8 +121,8 @@ function SearchResultsProducts({
             const price = product?.selectedOrFirstAvailableVariant?.price;
             const compareAtPrice = product?.selectedOrFirstAvailableVariant?.compareAtPrice;
             const isSale = compareAtPrice && price && parseFloat(compareAtPrice.amount) > parseFloat(price.amount);
-            const isSoldOut = product?.availableForSale === false;
-            const isSellingFast = product?.tags?.includes('selling-fast') || product?.handle?.includes('pet');
+            const isSoldOut = (product as any)?.availableForSale === false;
+            const isSellingFast = (product as any)?.tags?.includes('selling-fast') || product?.handle?.includes('pet');
             const image = product?.selectedOrFirstAvailableVariant?.image;
 
             return (

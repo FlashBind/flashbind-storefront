@@ -27,9 +27,9 @@ type SearchFormProps = Omit<FormProps, 'children'> & {
  *  </SearchForm>
  */
 export function SearchForm({children, ...props}: SearchFormProps) {
-  const inputRef = useRef<HTMLInputElement | null>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
-  useFocusOnCmdK(inputRef);
+  useFocusOnCmdK(inputRef as any);
 
   if (typeof children !== 'function') {
     return null;
@@ -37,7 +37,7 @@ export function SearchForm({children, ...props}: SearchFormProps) {
 
   return (
     <Form method="get" {...props}>
-      {children({inputRef})}
+      {children({inputRef: inputRef as any})}
     </Form>
   );
 }
