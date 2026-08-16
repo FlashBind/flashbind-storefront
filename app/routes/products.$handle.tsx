@@ -179,7 +179,7 @@ export default function Product() {
               
               <div className="flex items-center gap-3 mb-6">
                 <div className="flex text-yellow-400 text-sm">
-                  â˜…â˜…â˜…â˜…â˜…
+                  &#9733;&#9733;&#9733;&#9733;&#9733;
                 </div>
                 <span className="text-sm font-bold text-slate-500 underline decoration-slate-300 underline-offset-4 cursor-pointer hover:text-slate-900 transition-colors">
                   {reviewCount} Reviews
