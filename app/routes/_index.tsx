@@ -312,7 +312,7 @@ export default function Homepage() {
               </div>
               <Link to={PRODUCT_ROUTES.googleReview} className="inline-flex items-center text-[#1E3A8A] font-semibold text-lg hover:text-[#172A66] transition-colors group">
                 Google Reviews
-                <span className="ml-2 transform group-hover:translate-x-1 transition-transform">â†’</span>
+                <span className="ml-2 transform group-hover:translate-x-1 transition-transform">&rarr;</span>
               </Link>
             </div>
 
@@ -337,7 +337,7 @@ export default function Homepage() {
               </div>
               <Link to={PRODUCT_ROUTES.menu} className="inline-flex items-center text-[#1E3A8A] font-semibold text-lg hover:text-[#172A66] transition-colors group">
                 Tap-to-View Menus
-                <span className="ml-2 transform group-hover:translate-x-1 transition-transform">â†’</span>
+                <span className="ml-2 transform group-hover:translate-x-1 transition-transform">&rarr;</span>
               </Link>
             </div>
 
@@ -376,7 +376,7 @@ export default function Homepage() {
               </div>
               <Link to={PRODUCT_ROUTES.wifi} className="inline-flex items-center text-[#1E3A8A] font-semibold text-lg hover:text-[#172A66] transition-colors group">
                 Guest Wi-Fi
-                <span className="ml-2 transform group-hover:translate-x-1 transition-transform">â†’</span>
+                <span className="ml-2 transform group-hover:translate-x-1 transition-transform">&rarr;</span>
               </Link>
             </div>
 
@@ -401,7 +401,7 @@ export default function Homepage() {
               </div>
               <Link to={PRODUCT_ROUTES.petTag} className="inline-flex items-center text-[#1E3A8A] font-semibold text-lg hover:text-[#172A66] transition-colors group">
                 Smart Pet Tags
-                <span className="ml-2 transform group-hover:translate-x-1 transition-transform">â†’</span>
+                <span className="ml-2 transform group-hover:translate-x-1 transition-transform">&rarr;</span>
               </Link>
             </div>
 
@@ -584,7 +584,7 @@ export default function Homepage() {
             {/* Review 1 */}
             <div className="bg-white rounded-[2rem] p-8 shadow-xl shadow-slate-200/50 border border-slate-100 flex flex-col h-full hover:-translate-y-2 transition-transform duration-300 relative group">
               <div className="absolute inset-0 border-2 border-[#1E3A8A]/0 rounded-[2rem] group-hover:border-[#1E3A8A]/10 transition-colors duration-300 pointer-events-none"></div>
-              <div className="flex text-yellow-400 mb-4 text-xl">â˜…â˜…â˜…â˜…â˜…</div>
+              <div className="flex text-yellow-400 mb-4 text-xl">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
               <p className="text-slate-700 leading-relaxed mb-8 flex-grow font-medium">
                 "FlashBind completely transformed our checkout process. We placed the countertop stand next to our register, and our Google Reviews literally tripled in the first month. No apps, no friction."
               </p>
@@ -600,7 +600,7 @@ export default function Homepage() {
             {/* Review 2 */}
             <div className="bg-white rounded-[2rem] p-8 shadow-xl shadow-slate-200/50 border border-slate-100 flex flex-col h-full hover:-translate-y-2 transition-transform duration-300 relative group transform md:-translate-y-6">
               <div className="absolute inset-0 border-2 border-[#1E3A8A]/0 rounded-[2rem] group-hover:border-[#1E3A8A]/10 transition-colors duration-300 pointer-events-none"></div>
-              <div className="flex text-yellow-400 mb-4 text-xl">â˜…â˜…â˜…â˜…â˜…</div>
+              <div className="flex text-yellow-400 mb-4 text-xl">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
               <p className="text-slate-700 leading-relaxed mb-8 flex-grow font-medium">
                 "I ordered the matte metal business card and it feels incredibly premium. Every time I tap it on a client's phone at a networking event, their jaw drops. Best investment I've made for my agency."
               </p>
@@ -616,7 +616,7 @@ export default function Homepage() {
             {/* Review 3 */}
             <div className="bg-white rounded-[2rem] p-8 shadow-xl shadow-slate-200/50 border border-slate-100 flex flex-col h-full hover:-translate-y-2 transition-transform duration-300 relative group">
               <div className="absolute inset-0 border-2 border-[#1E3A8A]/0 rounded-[2rem] group-hover:border-[#1E3A8A]/10 transition-colors duration-300 pointer-events-none"></div>
-              <div className="flex text-yellow-400 mb-4 text-xl">â˜…â˜…â˜…â˜…â˜…</div>
+              <div className="flex text-yellow-400 mb-4 text-xl">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
               <p className="text-slate-700 leading-relaxed mb-8 flex-grow font-medium">
                 "We bought the smart pet collar tags for both our dogs. Knowing that anyone who finds them can instantly tap the tag and call me gives me so much peace of mind. The setup was instant."
               </p>
@@ -643,7 +643,7 @@ export default function Homepage() {
               {/* Review 1 */}
               <div className="w-full flex-shrink-0 snap-center px-2">
                 <div className="bg-white rounded-[2rem] p-8 shadow-xl shadow-slate-200/50 border border-slate-100 flex flex-col h-full">
-                  <div className="flex text-yellow-400 mb-4 text-xl">â˜…â˜…â˜…â˜…â˜…</div>
+                  <div className="flex text-yellow-400 mb-4 text-xl">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
                   <p className="text-slate-700 leading-relaxed mb-8 flex-grow font-medium min-h-[150px]">
                     "FlashBind completely transformed our checkout process. We placed the countertop stand next to our register, and our Google Reviews literally tripled in the first month. No apps, no friction."
                   </p>
@@ -660,7 +660,7 @@ export default function Homepage() {
               {/* Review 2 */}
               <div className="w-full flex-shrink-0 snap-center px-2">
                 <div className="bg-white rounded-[2rem] p-8 shadow-xl shadow-slate-200/50 border border-slate-100 flex flex-col h-full">
-                  <div className="flex text-yellow-400 mb-4 text-xl">â˜…â˜…â˜…â˜…â˜…</div>
+                  <div className="flex text-yellow-400 mb-4 text-xl">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
                   <p className="text-slate-700 leading-relaxed mb-8 flex-grow font-medium min-h-[150px]">
                     "I ordered the matte metal business card and it feels incredibly premium. Every time I tap it on a client's phone at a networking event, their jaw drops. Best investment I've made for my agency."
                   </p>
@@ -677,7 +677,7 @@ export default function Homepage() {
               {/* Review 3 */}
               <div className="w-full flex-shrink-0 snap-center px-2">
                 <div className="bg-white rounded-[2rem] p-8 shadow-xl shadow-slate-200/50 border border-slate-100 flex flex-col h-full">
-                  <div className="flex text-yellow-400 mb-4 text-xl">â˜…â˜…â˜…â˜…â˜…</div>
+                  <div className="flex text-yellow-400 mb-4 text-xl">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
                   <p className="text-slate-700 leading-relaxed mb-8 flex-grow font-medium min-h-[150px]">
                     "We bought the smart pet collar tags for both our dogs. Knowing that anyone who finds them can instantly tap the tag and call me gives me so much peace of mind. The setup was instant."
                   </p>
@@ -715,7 +715,7 @@ export default function Homepage() {
             Ordering for multiple locations or need custom branding?{' '}
             <Link to="/services" className="inline-flex items-center text-[#1E3A8A] font-bold hover:text-[#172A66] transition-colors group ml-2">
               See our custom business solutions
-              <span className="ml-1 transform group-hover:translate-x-1 transition-transform">â†’</span>
+              <span className="ml-1 transform group-hover:translate-x-1 transition-transform">&rarr;</span>
             </Link>
           </p>
         </div>
