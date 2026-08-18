@@ -6,8 +6,6 @@ import {sendEmailNotification} from '~/utils/email.server';
 
 export const meta: MetaFunction = () => {
   return [{title: 'FlashBind | Request a Quote'}];
-export const meta: MetaFunction = () => {
-  return [{title: 'FlashBind | Request a Quote'}];
 };
 
 export async function action({request, context}: ActionFunctionArgs) {
