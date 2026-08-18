@@ -4,38 +4,37 @@ export async function sendEmailNotification({
   message,
   type,
   attachmentUrl,
+  adminEmail,
 }: {
   subject: string;
   email: string;
   message: string;
   type: string;
   attachmentUrl?: string | null;
+  adminEmail: string;
+  apiKey: string;
 }) {
-  // We use Web3Forms in the backend to send the email notification for free.
-  // This bypasses the frontend integration while still leveraging their free email delivery.
-  const accessKey = '4fe03905-e3fa-46e8-a387-364c3763d0ad';
-
-  let fullMessage = `New ${type} submission from: ${email}\n\n`;
-  fullMessage += `Message:\n${message}\n\n`;
+  let htmlMessage = `<h2>New ${type} submission</h2>`;
+  htmlMessage += `<p><strong>From:</strong> ${email}</p>`;
+  htmlMessage += `<p><strong>Message:</strong><br/>${message.replace(/\n/g, '<br/>')}</p>`;
   
   if (attachmentUrl) {
-    fullMessage += `\n\n--- Attachment ---\n`;
-    fullMessage += `View Design File: ${attachmentUrl}\n`;
+    htmlMessage += `<hr/><p><strong>Design File Attachment:</strong> <a href="${attachmentUrl}">View File</a></p>`;
   }
 
   try {
-    const response = await fetch('https://api.web3forms.com/submit', {
+    const response = await fetch('https://api.resend.com/emails', {
       method: 'POST',
       headers: {
+        'Authorization': `Bearer ${apiKey}`,
         'Content-Type': 'application/json',
-        Accept: 'application/json',
       },
       body: JSON.stringify({
-        access_key: accessKey,
+        from: 'FlashBind Notifications <onboarding@resend.dev>',
+        to: adminEmail,
+        reply_to: email,
         subject: subject,
-        from_name: 'FlashBind Notifications',
-        email: email,
-        message: fullMessage,
+        html: htmlMessage,
       }),
     });
 

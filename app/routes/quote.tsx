@@ -61,12 +61,22 @@ export async function action({request, context}: ActionFunctionArgs) {
   }
 
   // Send Email Notification
+  const adminEmail = (context.env as any).ADMIN_EMAIL || 'YOUR_GMAIL_ADDRESS_HERE';
+  const apiKey = (context.env as any).RESEND_API_KEY;
+
+  if (!apiKey) {
+    console.error('RESEND_API_KEY is not set in environment variables');
+    return {error: 'Server misconfiguration: Email service unavailable.'};
+  }
+
   await sendEmailNotification({
     subject: 'New Quote Request from FlashBind',
     email,
     message,
     type: 'Quote Form',
-    attachmentUrl
+    attachmentUrl,
+    adminEmail,
+    apiKey,
   });
 
   return {success: true};
