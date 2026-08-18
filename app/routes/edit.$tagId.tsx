@@ -99,14 +99,20 @@ export async function action({ request, params, context }: ActionFunctionArgs) {
       image_url: imageUrl,
     };
   } else if (type === 'google_review' || type === 'menu') {
-    const destinationUrl = formData.get('destinationUrl') as string;
+    let destinationUrl = formData.get('destinationUrl') as string;
     if (!destinationUrl) {
       return { error: 'Destination URL is required' };
     }
+
+    // Automatically prepend https:// if the user forgets it
+    if (!destinationUrl.startsWith('http://') && !destinationUrl.startsWith('https://')) {
+      destinationUrl = 'https://' + destinationUrl;
+    }
+
     try {
       new URL(destinationUrl);
     } catch {
-      return { error: 'Please enter a valid URL (including https://)' };
+      return { error: 'Please enter a valid URL' };
     }
     updatePayload = {
       settings: { ...rawPet.settings, destination_url: destinationUrl }

@@ -67,19 +67,6 @@ export default async function handleRequest(
     customHeader = customHeader.replace('font-src', "font-src https://fonts.gstatic.com ");
   }
 
-  // Allow AJAX to Web3Forms
-  if (!customHeader.includes('connect-src')) {
-    customHeader += `; connect-src 'self' https://api.web3forms.com;`;
-  } else {
-    customHeader = customHeader.replace('connect-src', "connect-src https://api.web3forms.com ");
-  }
-  
-  // Allow form actions to Web3Forms (fallback)
-  if (!customHeader.includes('form-action')) {
-    customHeader += `; form-action 'self' https://api.web3forms.com;`;
-  } else {
-    customHeader = customHeader.replace('form-action', "form-action https://api.web3forms.com ");
-  }
   responseHeaders.set('Content-Security-Policy', customHeader);
 
   return new Response(body, {

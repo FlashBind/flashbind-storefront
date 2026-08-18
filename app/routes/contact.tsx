@@ -1,21 +1,63 @@
-import type {MetaFunction} from 'react-router';
+import type {MetaFunction, ActionFunctionArgs} from 'react-router';
 import {useState, useEffect, useRef} from 'react';
-import {useSearchParams} from 'react-router';
+import {useSearchParams, useActionData, useNavigation, Form} from 'react-router';
+import {getSupabaseAdmin} from '~/utils/supabase.server';
+import {sendEmailNotification} from '~/utils/email.server';
 
+export const meta: MetaFunction = () => {
+  return [{title: 'FlashBind | Contact Us'}];
 export const meta: MetaFunction = () => {
   return [{title: 'FlashBind | Contact Us'}];
 };
 
+export async function action({request, context}: ActionFunctionArgs) {
+  const formData = await request.formData();
+  const email = formData.get('email') as string;
+  const message = formData.get('message') as string;
+
+  if (!email || !message) {
+    return {error: 'Email and message are required.'};
+  }
+
+  const supabase = getSupabaseAdmin(context);
+
+  // 1. Save to Supabase
+  const {error} = await supabase.from('contact_messages').insert([{
+    email,
+    message,
+    type: 'contact',
+  }]);
+
+  if (error) {
+    console.error('Failed to save contact message:', error);
+    return {error: 'Something went wrong. Please try again later.'};
+  }
+
+  // 2. Send Email Notification
+  await sendEmailNotification({
+    subject: 'New Contact Request from FlashBind',
+    email,
+    message,
+    type: 'Contact Form',
+  });
+
+  return {success: true};
+}
+
 export default function ContactPage() {
+  const actionData = useActionData<typeof action>();
+  const navigation = useNavigation();
+  const isSubmitting = navigation.state === 'submitting';
+  
   const [searchParams] = useSearchParams();
-  const isSuccess = searchParams.get('success') === 'true';
-  const [status, setStatus] = useState<'' | 'submitting' | 'succeeded'>(isSuccess ? 'succeeded' : '');
-  const [redirectUrl, setRedirectUrl] = useState('');
+  const isSuccess = searchParams.get('success') === 'true' || actionData?.success;
   const formRef = useRef<HTMLFormElement>(null);
 
   useEffect(() => {
-    setRedirectUrl(window.location.origin + '/contact?success=true');
-  }, []);
+    if (actionData?.success && formRef.current) {
+      formRef.current.reset();
+    }
+  }, [actionData]);
 
   return (
     <div className="min-h-screen bg-[#FDFCF8] relative overflow-hidden flex items-center justify-center py-24">
@@ -34,7 +76,7 @@ export default function ContactPage() {
             </p>
           </div>
 
-          {status === 'succeeded' ? (
+          {isSuccess ? (
             <div className="bg-emerald-50 border border-emerald-200 text-emerald-800 p-8 rounded-2xl text-center">
               <h2 className="text-2xl font-bold mb-2">Message Sent!</h2>
               <p>Thanks for reaching out. We'll get back to you shortly.</p>
@@ -46,11 +88,13 @@ export default function ContactPage() {
               </a>
             </div>
           ) : (
-            <form ref={formRef} action="https://api.web3forms.com/submit" method="POST" encType="multipart/form-data" className="space-y-6">
-              <input type="hidden" name="access_key" value="4fe03905-e3fa-46e8-a387-364c3763d0ad" />
-              <input type="hidden" name="subject" value="New Contact Request from FlashBind" />
-              <input type="hidden" name="redirect" value={redirectUrl} />
-              <input type="checkbox" name="botcheck" className="hidden" style={{ display: 'none' }} />
+            <Form ref={formRef} method="post" className="space-y-6">
+              
+              {actionData?.error && (
+                <div className="p-4 bg-red-50 text-red-700 font-bold rounded-xl border border-red-200">
+                  {actionData.error}
+                </div>
+              )}
 
               <div>
                 <label htmlFor="email" className="block text-sm font-bold text-slate-900 mb-2">
@@ -81,21 +125,13 @@ export default function ContactPage() {
               </div>
 
               <button
-                type="button"
-                onClick={() => {
-                  if (formRef.current?.checkValidity()) {
-                    setStatus('submitting');
-                    formRef.current.submit();
-                  } else {
-                    formRef.current?.reportValidity();
-                  }
-                }}
-                disabled={status === 'submitting'}
+                type="submit"
+                disabled={isSubmitting}
                 className="w-full px-8 py-4 bg-slate-900 text-white font-bold rounded-xl hover:bg-[#1E3A8A] hover:scale-[1.02] shadow-[0_10px_20px_rgba(0,0,0,0.1)] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
               >
-                {status === 'submitting' ? 'Sending...' : 'Send Message'}
+                {isSubmitting ? 'Sending...' : 'Send Message'}
               </button>
-            </form>
+            </Form>
           )}
 
           <div className="mt-8 text-center">
