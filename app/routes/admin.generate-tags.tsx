@@ -6,7 +6,7 @@ export const handle = {
   hideLayout: true,
 };
 
-export async function loader({ context }: LoaderFunctionArgs) {
+export async function loader({ context, request }: LoaderFunctionArgs) {
   const userEmail = context.session.get('userEmail');
   if (!userEmail) {
     return redirect('/login?redirectTo=/admin/generate-tags');
