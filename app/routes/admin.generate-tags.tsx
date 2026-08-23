@@ -275,11 +275,16 @@ export function ErrorBoundary() {
     );
   }
 
+  const errorMessage = error instanceof Error ? error.message : String(error);
+
   return (
-    <div className="min-h-screen bg-slate-50 flex items-center justify-center">
-      <div className="bg-white p-8 rounded-2xl shadow-sm border border-red-100">
-        <h1 className="text-xl font-bold text-red-600 mb-2">Error</h1>
-        <p className="text-slate-700 font-medium">An unexpected error occurred.</p>
+    <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-8">
+      <div className="bg-white p-8 rounded-2xl shadow-sm border border-red-100 max-w-2xl w-full">
+        <h1 className="text-xl font-bold text-red-600 mb-4">Error</h1>
+        <p className="text-slate-700 font-medium mb-4">An unexpected error occurred:</p>
+        <pre className="bg-slate-100 p-4 rounded-xl text-sm overflow-auto text-red-800 break-words whitespace-pre-wrap">
+          {errorMessage}
+        </pre>
       </div>
     </div>
   );
