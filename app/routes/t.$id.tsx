@@ -1,6 +1,6 @@
 import { redirect } from 'react-router';
 import type { LoaderFunctionArgs } from 'react-router';
-import { getSupabase } from '~/utils/supabase.server';
+import { getSupabaseAdmin } from '~/utils/supabase.server';
 
 export async function loader({ params, context }: LoaderFunctionArgs) {
   const { id } = params;
@@ -9,7 +9,7 @@ export async function loader({ params, context }: LoaderFunctionArgs) {
     return redirect('/');
   }
 
-  const supabase = getSupabase(context);
+  const supabase = getSupabaseAdmin(context);
 
   // Query the redirects table where card_id matches the id parameter
   const { data, error } = await supabase

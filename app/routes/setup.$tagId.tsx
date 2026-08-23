@@ -76,10 +76,46 @@ export async function action({ request, params, context }: ActionFunctionArgs) {
   }
 
   if (!tagData.owner_email) {
+    // Rate Limiting Check
+    const clientIp = request.headers.get('x-forwarded-for') || 'unknown';
+    const { data: limitData } = await adminSupabase
+      .from('rate_limits')
+      .select('*')
+      .eq('tag_id', tagId)
+      .eq('ip_address', clientIp)
+      .single();
+
+    if (limitData) {
+      const lastAttempt = new Date(limitData.last_attempt_at);
+      const minutesSinceLast = (Date.now() - lastAttempt.getTime()) / 60000;
+      
+      if (limitData.attempts >= 5 && minutesSinceLast < 15) {
+        return { error: 'Too many failed attempts. Please try again in 15 minutes.' };
+      }
+    }
+
     // It's a new orphan tag. Validate the activation PIN.
     const activationPin = formData.get('activation_pin') as string;
     if (!activationPin || tagData.settings?.activation_pin !== activationPin) {
+      // Record failed attempt
+      if (limitData) {
+        // Reset attempts if the 15-minute window has passed, otherwise increment
+        const attempts = (new Date(limitData.last_attempt_at).getTime() > Date.now() - 15 * 60000) 
+          ? limitData.attempts + 1 
+          : 1;
+        await adminSupabase.from('rate_limits')
+          .update({ attempts, last_attempt_at: new Date().toISOString() })
+          .eq('id', limitData.id);
+      } else {
+        await adminSupabase.from('rate_limits')
+          .insert({ tag_id: tagId, ip_address: clientIp, attempts: 1 });
+      }
       return { error: 'Invalid Activation PIN. Please check the code included in your packaging.' };
+    }
+    
+    // Clear rate limits on success
+    if (limitData) {
+      await adminSupabase.from('rate_limits').delete().eq('id', limitData.id);
     }
   }
 
@@ -94,6 +130,13 @@ export async function action({ request, params, context }: ActionFunctionArgs) {
     const imageBase64 = formData.get('imageBase64') as string;
     let imageUrl = 'https://images.unsplash.com/photo-1543466835-00a7907e9de1?q=80&w=800&auto=format&fit=crop';
     if (imageBase64 && imageBase64.startsWith('data:image')) {
+      if (!imageBase64.startsWith('data:image/jpeg;base64,') && !imageBase64.startsWith('data:image/png;base64,')) {
+        return { error: 'Image must be a JPEG or PNG.' };
+      }
+      const sizeInBytes = imageBase64.length * 0.75;
+      if (sizeInBytes > 2 * 1024 * 1024) {
+        return { error: 'Image file size must be under 2MB.' };
+      }
       imageUrl = imageBase64;
     }
 

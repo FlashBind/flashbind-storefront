@@ -23,7 +23,12 @@ export const PRODUCT_ROUTES = {
 };
 
 export const meta: Route.MetaFunction = () => {
-  return [{title: 'FlashBind | Home'}];
+  return [
+    {title: 'FlashBind | Premium NFC Products'},
+    {name: 'description', content: 'FlashBind sells premium NFC-powered products — Google Review stands, digital menu cards, guest WiFi cards, and pet tags. Tap to connect instantly, no app required.'},
+    {property: 'og:title', content: 'FlashBind | Premium NFC Products'},
+    {property: 'og:image', content: 'https://flashbind.com/hero_new_1.jpg'}
+  ];
 };
 
 export async function loader(args: Route.LoaderArgs) {

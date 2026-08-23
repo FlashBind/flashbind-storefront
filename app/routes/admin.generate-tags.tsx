@@ -17,6 +17,63 @@ export async function loader({ context }: LoaderFunctionArgs) {
     throw new Response('Not authorized', { status: 403 });
   }
 
+  const url = new URL(request.url);
+  if (url.searchParams.get('export') === 'csv') {
+    const supabase = getSupabaseAdmin(context);
+    const { data: tags, error } = await supabase.from('tags').select('*').eq('is_claimed', false);
+    if (error) {
+      throw new Response('Failed to load tags for export', { status: 500 });
+    }
+
+    // Sort by type
+    tags.sort((a, b) => a.type.localeCompare(b.type));
+    
+    const csvRows = [
+      ['Item_Number', 'Product_Type', 'Tag_ID', 'NFC_URL_To_Encode', 'Print_Variable_QR', 'Activation_PIN', 'Design_File']
+    ];
+    
+    let i = 1;
+    let petTagCount = 0;
+    for (const tag of tags) {
+      let designFile = '';
+      let productType = '';
+      let printQR = `https://flashbind.com/p/${tag.id}`;
+      
+      if (tag.type === 'pet_tag') {
+          petTagCount++;
+          const isBlack = petTagCount % 2 !== 0;
+          productType = isBlack ? 'Black Pet Tag' : 'White Pet Tag'; 
+          designFile = isBlack ? 'black_pet_tag_design' : 'white_pet_tag_design';
+          printQR = 'NO';
+      } else if (tag.type === 'wifi') {
+          productType = 'Wi-Fi Stand';
+          designFile = 'wifi_stand_design';
+      } else if (tag.type === 'menu' || tag.type === 'google_review') {
+          productType = 'Menu Stand';
+          designFile = 'menu_stand_design';
+      }
+      
+      csvRows.push([
+        String(i++).padStart(3, '0'),
+        productType,
+        tag.id,
+        `https://flashbind.com/p/${tag.id}`,
+        printQR,
+        tag.settings?.activation_pin || '',
+        designFile
+      ]);
+    }
+
+    const csvContent = csvRows.map(e => e.join(',')).join('\n');
+    return new Response(csvContent, {
+      status: 200,
+      headers: {
+        'Content-Type': 'text/csv',
+        'Content-Disposition': 'attachment; filename="flashbind_tags_order.csv"'
+      }
+    });
+  }
+
   return null;
 }
 
@@ -42,20 +99,14 @@ export async function action({ request, context }: ActionFunctionArgs) {
 
   const supabase = getSupabaseAdmin(context);
   
-  // Find highest existing ID
-  const { data: existingTags, error: fetchError } = await supabase.from('tags').select('id');
-  if (fetchError) {
-    return { error: 'Failed to fetch existing tags.' };
-  }
-
-  const maxId = existingTags?.reduce((max, tag) => {
-    const num = parseInt(tag.id, 10);
-    return !isNaN(num) && num > max ? num : max;
-  }, 0) || 0;
-
   const newTags = [];
   for (let i = 1; i <= quantity; i++) {
-    const newId = String(maxId + i).padStart(3, '0');
+    let newId;
+    while (true) {
+      newId = crypto.randomUUID().split('-')[0];
+      const { data } = await supabase.from('tags').select('id').eq('id', newId).single();
+      if (!data) break; // Unique
+    }
     const activationPin = Math.floor(100000 + Math.random() * 900000).toString();
     newTags.push({
       id: newId,
@@ -91,11 +142,19 @@ export default function AdminGenerateTagsPage() {
   return (
     <div className="min-h-screen bg-slate-50 w-full font-sans p-8">
       <div className="max-w-2xl mx-auto">
-        <div className="flex justify-between items-center mb-8">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
           <h1 className="text-3xl font-extrabold text-slate-900">Admin: Generate Tags</h1>
-          <a href="/dashboard" className="text-blue-600 font-semibold hover:underline">
-            Back to Dashboard
-          </a>
+          <div className="flex items-center gap-6">
+            <a href="/admin/generate-tags?export=csv" className="inline-flex items-center px-5 py-2.5 bg-slate-900 text-white text-sm font-bold rounded-xl hover:bg-slate-800 transition-colors shadow-sm">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+              </svg>
+              Export Order CSV
+            </a>
+            <a href="/dashboard" className="text-blue-600 font-semibold hover:underline">
+              Back to Dashboard
+            </a>
+          </div>
         </div>
 
         <div className="bg-white rounded-3xl shadow-sm border border-slate-100 p-8 mb-8">

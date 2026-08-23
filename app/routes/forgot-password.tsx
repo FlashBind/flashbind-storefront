@@ -20,10 +20,6 @@ export async function action({ request, context }: ActionFunctionArgs) {
 
   if (error) {
     console.error('Supabase Reset Password Error:', error);
-    const errorMsg = error?.message && error.message !== '()' && error.message !== '{}' 
-      ? String(error.message)
-      : 'Failed to send reset email. Please check your SMTP settings in Supabase or try again later.';
-    return data({ error: errorMsg, success: false }, { status: 400 });
   }
 
   return data({ success: true, error: null });
@@ -46,15 +42,10 @@ export default function ForgotPassword() {
 
         {actionData?.success ? (
           <div className="bg-green-50 text-green-700 p-4 rounded-xl text-center font-medium">
-            Check your email for the reset link!
+            If an account exists with that email, a reset link has been sent.
           </div>
         ) : (
           <Form method="post" className="space-y-6">
-            {actionData?.error && (
-              <div className="bg-red-50 text-red-600 p-3 rounded-xl text-sm font-medium text-center">
-                {actionData.error}
-              </div>
-            )}
             <div>
               <label htmlFor="email" className="block text-sm font-bold text-slate-700 mb-2">
                 Email Address
