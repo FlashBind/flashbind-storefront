@@ -39,10 +39,10 @@ export function CartLineItem({
   const displayImage = productImages.length > 1 ? productImages[1] : (product as any)?.featuredImage || image;
 
   return (
-    <li key={id} className="flex flex-col gap-4 w-full p-5 bg-white border border-gray-200 shadow-[0_4px_20px_rgba(0,0,0,0.04)] rounded-2xl mb-4 last:mb-0 relative">
+    <li key={id} className="flex flex-col gap-4 w-full p-5 bg-white border border-slate-300 shadow-md rounded-2xl mb-4 last:mb-0 relative transition-all hover:shadow-lg">
       <div className="flex flex-row items-start gap-5 w-full">
         {displayImage && (
-          <div className="w-24 h-24 bg-white rounded-lg flex items-center justify-center overflow-hidden flex-shrink-0 border border-gray-100 p-1 shadow-[0_2px_8px_rgba(0,0,0,0.02)]">
+          <div className="w-24 h-24 bg-white rounded-lg flex items-center justify-center overflow-hidden flex-shrink-0 border border-slate-200 p-1 shadow-sm">
             <Image
               alt={title}
               aspectRatio="1/1"
