@@ -35,11 +35,23 @@ export default function PrivacyPolicyPage() {
             <h2 className="text-2xl font-bold text-slate-900 mt-8 mb-4">3. Security of Your Information</h2>
             <p>We use administrative, technical, and physical security measures to help protect your personal information. While we have taken reasonable steps to secure the personal information you provide to us, please be aware that despite our efforts, no security measures are perfect or impenetrable, and no method of data transmission can be guaranteed against any interception or other type of misuse.</p>
 
-            <h2 className="text-2xl font-bold text-slate-900 mt-8 mb-4">4. Children's Privacy (COPPA Compliance)</h2>
+            <h2 className="text-2xl font-bold text-slate-900 mt-8 mb-4">4. Cookies and Tracking Technologies</h2>
+            <p>We may use cookies, web beacons, tracking pixels, and other tracking technologies on our website to help customize the site and improve your experience. When you access the website, your personal information is not collected through the use of tracking technology, but it helps us understand site usage and improve performance.</p>
+
+            <h2 className="text-2xl font-bold text-slate-900 mt-8 mb-4">5. Data Sharing and Third Parties</h2>
+            <p>We do not sell, trade, or rent your personal identification information to others. We may share generic aggregated demographic information not linked to any personal identification information with our business partners. We may use third-party service providers (such as Shopify for e-commerce, Stripe for secure payments, and database hosting providers) to help us operate our business. These third parties have access to your personal data only to perform specific tasks on our behalf and are obligated not to disclose or use it for any other purpose.</p>
+
+            <h2 className="text-2xl font-bold text-slate-900 mt-8 mb-4">6. European Privacy Rights (GDPR Compliance)</h2>
+            <p>If you are a resident of the European Economic Area (EEA), you have certain data protection rights. We aim to take reasonable steps to allow you to correct, amend, delete, or limit the use of your Personal Data. Your rights include: the right to access, update or delete your information; the right of rectification; the right to object; the right of restriction; the right to data portability; and the right to withdraw consent. To exercise any of these rights, please contact us.</p>
+
+            <h2 className="text-2xl font-bold text-slate-900 mt-8 mb-4">7. California Privacy Rights (CCPA Compliance)</h2>
+            <p>If you are a resident of California, the California Consumer Privacy Act (CCPA) provides you with specific rights regarding your personal information. You have the right to request that we disclose certain information to you about our collection and use of your personal information over the past 12 months. You also have the right to request the deletion of your personal information. We do not sell your personal data. We will not discriminate against you for exercising any of your CCPA rights.</p>
+
+            <h2 className="text-2xl font-bold text-slate-900 mt-8 mb-4">8. Children's Privacy (COPPA Compliance)</h2>
             <p>Our website and services are not intended for or directed at children under the age of 13. We do not knowingly collect personal information from children under 13. If you are a parent or guardian and believe that your child under 13 has provided us with personal information without your consent, please contact us immediately at info@flashbind.com so we can promptly delete such information from our systems.</p>
 
-            <h2 className="text-2xl font-bold text-slate-900 mt-8 mb-4">5. Contact Us</h2>
-            <p>If you have questions or comments about this notice, you may email us at info@flashbind.com or by post to our registered office.</p>
+            <h2 className="text-2xl font-bold text-slate-900 mt-8 mb-4">9. Contact Us</h2>
+            <p>If you have questions, comments, or requests regarding this Privacy Policy or your data rights, you may email us at info@flashbind.com or by post to our registered office.</p>
           </div>
         </div>
       </div>
