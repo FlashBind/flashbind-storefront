@@ -61,7 +61,7 @@ export async function action({request, context}: ActionFunctionArgs) {
   }
 
   // Send Email Notification
-  const adminEmail = (context.env as any).ADMIN_EMAIL || 'YOUR_GMAIL_ADDRESS_HERE';
+  const adminEmail = (context.env as any).NOTIFICATION_EMAIL || (context.env as any).ADMIN_EMAIL || 'YOUR_GMAIL_ADDRESS_HERE';
   const apiKey = (context.env as any).RESEND_API_KEY;
 
   if (!apiKey) {
