@@ -5,6 +5,7 @@ export async function sendEmailNotification({
   type,
   attachmentUrl,
   adminEmail,
+  apiKey,
 }: {
   subject: string;
   email: string;
@@ -30,7 +31,7 @@ export async function sendEmailNotification({
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        from: 'FlashBind Notifications <onboarding@resend.dev>',
+        from: 'FlashBind <info@flashbind.com>',
         to: adminEmail,
         reply_to: email,
         subject: subject,
