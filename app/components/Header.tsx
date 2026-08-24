@@ -396,7 +396,7 @@ function HeaderCtas({
       <CartToggle cart={cart} />
       
       {/* Premium CTA */}
-      <NavLink to="/#recommended-products" className="hidden lg:flex ml-2 px-6 py-2.5 bg-slate-900 text-white text-sm font-bold rounded-full hover:bg-[#1E3A8A] hover:scale-105 hover:shadow-[0_0_25px_rgba(30,58,138,0.4)] transition-all duration-300 shadow-md no-underline hover:no-underline">
+      <NavLink to="/#recommended-products" className="hidden lg:flex ml-2 px-6 py-2.5 bg-gradient-to-r from-[#172A66] via-[#1E3A8A] to-[#172A66] text-white text-sm font-bold rounded-full hover:from-[#1E3A8A] hover:via-[#2563EB] hover:to-[#1E3A8A] hover:scale-105 shadow-[0_4px_15px_rgba(30,58,138,0.3)] hover:shadow-[0_0_25px_rgba(96,165,250,0.5)] transition-all duration-500 no-underline hover:no-underline border border-white/10">
         Get Started
       </NavLink>
     </nav>
