@@ -43,7 +43,7 @@ export function Header({
     <>
       <header className={`sticky top-0 z-50 flex flex-col w-full transition-all duration-500 border-b ${isScrolled ? 'bg-white/95 backdrop-blur-2xl shadow-[0_4px_20px_rgba(0,0,0,0.05)] border-slate-200/60' : 'bg-white shadow-none border-transparent'}`}>
         {/* Trust Signal Bar (Premium Marquee) */}
-        <div className="w-full bg-slate-900 py-2.5 overflow-hidden flex whitespace-nowrap pointer-events-none">
+        <div className="w-full bg-gradient-to-r from-[#172A66] via-[#1E3A8A] to-[#172A66] py-2.5 overflow-hidden flex whitespace-nowrap pointer-events-none border-b border-white/10 shadow-inner">
           <div className="flex w-max" style={{ animation: 'marquee 50s linear infinite' }}>
             {[...Array(8)].map((_, i) => (
               <div key={i} className="flex items-center">
@@ -55,8 +55,8 @@ export function Header({
                   "Enterprise-grade NFC chips"
                 ].map((statement, j) => (
                   <div key={j} className="flex items-center">
-                    <span className="text-[11px] font-medium text-white/90 tracking-widest uppercase">{statement}</span>
-                    <span className="w-1 h-1 rounded-full bg-white/40 mx-6"></span>
+                    <span className="text-[11px] font-bold text-white tracking-widest uppercase drop-shadow-md">{statement}</span>
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#60A5FA] mx-6 shadow-[0_0_8px_rgba(96,165,250,0.8)]"></span>
                   </div>
                 ))}
               </div>
