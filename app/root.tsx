@@ -72,7 +72,7 @@ export function links() {
     {rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg?v=2'},
     {rel: 'shortcut icon', href: '/favicon.ico?v=2'},
     {rel: 'apple-touch-icon', sizes: '180x180', href: '/apple-touch-icon.png?v=2'},
-    {rel: 'manifest', href: '/site.webmanifest?v=2'},
+    {rel: 'manifest', href: '/manifest.json?v=2'},
   ];
 }
 
