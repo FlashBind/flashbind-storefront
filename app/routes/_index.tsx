@@ -22,12 +22,16 @@ export const PRODUCT_ROUTES = {
   wifi: '/products/guest-wi-fi-hub',
 };
 
-export const meta: Route.MetaFunction = () => {
+export const meta: Route.MetaFunction = ({data, matches}) => {
+  const parentMeta = matches.flatMap((match) => match.meta ?? []);
   return [
+    ...parentMeta.filter(
+      (m) => !('name' in m && m.name === 'description') && !('title' in m)
+    ),
     {title: 'FlashBind | Premium NFC Products'},
     {name: 'description', content: 'FlashBind sells premium NFC-powered products — Google Review stands, digital menu cards, guest WiFi cards, and pet tags. Tap to connect instantly, no app required.'},
     {property: 'og:title', content: 'FlashBind | Premium NFC Products'},
-    {property: 'og:image', content: 'https://flashbind.com/hero_new_1.jpg'}
+    {property: 'og:image', content: 'https://flashbind.com/hero_new_1.jpg'},
   ];
 };
 

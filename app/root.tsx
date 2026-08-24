@@ -22,7 +22,7 @@ export type RootLoader = typeof loader;
 export const meta: Route.MetaFunction = () => {
   return [
     {title: 'FlashBind'},
-    {name: 'description', content: 'Custom NFC solutions for businesses'},
+    {name: 'description', content: 'FlashBind sells NFC products that help hospitality businesses collect more Google reviews, share menus, and connect with guests instantly.'},
   ];
 };
 
@@ -68,7 +68,11 @@ export function links() {
       rel: 'preconnect',
       href: 'https://shop.app',
     },
-    {rel: 'icon', type: 'image/png', href: '/favicon-cropped.png'},
+    {rel: 'icon', type: 'image/png', href: '/favicon-96x96.png?v=2', sizes: '96x96'},
+    {rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg?v=2'},
+    {rel: 'shortcut icon', href: '/favicon.ico?v=2'},
+    {rel: 'apple-touch-icon', sizes: '180x180', href: '/apple-touch-icon.png?v=2'},
+    {rel: 'manifest', href: '/site.webmanifest?v=2'},
   ];
 }
 
