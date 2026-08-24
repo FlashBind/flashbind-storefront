@@ -444,21 +444,26 @@ function NavbarSearch() {
 }
 
 function CartBadge({count}: {count: number}) {
-  const {open} = useAside();
+  const {open, type, close} = useAside();
   const {publish, shop, cart, prevCart} = useAnalytics();
+  const isCartOpen = type === 'cart';
 
   return (
     <a
       href="/cart"
       onClick={(e) => {
         e.preventDefault();
-        open('cart');
-        publish('cart_viewed', {
-          cart,
-          prevCart,
-          shop,
-          url: window.location.href || '',
-        } as CartViewPayload);
+        if (isCartOpen) {
+          close();
+        } else {
+          open('cart');
+          publish('cart_viewed', {
+            cart,
+            prevCart,
+            shop,
+            url: window.location.href || '',
+          } as CartViewPayload);
+        }
       }}
       className="relative flex items-center text-slate-600 hover:text-[#1E3A8A] transition-colors md:mr-4 order-first md:order-none"
       title="Cart"
