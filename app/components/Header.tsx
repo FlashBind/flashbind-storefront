@@ -64,7 +64,7 @@ export function Header({
           </div>
         </div>
 
-        <div className="px-6 py-3 md:py-4 flex items-center justify-between w-full">
+        <div className="px-6 py-3 md:py-4 flex items-center justify-between w-full relative">
           <NavLink prefetch="intent" to="/" className="flex items-center gap-3 relative z-10" onClick={close}>
             <img src="/logo-transparent.png" alt="FlashBind Logo" className="h-16 md:h-20 object-contain" />
           </NavLink>
