@@ -37,7 +37,7 @@ export function PageLayout({
       <CartAside cart={cart} />
       <SearchAside />
       {/* Trust Signal Bar (Premium Marquee) */}
-      <div className="w-full bg-[#F9F9F8] border-b border-[#E5E5E3] py-2.5 overflow-hidden flex whitespace-nowrap pointer-events-none">
+      <div className="w-full bg-[#0A1838] py-2.5 overflow-hidden flex whitespace-nowrap pointer-events-none">
         <div className="flex w-max" style={{ animation: 'marquee 50s linear infinite' }}>
           {[...Array(8)].map((_, i) => (
             <div key={i} className="flex items-center">
@@ -49,8 +49,8 @@ export function PageLayout({
                 "Enterprise-grade NFC chips"
               ].map((statement, j) => (
                 <div key={j} className="flex items-center">
-                  <span className="text-[11px] font-medium text-[#666666] tracking-widest">{statement}</span>
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#1E3A8A] mx-6"></span>
+                  <span className="text-[11px] font-medium text-white/90 tracking-widest uppercase">{statement}</span>
+                  <span className="w-1 h-1 rounded-full bg-[#3B82F6] mx-6"></span>
                 </div>
               ))}
             </div>
