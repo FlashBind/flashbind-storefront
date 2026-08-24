@@ -35,7 +35,10 @@ export default function PrivacyPolicyPage() {
             <h2 className="text-2xl font-bold text-slate-900 mt-8 mb-4">3. Security of Your Information</h2>
             <p>We use administrative, technical, and physical security measures to help protect your personal information. While we have taken reasonable steps to secure the personal information you provide to us, please be aware that despite our efforts, no security measures are perfect or impenetrable, and no method of data transmission can be guaranteed against any interception or other type of misuse.</p>
 
-            <h2 className="text-2xl font-bold text-slate-900 mt-8 mb-4">4. Contact Us</h2>
+            <h2 className="text-2xl font-bold text-slate-900 mt-8 mb-4">4. Children's Privacy (COPPA Compliance)</h2>
+            <p>Our website and services are not intended for or directed at children under the age of 13. We do not knowingly collect personal information from children under 13. If you are a parent or guardian and believe that your child under 13 has provided us with personal information without your consent, please contact us immediately at info@flashbind.com so we can promptly delete such information from our systems.</p>
+
+            <h2 className="text-2xl font-bold text-slate-900 mt-8 mb-4">5. Contact Us</h2>
             <p>If you have questions or comments about this notice, you may email us at info@flashbind.com or by post to our registered office.</p>
           </div>
         </div>
