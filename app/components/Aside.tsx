@@ -75,12 +75,7 @@ export function Aside({
           expanded ? 'translate-x-0' : 'translate-x-full'
         } flex flex-col pt-[115px] md:pt-[124px]`}
       >
-        <header className="flex items-center justify-between p-6 border-b border-gray-100">
-          <h3 id={id} className="text-sm font-semibold tracking-wider uppercase text-slate-900">{heading}</h3>
-          <button className="text-gray-400 hover:text-black transition-colors text-2xl leading-none" onClick={close} aria-label="Close">
-            &times;
-          </button>
-        </header>
+
         <main className="flex-1 overflow-y-auto p-6 bg-[#F8FAFC] text-slate-800">
           {children}
         </main>
