@@ -56,7 +56,7 @@ export function Aside({
   return (
     <div
       aria-modal
-      className={`fixed inset-0 z-[100] transition-opacity duration-300 ${
+      className={`fixed inset-0 z-40 transition-opacity duration-300 ${
         expanded ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
       }`}
       role="dialog"
@@ -73,7 +73,7 @@ export function Aside({
       <aside 
         className={`absolute top-0 right-0 h-full w-full max-w-md bg-white border-l border-gray-100 shadow-2xl transition-transform duration-300 transform ${
           expanded ? 'translate-x-0' : 'translate-x-full'
-        } flex flex-col`}
+        } flex flex-col pt-[115px] md:pt-[124px]`}
       >
         <header className="flex items-center justify-between p-6 border-b border-gray-100">
           <h3 id={id} className="text-sm font-semibold tracking-wider uppercase text-slate-900">{heading}</h3>
