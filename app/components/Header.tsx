@@ -44,7 +44,7 @@ export function Header({
       <header className={`sticky top-0 z-50 flex flex-col w-full transition-all duration-500 border-b ${isScrolled ? 'bg-white/95 backdrop-blur-2xl shadow-[0_4px_20px_rgba(0,0,0,0.05)] border-slate-200/60' : 'bg-white shadow-none border-transparent'}`}>
         {/* Trust Signal Bar (Premium Marquee) */}
         <div className="w-full bg-gradient-to-r from-[#172A66] via-[#1E3A8A] to-[#172A66] py-2.5 overflow-hidden flex whitespace-nowrap pointer-events-none border-b border-white/10 shadow-inner">
-          <div className="flex w-max" style={{ animation: 'marquee 50s linear infinite' }}>
+          <div className="flex w-max" style={{ animation: 'marquee 80s linear infinite' }}>
             {[...Array(8)].map((_, i) => (
               <div key={i} className="flex items-center">
                 {[
