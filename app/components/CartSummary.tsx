@@ -35,11 +35,35 @@ export function CartSummary({cart, layout}: CartSummaryProps) {
 }
 
 function CartCheckoutActions({checkoutUrl}: {checkoutUrl?: string}) {
+  const [agreed, setAgreed] = useState(false);
+
   if (!checkoutUrl) return null;
 
   return (
     <div>
-      <a href={checkoutUrl} target="_self" className="block w-full text-center bg-slate-900 text-white py-3 rounded-md font-medium hover:bg-black transition-colors">
+      <div className="flex items-start gap-3 mb-4">
+        <input 
+          type="checkbox" 
+          id="cartTermsAgreement" 
+          checked={agreed}
+          onChange={(e) => setAgreed(e.target.checked)}
+          className="mt-1 w-4 h-4 text-slate-900 border-slate-300 rounded focus:ring-slate-900 cursor-pointer"
+        />
+        <label htmlFor="cartTermsAgreement" className="text-xs text-slate-600 leading-relaxed cursor-pointer">
+          I confirm I have read and agree to the <a href="/terms-of-service" target="_blank" rel="noreferrer" className="text-slate-900 font-medium hover:underline">Terms of Service</a> and <a href="/privacy-policy" target="_blank" rel="noreferrer" className="text-slate-900 font-medium hover:underline">Privacy Policy</a>.
+        </label>
+      </div>
+
+      <a 
+        href={agreed ? checkoutUrl : '#'} 
+        onClick={(e) => { 
+          if(!agreed) { 
+            e.preventDefault(); 
+            alert('Please agree to the Terms of Service and Privacy Policy before checking out.'); 
+          } 
+        }} 
+        className={`block w-full text-center py-3 rounded-full font-bold transition-all ${agreed ? 'bg-[#1E3A8A] text-white hover:bg-[#172A66] shadow-[0_4px_15px_rgba(30,58,138,0.3)]' : 'bg-slate-200 text-slate-400 cursor-not-allowed'}`}
+      >
         Checkout
       </a>
     </div>

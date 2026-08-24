@@ -51,9 +51,15 @@ export function Footer({
                   <h4 className="text-white font-bold mb-6 tracking-widest uppercase text-sm">Legal</h4>
                   <ul className="space-y-4">
                     <li><NavLink to="/privacy-policy" className="hover:text-white transition-colors">Privacy Policy</NavLink></li>
+                    <li><NavLink to="/cookie-policy" className="hover:text-white transition-colors">Cookie Policy</NavLink></li>
                     <li><NavLink to="/terms-of-service" className="hover:text-white transition-colors">Terms of Service</NavLink></li>
                     <li><NavLink to="/shipping-policy" className="hover:text-white transition-colors">Shipping Policy</NavLink></li>
                     <li><NavLink to="/refund-policy" className="hover:text-white transition-colors">Refund/Returns Policy</NavLink></li>
+                    <li className="pt-2">
+                      <button onClick={() => { if(typeof window !== 'undefined') { localStorage.removeItem('flashbind_cookie_consent'); window.location.reload(); } }} className="text-[11px] text-slate-500 hover:text-slate-300 transition-colors uppercase tracking-wider underline">
+                        Do Not Sell My Personal Information
+                      </button>
+                    </li>
                   </ul>
                 </div>
               </div>
