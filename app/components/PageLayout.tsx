@@ -36,27 +36,6 @@ export function PageLayout({
     <Aside.Provider>
       <CartAside cart={cart} />
       <SearchAside />
-      {/* Trust Signal Bar (Premium Marquee) */}
-      <div className="w-full bg-[#0A1838] py-2.5 overflow-hidden flex whitespace-nowrap pointer-events-none">
-        <div className="flex w-max" style={{ animation: 'marquee 50s linear infinite' }}>
-          {[...Array(8)].map((_, i) => (
-            <div key={i} className="flex items-center">
-              {[
-                "500+ businesses powered",
-                "Trusted across the EU",
-                "Custom branding on every order",
-                "Same-day dispatch",
-                "Enterprise-grade NFC chips"
-              ].map((statement, j) => (
-                <div key={j} className="flex items-center">
-                  <span className="text-[11px] font-medium text-white/90 tracking-widest uppercase">{statement}</span>
-                  <span className="w-1 h-1 rounded-full bg-[#3B82F6] mx-6"></span>
-                </div>
-              ))}
-            </div>
-          ))}
-        </div>
-      </div>
       {header && (
         <Header
           header={header}

@@ -41,20 +41,44 @@ export function Header({
 
   return (
     <>
-      <header className={`sticky top-0 z-50 px-6 py-3 md:py-4 flex items-center justify-between w-full transition-all duration-500 border-b ${isScrolled ? 'bg-white/95 backdrop-blur-2xl shadow-[0_4px_20px_rgba(0,0,0,0.05)] border-slate-200/60' : 'bg-white shadow-none border-transparent'}`}>
-        <NavLink prefetch="intent" to="/" className="flex items-center gap-3 relative z-10" onClick={close}>
-          <img src="/logo-transparent.png" alt="FlashBind Logo" className="h-16 md:h-20 object-contain" />
-        </NavLink>
-        <div className="hidden md:flex md:absolute md:left-1/2 md:top-1/2 md:-translate-x-1/2 md:-translate-y-1/2 z-10">
-          <HeaderMenu
-            menu={menu}
-            viewport="desktop"
-            primaryDomainUrl={header.shop.primaryDomain.url}
-            publicStoreDomain={publicStoreDomain}
-          />
+      <header className={`sticky top-0 z-50 flex flex-col w-full transition-all duration-500 border-b ${isScrolled ? 'bg-white/95 backdrop-blur-2xl shadow-[0_4px_20px_rgba(0,0,0,0.05)] border-slate-200/60' : 'bg-white shadow-none border-transparent'}`}>
+        {/* Trust Signal Bar (Premium Marquee) */}
+        <div className="w-full bg-[#1E3A8A] py-2.5 overflow-hidden flex whitespace-nowrap pointer-events-none">
+          <div className="flex w-max" style={{ animation: 'marquee 50s linear infinite' }}>
+            {[...Array(8)].map((_, i) => (
+              <div key={i} className="flex items-center">
+                {[
+                  "500+ businesses powered",
+                  "Trusted across the EU",
+                  "Custom branding on every order",
+                  "Same-day dispatch",
+                  "Enterprise-grade NFC chips"
+                ].map((statement, j) => (
+                  <div key={j} className="flex items-center">
+                    <span className="text-[11px] font-medium text-white/90 tracking-widest uppercase">{statement}</span>
+                    <span className="w-1 h-1 rounded-full bg-white/40 mx-6"></span>
+                  </div>
+                ))}
+              </div>
+            ))}
+          </div>
         </div>
-        <div className="relative z-10">
-          <HeaderCtas isLoggedIn={isLoggedIn} cart={cart} setIsAccountOpen={setIsAccountOpen} />
+
+        <div className="px-6 py-3 md:py-4 flex items-center justify-between w-full">
+          <NavLink prefetch="intent" to="/" className="flex items-center gap-3 relative z-10" onClick={close}>
+            <img src="/logo-transparent.png" alt="FlashBind Logo" className="h-16 md:h-20 object-contain" />
+          </NavLink>
+          <div className="hidden md:flex md:absolute md:left-1/2 md:top-1/2 md:-translate-x-1/2 md:-translate-y-1/2 z-10">
+            <HeaderMenu
+              menu={menu}
+              viewport="desktop"
+              primaryDomainUrl={header.shop.primaryDomain.url}
+              publicStoreDomain={publicStoreDomain}
+            />
+          </div>
+          <div className="relative z-10">
+            <HeaderCtas isLoggedIn={isLoggedIn} cart={cart} setIsAccountOpen={setIsAccountOpen} />
+          </div>
         </div>
       </header>
 
@@ -129,7 +153,7 @@ export function Header({
 
       {/* Mobile Slide-down Menu */}
       <div 
-        className={`md:hidden fixed top-[72px] left-0 w-full bg-white shadow-xl border-b border-slate-100 transition-all duration-300 z-40 overflow-hidden ${
+        className={`md:hidden fixed top-[108px] left-0 w-full bg-white shadow-xl border-b border-slate-100 transition-all duration-300 z-40 overflow-hidden ${
           isMobileMenuOpen ? 'max-h-[85vh] opacity-100' : 'max-h-0 opacity-0'
         }`}
       >
@@ -198,7 +222,7 @@ export function Header({
       {/* Backdrop for mobile menu */}
       {isMobileMenuOpen && (
         <div 
-          className="md:hidden fixed inset-0 bg-black/40 backdrop-blur-sm z-30 top-[72px]" 
+          className="md:hidden fixed inset-0 bg-black/40 backdrop-blur-sm z-30 top-[108px]" 
           onClick={close}
           aria-hidden="true"
         />
