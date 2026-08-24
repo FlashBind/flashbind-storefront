@@ -132,7 +132,7 @@ export default function Homepage() {
           <div className="w-full max-w-[45rem] px-6 lg:pl-12 lg:pr-16 pt-16 pb-12 lg:py-20 mx-auto lg:ml-auto lg:mr-0 flex flex-col justify-center items-center lg:items-start text-center lg:text-left">
             <div className="inline-block mb-8 px-4 py-2 rounded-full border border-black/5 bg-white/40 backdrop-blur-md self-center lg:self-start">
               <span className="text-[13px] font-medium text-[#4A4A4A] flex items-center gap-2.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#60A5FA] shadow-[0_0_8px_rgba(96,165,250,0.8)] animate-pulse"></span>
+                <span className="w-1.5 h-1.5 rounded-full bg-[#1E3A8A] opacity-80"></span>
                 The future of interaction
               </span>
             </div>
@@ -146,7 +146,7 @@ export default function Homepage() {
             </p>
             
             <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start w-full gap-4">
-              <Link to="/catalog" className="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-[#172A66] via-[#1E3A8A] to-[#172A66] text-white font-bold rounded-full hover:from-[#1E3A8A] hover:via-[#2563EB] hover:to-[#1E3A8A] hover:scale-105 shadow-[0_10px_30px_rgba(30,58,138,0.4)] hover:shadow-[0_10px_50px_rgba(96,165,250,0.5)] transition-all duration-500 text-base text-center border border-white/10">
+              <Link to="/catalog" className="w-full sm:w-auto px-8 py-4 bg-[#1E3A8A] text-white font-bold rounded-full hover:bg-[#172A66] hover:scale-105 shadow-[0_10px_40px_rgba(30,58,138,0.3)] transition-all duration-300 text-base text-center">
                 Explore Catalog
               </Link>
               <a href="#solutions" className="w-full sm:w-auto px-8 py-4 bg-white/80 backdrop-blur-sm border border-slate-200 text-slate-700 font-bold rounded-full hover:bg-slate-50 hover:border-[#1E3A8A]/30 hover:text-[#1E3A8A] hover:scale-105 shadow-sm hover:shadow-md transition-all duration-300 text-base text-center">
@@ -171,7 +171,7 @@ export default function Homepage() {
             {/* Floating Badge overlay */}
             <div className="absolute bottom-6 left-6 inline-block px-5 py-2.5 rounded-full border border-white/20 bg-white/80 backdrop-blur-xl shadow-lg z-10">
               <span className="text-[13px] font-bold text-[#1A1A1A] flex items-center gap-2.5 uppercase tracking-widest">
-                <span className="w-2 h-2 rounded-full bg-[#60A5FA] shadow-[0_0_8px_rgba(96,165,250,0.8)] animate-pulse"></span>
+                <span className="w-2 h-2 rounded-full bg-[#1E3A8A] animate-pulse"></span>
                 Fully Customisable
               </span>
             </div>
