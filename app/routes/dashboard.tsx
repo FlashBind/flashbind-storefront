@@ -1,9 +1,16 @@
-import { Form, redirect, useLoaderData } from 'react-router';
+import { Form, redirect, useLoaderData, type HeadersFunction } from 'react-router';
 import type { LoaderFunctionArgs } from 'react-router';
-import { getSupabase } from '~/utils/supabase.server';
+import { getSupabaseAdmin } from '~/utils/supabase.server';
+import { sanitizeTagSettings } from '~/utils/tagSanitizer.server';
 
 export const handle = {
   hideLayout: true, // Hide global header/footer to match app-like feel
+};
+
+export const headers: HeadersFunction = () => {
+  return new Headers({
+    'Cache-Control': 'private, no-store, max-age=0',
+  });
 };
 
 export async function loader({ context }: LoaderFunctionArgs) {
@@ -14,21 +21,34 @@ export async function loader({ context }: LoaderFunctionArgs) {
   }
 
   // 2. Query the database for tags matching this user's email
-  const supabase = getSupabase(context);
-  const { data: rawTags, error } = await supabase.from('tags').select('*').eq('owner_email', userEmail);
+  const supabase = getSupabaseAdmin(context);
+  const { data: rawTags, error } = await supabase
+    .from('tags')
+    .select('id, is_claimed, type, settings, pet_name, owner_name, phone, owner_email, medical_notes, image_url')
+    .eq('owner_email', userEmail);
 
-  const userTags = (rawTags || []).map((rawTag: any) => ({
-    id: rawTag.id,
-    isClaimed: rawTag.is_claimed,
-    type: rawTag.type || 'pet_tag',
-    settings: rawTag.settings || {},
-    dogName: rawTag.pet_name,
-    ownerName: rawTag.owner_name,
-    ownerPhone: rawTag.phone,
-    ownerEmail: rawTag.owner_email,
-    medicalNotes: rawTag.medical_notes,
-    imageUrl: rawTag.image_url,
-  }));
+  if (error) {
+    console.error('Failed to load dashboard tags:', error);
+    throw new Response('Internal Server Error', { status: 500 });
+  }
+
+  const userTags = (rawTags || []).map((rawTag: any) => {
+    const type = rawTag.type || 'pet_tag';
+    const safeSettings = sanitizeTagSettings(type, rawTag.settings);
+
+    return {
+      id: rawTag.id,
+      isClaimed: rawTag.is_claimed,
+      type: type,
+      settings: safeSettings,
+      dogName: rawTag.pet_name,
+      ownerName: rawTag.owner_name,
+      ownerPhone: rawTag.phone,
+      ownerEmail: rawTag.owner_email,
+      medicalNotes: rawTag.medical_notes,
+      imageUrl: rawTag.image_url,
+    };
+  });
 
   return { userEmail, userTags };
 }
