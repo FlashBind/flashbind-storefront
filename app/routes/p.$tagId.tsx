@@ -1,10 +1,16 @@
-import { useLoaderData, redirect } from 'react-router';
+import { useLoaderData, redirect, type HeadersFunction } from 'react-router';
 import type { LoaderFunctionArgs } from 'react-router';
+import { sanitizeTagSettings } from '~/utils/tagSanitizer.server';
 
-
-// Tell the root layout to hide the header and footer for this route
 export const handle = {
   hideLayout: true,
+};
+
+export const headers: HeadersFunction = () => {
+  return new Headers({
+    'Cache-Control': 'private, no-store, max-age=0',
+    'X-Robots-Tag': 'noindex, nofollow, noarchive',
+  });
 };
 
 // Server-side Logic (Remix Loader)
@@ -17,7 +23,11 @@ export async function loader({ params, context }: LoaderFunctionArgs) {
 
   const { getSupabaseAdmin } = await import('~/utils/supabase.server');
   const adminSupabase = getSupabaseAdmin(context);
-  const { data: rawPet, error } = await adminSupabase.from('tags').select('*').eq('id', tagId).single();
+  const { data: rawPet, error } = await adminSupabase
+    .from('tags')
+    .select('id, is_claimed, type, settings, pet_name, owner_name, phone, owner_email, medical_notes, image_url')
+    .eq('id', tagId)
+    .single();
 
   // If the ID is not found in the DB, return 404
   if (error || !rawPet) {
@@ -29,18 +39,22 @@ export async function loader({ params, context }: LoaderFunctionArgs) {
     return redirect(`/setup/${tagId}`);
   }
 
+  const type = rawPet.type || 'pet_tag';
+  const safeSettings = sanitizeTagSettings(type, rawPet.settings);
+  const isPetTag = type === 'pet_tag';
+
   // Map snake_case to frontend camelCase
   const pet = {
     id: rawPet.id,
     isClaimed: rawPet.is_claimed,
-    type: rawPet.type || 'pet_tag',
-    settings: rawPet.settings || {},
-    dogName: rawPet.pet_name,
-    ownerName: rawPet.owner_name,
-    ownerPhone: rawPet.phone,
-    ownerEmail: rawPet.owner_email,
-    medicalNotes: rawPet.medical_notes,
-    imageUrl: rawPet.image_url,
+    type: type,
+    settings: safeSettings,
+    dogName: isPetTag ? rawPet.pet_name : null,
+    ownerName: isPetTag ? rawPet.owner_name : null,
+    ownerPhone: isPetTag ? rawPet.phone : null,
+    ownerEmail: isPetTag ? rawPet.owner_email : null,
+    medicalNotes: isPetTag ? rawPet.medical_notes : null,
+    imageUrl: isPetTag ? rawPet.image_url : null,
   };
 
   // Immediate redirect for google_review and menu tags
