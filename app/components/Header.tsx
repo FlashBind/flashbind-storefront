@@ -48,11 +48,10 @@ export function Header({
             {[...Array(8)].map((_, i) => (
               <div key={i} className="flex items-center">
                 {[
-                  "500+ businesses powered",
-                  "Trusted across the EU",
-                  "Custom branding on every order",
-                  "Same-day dispatch",
-                  "Enterprise-grade NFC chips"
+                  "PREMIUM NFC HARDWARE",
+                  "COMPATIBLE WITH MOST MODERN SMARTPHONES",
+                  "NO APP REQUIRED",
+                  "EDITABLE ANYTIME"
                 ].map((statement, j) => (
                   <div key={j} className="flex items-center">
                     <span className="text-[11px] font-bold text-white tracking-widest uppercase drop-shadow-md">{statement}</span>

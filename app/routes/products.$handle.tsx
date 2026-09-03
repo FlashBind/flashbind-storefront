@@ -105,14 +105,6 @@ export default function Product() {
   const defaultImage = selectedVariant?.image || productImages[0];
   const [activeImage, setActiveImage] = useState(defaultImage);
 
-  // Generate a deterministic random review count based on product ID
-  const idStr = product?.id || product?.handle || 'default';
-  let hash = 0;
-  for (let i = 0; i < idStr.length; i++) {
-    hash = idStr.charCodeAt(i) + ((hash << 5) - hash);
-    hash |= 0; 
-  }
-  const reviewCount = Math.abs(hash % 420) + 80;
   const [activeFeature, setActiveFeature] = useState(0);
 
   // Update active image if the variant changes
@@ -177,15 +169,6 @@ export default function Product() {
                 )}
               </div>
               
-              <div className="flex items-center gap-3 mb-6">
-                <div className="flex text-yellow-400 text-sm">
-                  &#9733;&#9733;&#9733;&#9733;&#9733;
-                </div>
-                <span className="text-sm font-bold text-slate-500 underline decoration-slate-300 underline-offset-4 cursor-pointer hover:text-slate-900 transition-colors">
-                  {reviewCount} Reviews
-                </span>
-              </div>
-              
               <div className="text-3xl font-extrabold text-slate-900 mb-8">
                 <ProductPrice
                   price={selectedVariant?.price}
@@ -197,6 +180,7 @@ export default function Product() {
                 <ProductForm
                   productOptions={productOptions}
                   selectedVariant={selectedVariant}
+                  productHandle={product.handle}
                 />
               </div>
               
@@ -239,8 +223,8 @@ export default function Product() {
                         <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                       </svg>
                     </div>
-                    <h4 className="font-bold text-slate-900 text-sm mb-1">Bank-Grade</h4>
-                    <p className="text-xs text-slate-500">Encrypted data</p>
+                    <h4 className="font-bold text-slate-900 text-sm mb-1">Editable</h4>
+                    <p className="text-xs text-slate-500">Update destination anytime</p>
                   </div>
                 </div>
                 
@@ -295,7 +279,7 @@ export default function Product() {
               
               <details className="group border border-slate-200 rounded-xl bg-white shadow-sm [&_summary::-webkit-details-marker]:hidden">
                 <summary className="flex cursor-pointer items-center justify-between gap-1.5 p-6 text-slate-900 font-bold transition-colors hover:text-blue-600">
-                  Are there any monthly subscription fees?
+                  Do I need a FlashBind software plan?
                   <span className="shrink-0 transition duration-300 group-open:-rotate-180 text-slate-400">
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                       <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
@@ -303,7 +287,7 @@ export default function Product() {
                   </span>
                 </summary>
                 <div className="px-6 pb-6 text-slate-600 leading-relaxed text-base">
-                  <p>Zero. This is a one-time purchase. You own the hardware and can update the destination link as many times as you like from our free dashboard.</p>
+                  <p>No. FlashBind hardware works without a plan. Optional software plans add branded pages, customer-feedback tools, analytics and multi-location management.</p>
                 </div>
               </details>
 

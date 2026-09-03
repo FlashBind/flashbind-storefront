@@ -12,9 +12,11 @@ import {useState} from 'react';
 export function ProductForm({
   productOptions,
   selectedVariant,
+  productHandle,
 }: {
   productOptions: MappedProductOptions[];
   selectedVariant: ProductFragment['selectedOrFirstAvailableVariant'];
+  productHandle: string;
 }) {
   const navigate = useNavigate();
   const {open} = useAside();
@@ -147,9 +149,13 @@ export function ProductForm({
               : 'bg-slate-400 cursor-not-allowed opacity-80'
           }`}
         >
-          {selectedVariant?.availableForSale 
+          {selectedVariant?.availableForSale
             ? <span>ADD TO CART &mdash; {formattedPrice}</span>
-            : <span>SOLD OUT</span>
+            : <span>
+                {['nfc-restaurant-menu-stand', 'guest-wi-fi-hub', 'smart-pet-collar-tag'].includes(productHandle)
+                  ? 'COMING SOON'
+                  : 'SOLD OUT'}
+              </span>
           }
         </AddToCartButton>
 

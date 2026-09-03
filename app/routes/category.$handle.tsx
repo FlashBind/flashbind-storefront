@@ -12,7 +12,6 @@ type TrendingProduct = {
   description: string;
   price: string;
   comparePrice?: string;
-  reviews: number;
   badge?: string;
   badgeColor?: string;
   colors?: string[];
@@ -28,7 +27,6 @@ const ALL_PRODUCTS: TrendingProduct[] = [
     description: 'Premium matte metal finish with instant tap-to-share networking technology.',
     price: '$39.99',
     comparePrice: '$49.99',
-    reviews: 241,
     badge: 'Bestseller',
     badgeColor: 'bg-white/95 text-slate-800',
     colors: ['bg-slate-900', 'bg-slate-300', 'bg-yellow-500'],
@@ -39,7 +37,6 @@ const ALL_PRODUCTS: TrendingProduct[] = [
     name: 'Smart Business Card (Bamboo)',
     description: 'Eco-friendly bamboo finish with built-in NFC for sustainable networking.',
     price: '$29.99',
-    reviews: 145,
     categoryId: 'business-cards'
   },
   {
@@ -47,7 +44,6 @@ const ALL_PRODUCTS: TrendingProduct[] = [
     name: 'Google Review Stand',
     description: 'Perfect for countertops. Let customers review your business with a single tap.',
     price: '$24.99',
-    reviews: 892,
     badge: 'Selling Fast',
     badgeColor: 'bg-slate-800/90 text-white',
     categoryId: 'review-stands'
@@ -57,7 +53,6 @@ const ALL_PRODUCTS: TrendingProduct[] = [
     name: 'Smart Pet Collar Tag',
     description: 'Keep your pets safe. Tap to reveal owner contact details instantly.',
     price: '$19.99',
-    reviews: 118,
     badge: 'Low Stock',
     badgeColor: 'bg-slate-800/90 text-white',
     colors: ['bg-[#1E3A8A]', 'bg-pink-500', 'bg-slate-900'],
@@ -69,7 +64,6 @@ const ALL_PRODUCTS: TrendingProduct[] = [
     name: 'Guest Wi-Fi Hub',
     description: 'Minimalist acrylic stand. Allow guests to connect to your network instantly without passwords.',
     price: '$29.99',
-    reviews: 312,
     categoryId: 'wifi-hubs',
     availableForSale: false
   }
@@ -188,10 +182,6 @@ function TrendingProductCard({ product }: { product: TrendingProduct }) {
         </div>
         
         <h3 className="text-2xl font-sans font-extrabold text-slate-900 mb-2 tracking-tight group-hover:text-[#1E3A8A] transition-colors duration-300 cursor-pointer shrink-0">{product.name}</h3>
-        <div className="flex items-center gap-1.5 mb-3 shrink-0">
-          <div className="flex text-yellow-400 text-[10px]">★★★★★</div>
-          <span className="text-xs font-bold text-slate-400">({product.reviews})</span>
-        </div>
         <p className="font-sans text-slate-500 text-[15px] mb-6 leading-relaxed line-clamp-3 grow">{product.description}</p>
       
         <div className="flex items-center justify-between mt-auto pt-4 border-t border-slate-100 shrink-0">

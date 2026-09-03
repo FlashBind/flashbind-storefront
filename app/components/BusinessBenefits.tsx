@@ -44,15 +44,15 @@ export function BusinessBenefits({ isProductPage = false }: { isProductPage?: bo
             </p>
           </div>
           
-          {/* Column 3: No Monthly Fees */}
+          {/* Column 3: Optional Software */}
           <div className="bg-slate-50 border border-slate-100 rounded-[2rem] p-10 text-center flex flex-col items-center transition-all duration-300 hover:shadow-xl hover:bg-white hover:-translate-y-1">
             <div className="w-16 h-16 bg-blue-100 text-[#1E3A8A] rounded-2xl flex items-center justify-center mb-6 shadow-sm">
               <svg xmlns="http://www.w3.org/2000/svg" className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
               </svg>
             </div>
-            <h3 className="text-xl font-bold text-slate-900 mb-3">No Monthly Fees</h3>
-            <p className="text-slate-500 text-[15px] leading-relaxed">Own your hardware. Generate reviews and drive traffic with zero recurring software subscriptions.</p>
+            <h3 className="text-xl font-bold text-slate-900 mb-3">Optional Software</h3>
+            <p className="text-slate-500 text-[15px] leading-relaxed">Purchase the hardware once and use it without a monthly plan. Upgrade with optional FlashBind software when your business needs additional tools.</p>
           </div>
         </div>
       </div>

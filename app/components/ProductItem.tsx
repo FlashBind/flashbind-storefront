@@ -19,19 +19,14 @@ export function ProductItem({
   const variantUrl = useVariantUrl(product.handle);
   const image = product.featuredImage;
   
-  const idStr = product?.id || product?.handle || 'default';
-  let hash = 0;
-  for (let i = 0; i < idStr.length; i++) {
-    hash = idStr.charCodeAt(i) + ((hash << 5) - hash);
-    hash |= 0;
-  }
-  const reviewCount = Math.abs(hash % 420) + 80;
+
 
   const price = product?.priceRange?.minVariantPrice;
   const compareAtPrice = product?.compareAtPriceRange?.minVariantPrice;
   const isSale = compareAtPrice && price && parseFloat(compareAtPrice.amount) > parseFloat(price.amount);
   const isSoldOut = product?.availableForSale === false;
-  const isSellingFast = product?.tags?.includes('selling-fast') || product?.handle?.includes('pet');
+  const isComingSoon = isSoldOut && ['nfc-restaurant-menu-stand', 'guest-wi-fi-hub', 'smart-pet-collar-tag'].includes(product?.handle || '');
+  const isSellingFast = product?.tags?.includes('selling-fast');
 
 
   return (
@@ -43,7 +38,11 @@ export function ProductItem({
     >
       {/* Badges Container */}
       <div className="absolute top-8 left-8 z-10 flex flex-col gap-2 items-start">
-        {isSoldOut ? (
+        {isComingSoon ? (
+          <div className="bg-slate-800/90 backdrop-blur-sm border border-slate-700/50 text-white text-[11px] font-extrabold uppercase tracking-widest py-1.5 px-3 rounded-full shadow-sm">
+            Coming Soon
+          </div>
+        ) : isSoldOut ? (
           <div className="bg-slate-800/90 backdrop-blur-sm border border-slate-700/50 text-white text-[11px] font-extrabold uppercase tracking-widest py-1.5 px-3 rounded-full shadow-sm">
             Sold Out
           </div>
@@ -84,10 +83,7 @@ export function ProductItem({
       
       <h3 className="text-[1.35rem] font-bold text-slate-900 mb-1 leading-tight">{product.title}</h3>
       
-      <div className="flex items-center gap-1.5 mb-4">
-        <div className="flex text-yellow-400 text-sm tracking-tight">★★★★★</div>
-        <span className="text-[11px] text-slate-400 font-medium">({reviewCount})</span>
-      </div>
+
       
       <p className="text-sm text-slate-500 leading-relaxed mb-8 flex-grow">
         Perfect for your business. Let customers connect instantly with a single tap.
