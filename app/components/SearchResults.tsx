@@ -122,7 +122,8 @@ function SearchResultsProducts({
             const compareAtPrice = product?.selectedOrFirstAvailableVariant?.compareAtPrice;
             const isSale = compareAtPrice && price && parseFloat(compareAtPrice.amount) > parseFloat(price.amount);
             const isSoldOut = (product as any)?.availableForSale === false;
-            const isSellingFast = (product as any)?.tags?.includes('selling-fast') || product?.handle?.includes('pet');
+            const isComingSoon = isSoldOut && ['nfc-restaurant-menu-stand', 'guest-wi-fi-hub', 'smart-pet-collar-tag'].includes(product?.handle || '');
+            const isSellingFast = (product as any)?.tags?.includes('selling-fast');
             const image = product?.selectedOrFirstAvailableVariant?.image;
 
             return (
@@ -133,7 +134,11 @@ function SearchResultsProducts({
                 className="group bg-white rounded-[2.5rem] p-6 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 flex flex-col relative h-full hover:-translate-y-2 hover:shadow-[0_20px_40px_rgb(0,0,0,0.08)] transition-all duration-300 text-left"
               >
                 <div className="absolute top-8 left-8 z-10 flex flex-col items-start gap-2">
-                  {isSoldOut ? (
+                  {isComingSoon ? (
+                    <div className="bg-slate-800/90 backdrop-blur-sm border border-slate-700/50 text-white text-[11px] font-extrabold uppercase tracking-widest py-1.5 px-3 rounded-full shadow-sm">
+                      Coming Soon
+                    </div>
+                  ) : isSoldOut ? (
                     <div className="bg-slate-800/90 backdrop-blur-sm border border-slate-700/50 text-white text-[11px] font-extrabold uppercase tracking-widest py-1.5 px-3 rounded-full shadow-sm">
                       Sold Out
                     </div>
@@ -225,7 +230,7 @@ function SearchResultsEmpty() {
         </svg>
       </div>
       <h3 className="text-2xl font-bold text-slate-900 mb-2">No results found</h3>
-      <p className="text-slate-500 max-w-md mx-auto">We couldn't find anything matching your search. Try adjusting your keywords or browse our catalog.</p>
+      <p className="text-slate-500 max-w-md mx-auto">We couldn’t find anything matching your search. Try adjusting your keywords or browse our catalog.</p>
     </div>
   );
 }

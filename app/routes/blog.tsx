@@ -18,7 +18,7 @@ export default function BlogPage() {
             Journal
           </div>
           <h1 className="text-4xl md:text-6xl font-extrabold text-slate-900 tracking-tight mb-4">Latest Insights</h1>
-          <p className="text-slate-500 text-lg md:text-xl max-w-2xl mx-auto">News, tech trends, and tips on how to maximize your physical-to-digital conversions.</p>
+          <p className="text-slate-500 text-lg md:text-xl max-w-2xl mx-auto">Practical guides for making physical-to-digital customer journeys easier.</p>
         </div>
 
         {/* Featured Post */}
@@ -33,13 +33,13 @@ export default function BlogPage() {
             <div className="w-full md:w-2/5 flex flex-col justify-center py-6 pr-6">
               <div className="flex items-center gap-4 mb-6">
                  <span className="px-4 py-1.5 bg-blue-100 text-blue-700 rounded-full text-xs font-bold uppercase tracking-widest">Technology</span>
-                 <span className="text-slate-400 font-medium text-sm">Oct 24, 2026</span>
+                 <span className="text-slate-400 font-medium text-sm">Sep 5, 2026</span>
               </div>
               <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight mb-6 group-hover:text-[#1E3A8A] transition-colors leading-tight">
-                Why NFC is Replacing QR Codes in Hospitality
+                NFC and QR Codes in Hospitality: When to Use Each
               </h2>
               <p className="text-slate-500 text-lg leading-relaxed mb-8">
-                Learn why top restaurants and hotels are ditching clunky QR codes in favor of seamless tap-to-view NFC technology to elevate the guest experience.
+                Compare tap-to-open NFC with familiar QR codes and learn how the two can complement each other in a guest experience.
               </p>
               <div className="flex items-center gap-3 mt-auto">
                 <div className="w-10 h-10 rounded-full border border-slate-200 shadow-sm bg-white overflow-hidden flex items-center justify-center">
@@ -65,13 +65,13 @@ export default function BlogPage() {
             </div>
             <div className="flex items-center gap-3 mb-4">
                <span className="px-3 py-1 bg-green-100 text-green-700 rounded-full text-[10px] font-bold uppercase tracking-widest">Marketing</span>
-               <span className="text-slate-400 font-medium text-[11px]">Oct 18, 2026</span>
+               <span className="text-slate-400 font-medium text-[11px]">Sep 5, 2026</span>
             </div>
             <h3 className="text-2xl font-extrabold text-slate-900 tracking-tight mb-4 group-hover:text-[#1E3A8A] transition-colors">
-              How to Boost Your Local SEO with Google Review Stands
+              Make It Easier for Customers to Find Your Google Review Page
             </h3>
             <p className="text-slate-500 leading-relaxed mb-8 flex-grow">
-              Discover the exact strategy local businesses are using to triple their Google Reviews in under 30 days using physical NFC endpoints.
+              Learn how a simple NFC touchpoint can shorten the path to your public Google review form.
             </p>
             <div className="flex items-center text-[#1E3A8A] font-bold text-sm">
               Read article <span className="ml-2 transform group-hover:translate-x-1 transition-transform">→</span>
@@ -87,13 +87,13 @@ export default function BlogPage() {
             </div>
             <div className="flex items-center gap-3 mb-4">
                <span className="px-3 py-1 bg-teal-100 text-teal-700 rounded-full text-[10px] font-bold uppercase tracking-widest">Pets</span>
-               <span className="text-slate-400 font-medium text-[11px]">Oct 5, 2026</span>
+               <span className="text-slate-400 font-medium text-[11px]">Sep 5, 2026</span>
             </div>
             <h3 className="text-2xl font-extrabold text-slate-900 tracking-tight mb-4 group-hover:text-[#1E3A8A] transition-colors">
-              Why Smart Pet Tags are the New Standard for Pet Safety
+              What an NFC Pet Tag Can—and Cannot—Do
             </h3>
             <p className="text-slate-500 leading-relaxed mb-8 flex-grow">
-              Discover how NFC-enabled pet tags are helping lost pets get home faster by providing finders with instant access to contact info and medical records.
+              See how an NFC tag can share a pet profile with a finder, without pretending to be a GPS tracker.
             </p>
             <div className="flex items-center text-[#1E3A8A] font-bold text-sm">
               Read article <span className="ml-2 transform group-hover:translate-x-1 transition-transform">→</span>

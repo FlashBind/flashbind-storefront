@@ -1,6 +1,6 @@
 import {useLoaderData, Link} from 'react-router';
 import type {Route} from './+types/collections.all';
-import {getPaginationVariables} from '@shopify/hydrogen';
+import {getPaginationVariables, Money} from '@shopify/hydrogen';
 import {PaginatedResourceSection} from '~/components/PaginatedResourceSection';
 
 export const meta: Route.MetaFunction = () => {
@@ -49,22 +49,23 @@ export default function Collection() {
 }
 
 function TrendingProductCard({ product }: { product: any }) {
-  // Format price
-  const priceAmount = product.priceRange?.minVariantPrice?.amount;
-  const compareAmount = product.compareAtPriceRange?.minVariantPrice?.amount;
-  
-  const price = priceAmount ? `$${parseFloat(priceAmount).toFixed(2)}` : 'View Price';
-  const comparePrice = compareAmount ? `$${parseFloat(compareAmount).toFixed(2)}` : null;
-  const isSale = compareAmount && priceAmount && parseFloat(compareAmount) > parseFloat(priceAmount);
+  const price = product.priceRange?.minVariantPrice;
+  const comparePrice = product.compareAtPriceRange?.minVariantPrice;
+  const isSale = comparePrice && price && parseFloat(comparePrice.amount) > parseFloat(price.amount);
   const isSoldOut = product.availableForSale === false;
-  const isSellingFast = product.tags?.includes('selling-fast') || product.handle?.includes('pet');
+  const isComingSoon = isSoldOut && ['nfc-restaurant-menu-stand', 'guest-wi-fi-hub', 'smart-pet-collar-tag'].includes(product.handle || '');
+  const isSellingFast = product.tags?.includes('selling-fast');
 
   return (
     <Link to={`/products/${product.handle}`} className="block">
       <div className="bg-white/60 backdrop-blur-3xl rounded-[2.5rem] p-6 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:-translate-y-2 hover:shadow-[0_0_25px_rgba(30,58,138,0.4)] transition-all duration-500 group border-2 border-white/80 hover:border-[#1E3A8A] relative overflow-hidden" style={{ animation: 'fadeIn 0.5s ease-out both' }}>
         <div className="relative z-10">
           <div className="relative z-10 flex flex-col items-start gap-2 absolute top-4 left-4 z-20">
-            {isSoldOut ? (
+            {isComingSoon ? (
+              <div className="bg-slate-800/90 backdrop-blur-sm border border-slate-700/50 text-white text-[11px] font-extrabold uppercase tracking-widest py-1.5 px-3 rounded-full shadow-sm">
+                Coming Soon
+              </div>
+            ) : isSoldOut ? (
               <div className="bg-slate-800/90 backdrop-blur-sm border border-slate-700/50 text-white text-[11px] font-extrabold uppercase tracking-widest py-1.5 px-3 rounded-full shadow-sm">
                 Sold Out
               </div>
@@ -109,10 +110,12 @@ function TrendingProductCard({ product }: { product: any }) {
               <span className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mb-1">Starting at</span>
               {isSale && (
                 <span className="text-xs text-slate-400 line-through decoration-slate-300 font-medium mb-0.5">
-                  {comparePrice}
+                  <Money data={comparePrice} />
                 </span>
               )}
-              <span className={`text-2xl font-extrabold ${isSale ? 'text-[#1E3A8A]' : 'text-slate-900'}`}>{price}</span>
+              <span className={`text-2xl font-extrabold ${isSale ? 'text-[#1E3A8A]' : 'text-slate-900'}`}>
+                {price ? <Money data={price} /> : 'View price'}
+              </span>
             </div>
             <button 
               onClick={(e) => {

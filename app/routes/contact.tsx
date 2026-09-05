@@ -3,6 +3,10 @@ import {useState, useEffect, useRef} from 'react';
 import {useSearchParams, useActionData, useNavigation, Form} from 'react-router';
 import {getSupabaseAdmin} from '~/utils/supabase.server';
 import {sendEmailNotification} from '~/utils/email.server';
+import {
+  getFormText,
+  normalizeEmail,
+} from '~/utils/requestSecurity.server';
 
 export const meta: MetaFunction = () => {
   return [{title: 'FlashBind | Contact Us'}];
@@ -10,11 +14,27 @@ export const meta: MetaFunction = () => {
 
 export async function action({request, context}: ActionFunctionArgs) {
   const formData = await request.formData();
-  const email = formData.get('email') as string;
-  const message = formData.get('message') as string;
+  const email = normalizeEmail(formData.get('email'));
+  const message = getFormText(formData, 'message', 5000);
+  const honeypot = formData.get('company_website');
+
+  if (typeof honeypot === 'string' && honeypot.trim()) {
+    return {success: true};
+  }
 
   if (!email || !message) {
-    return {error: 'Email and message are required.'};
+    return {error: 'Enter a valid email and a message of up to 5,000 characters.'};
+  }
+
+  const adminEmail = normalizeEmail(
+    (context.env as any).NOTIFICATION_EMAIL ||
+      (context.env as any).ADMIN_EMAIL,
+  );
+  const apiKey = (context.env as any).RESEND_API_KEY;
+
+  if (!adminEmail || !apiKey) {
+    console.error('Contact notifications are not configured');
+    return {error: 'The contact form is temporarily unavailable. Please email info@flashbind.com.'};
   }
 
   const supabase = getSupabaseAdmin(context);
@@ -32,14 +52,6 @@ export async function action({request, context}: ActionFunctionArgs) {
   }
 
   // 2. Send Email Notification
-  const adminEmail = (context.env as any).NOTIFICATION_EMAIL || (context.env as any).ADMIN_EMAIL || 'YOUR_GMAIL_ADDRESS_HERE';
-  const apiKey = (context.env as any).RESEND_API_KEY;
-  
-  if (!apiKey) {
-    console.error('RESEND_API_KEY is not set in environment variables');
-    return {error: 'Server misconfiguration: Email service unavailable.'};
-  }
-
   await sendEmailNotification({
     subject: 'New Contact Request from FlashBind',
     email,
@@ -80,14 +92,14 @@ export default function ContactPage() {
           <div className="text-center mb-10">
             <h1 className="text-4xl font-extrabold text-slate-900 tracking-tight mb-4">Contact Us</h1>
             <p className="text-slate-500 text-lg">
-              Have questions about bulk encoding, white-labeling, or anything else? Send us a message and we'll get right back to you.
+              Have questions about bulk encoding, white-labeling, or anything else? Send us a message and we’ll get right back to you.
             </p>
           </div>
 
           {isSuccess ? (
             <div className="bg-emerald-50 border border-emerald-200 text-emerald-800 p-8 rounded-2xl text-center">
               <h2 className="text-2xl font-bold mb-2">Message Sent!</h2>
-              <p>Thanks for reaching out. We'll get back to you shortly.</p>
+              <p>Thanks for reaching out. We’ll get back to you shortly.</p>
               <a 
                 href="/contact"
                 className="mt-6 px-6 py-2 bg-emerald-600 text-white font-bold rounded-lg hover:bg-emerald-700 transition-colors inline-block"
@@ -97,6 +109,16 @@ export default function ContactPage() {
             </div>
           ) : (
             <Form ref={formRef} method="post" className="space-y-6">
+              <div className="absolute -left-[10000px]" aria-hidden="true">
+                <label htmlFor="company_website">Leave this field empty</label>
+                <input
+                  id="company_website"
+                  name="company_website"
+                  type="text"
+                  tabIndex={-1}
+                  autoComplete="off"
+                />
+              </div>
               
               {actionData?.error && (
                 <div className="p-4 bg-red-50 text-red-700 font-bold rounded-xl border border-red-200">
@@ -113,6 +135,7 @@ export default function ContactPage() {
                   id="email"
                   name="email"
                   required
+                  maxLength={254}
                   placeholder="you@company.com"
                   className="w-full px-5 py-4 rounded-xl border border-slate-200 bg-white/50 focus:bg-white focus:border-[#1E3A8A] focus:ring-2 focus:ring-[#1E3A8A]/20 transition-all outline-none text-slate-900"
                 />
@@ -126,6 +149,7 @@ export default function ContactPage() {
                   id="message"
                   name="message"
                   required
+                  maxLength={5000}
                   rows={5}
                   placeholder="How can we help you?"
                   className="w-full px-5 py-4 rounded-xl border border-slate-200 bg-white/50 focus:bg-white focus:border-[#1E3A8A] focus:ring-2 focus:ring-[#1E3A8A]/20 transition-all outline-none text-slate-900 resize-none"

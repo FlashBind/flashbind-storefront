@@ -1,7 +1,18 @@
-import { Form, useActionData, useNavigation, useSearchParams } from 'react-router';
-import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
-import { redirect } from 'react-router';
+import {
+  Form,
+  redirect,
+  useActionData,
+  useNavigation,
+  useSearchParams,
+  type ActionFunctionArgs,
+  type LoaderFunctionArgs,
+} from 'react-router';
 import { getSupabase } from '~/utils/supabase.server';
+import {
+  getFormPassword,
+  normalizeEmail,
+  safeRedirectPath,
+} from '~/utils/requestSecurity.server';
 
 export const handle = {
   hideLayout: true,
@@ -11,7 +22,7 @@ export async function loader({ context, request }: LoaderFunctionArgs) {
   const email = context.session.get('userEmail');
   if (email) {
     const url = new URL(request.url);
-    const redirectTo = url.searchParams.get('redirectTo') || '/';
+    const redirectTo = safeRedirectPath(url.searchParams.get('redirectTo'));
     return redirect(redirectTo);
   }
   return null;
@@ -19,11 +30,15 @@ export async function loader({ context, request }: LoaderFunctionArgs) {
 
 export async function action({ request, context }: ActionFunctionArgs) {
   const formData = await request.formData();
-  const email = formData.get('email') as string;
-  const password = formData.get('password') as string;
-  const confirmPassword = formData.get('confirmPassword') as string;
+  const email = normalizeEmail(formData.get('email'));
+  const password = getFormPassword(formData, 'password');
+  const confirmPassword = getFormPassword(formData, 'confirmPassword');
+  const acceptedTerms = formData.get('legalAgreement') === 'on';
   const url = new URL(request.url);
-  const redirectTo = url.searchParams.get('redirectTo') || '/dashboard';
+  const redirectTo = safeRedirectPath(
+    url.searchParams.get('redirectTo'),
+    '/dashboard',
+  );
 
   if (!email || !password || !confirmPassword) {
     return { error: 'Please fill in all fields.' };
@@ -33,8 +48,12 @@ export async function action({ request, context }: ActionFunctionArgs) {
     return { error: 'Passwords do not match.' };
   }
 
-  if (password.length < 6) {
-    return { error: 'Password must be at least 6 characters long.' };
+  if (password.length < 8) {
+    return { error: 'Password must be at least 8 characters long.' };
+  }
+
+  if (!acceptedTerms) {
+    return { error: 'Please accept the Terms of Service and Privacy Policy.' };
   }
 
   const isLocalhost = request.url.includes('localhost') || request.url.includes('127.0.0.1');
@@ -53,16 +72,6 @@ export async function action({ request, context }: ActionFunctionArgs) {
     let errorMessage = 'Failed to create account. Please try again.';
     if (error?.name === 'AuthRetryableFetchError') {
       errorMessage = 'Unable to connect to the authentication server. Please check your internet connection or try again later.';
-    } else if (error?.message && error.message !== '{}') {
-      errorMessage = error.message;
-    } else if ((error as any)?.error_description && (error as any).error_description !== '{}') {
-      errorMessage = (error as any).error_description;
-    } else if ((error as any)?.msg && (error as any).msg !== '{}') {
-      errorMessage = (error as any).msg;
-    } else if (typeof error === 'string' && error !== '{}') {
-      errorMessage = error;
-    } else if (error && typeof error === 'object' && Object.keys(error).length > 0) {
-      errorMessage = `System Error: ${JSON.stringify(error)}`;
     }
 
     return Response.json(
@@ -134,6 +143,8 @@ export default function RegisterPage() {
                 id="password" 
                 name="password" 
                 required
+                minLength={8}
+                maxLength={128}
                 placeholder="••••••••"
                 className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
               />
@@ -149,6 +160,8 @@ export default function RegisterPage() {
                 id="confirmPassword" 
                 name="confirmPassword" 
                 required
+                minLength={8}
+                maxLength={128}
                 placeholder="••••••••"
                 className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
               />

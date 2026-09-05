@@ -3,6 +3,7 @@ import type {Route} from './+types/cart';
 import type {CartQueryDataReturn} from '@shopify/hydrogen';
 import {CartForm} from '@shopify/hydrogen';
 import {CartMain} from '~/components/CartMain';
+import {safeRedirectPath} from '~/utils/requestSecurity.server';
 
 export const meta: Route.MetaFunction = () => {
   return [{title: `FlashBind | Cart`}];
@@ -83,7 +84,7 @@ export async function action({request, context}: Route.ActionArgs) {
     headers.set('Location', result.cart.checkoutUrl);
   } else if (typeof redirectTo === 'string') {
     status = 303;
-    headers.set('Location', redirectTo);
+    headers.set('Location', safeRedirectPath(redirectTo, '/cart'));
   }
 
   return data(

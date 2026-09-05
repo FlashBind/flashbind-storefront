@@ -1,6 +1,11 @@
-import { useLoaderData, redirect, type HeadersFunction } from 'react-router';
-import type { LoaderFunctionArgs } from 'react-router';
+import {
+  redirect,
+  useLoaderData,
+  type HeadersFunction,
+  type LoaderFunctionArgs,
+} from 'react-router';
 import { sanitizeTagSettings } from '~/utils/tagSanitizer.server';
+import {normalizeHttpUrl} from '~/utils/requestSecurity.server';
 
 export const handle = {
   hideLayout: true,
@@ -47,7 +52,7 @@ export async function loader({ params, context }: LoaderFunctionArgs) {
   const pet = {
     id: rawPet.id,
     isClaimed: rawPet.is_claimed,
-    type: type,
+    type,
     settings: safeSettings,
     dogName: isPetTag ? rawPet.pet_name : null,
     ownerName: isPetTag ? rawPet.owner_name : null,
@@ -59,10 +64,12 @@ export async function loader({ params, context }: LoaderFunctionArgs) {
 
   // Immediate redirect for google_review and menu tags
   if (pet.type === 'google_review' || pet.type === 'menu') {
-    const dest = pet.settings.destination_url;
+    const dest = normalizeHttpUrl(pet.settings.destination_url);
     if (dest) {
       return redirect(dest, 302);
     }
+
+    return redirect('/');
   }
 
   const userEmail = context.session.get('userEmail');
@@ -99,7 +106,7 @@ export default function PetTagLandingPage() {
           <button
             onClick={() => {
               if (pet.settings?.network_password) {
-                navigator.clipboard.writeText(pet.settings.network_password);
+                void navigator.clipboard.writeText(pet.settings.network_password);
                 alert('Password copied to clipboard!');
               }
             }}
@@ -125,9 +132,9 @@ export default function PetTagLandingPage() {
       <div className="w-full bg-white min-h-screen md:min-h-0 md:max-w-[400px] md:mx-auto md:border-[12px] md:border-gray-900 md:rounded-[2.5rem] md:shadow-2xl md:my-12 overflow-hidden">
           {/* Pet Image */}
           <div className="h-72 w-full bg-slate-200">
-            <img 
-              src={pet.imageUrl} 
-              alt={`Photo of ${pet.dogName}`} 
+            <img
+              src={pet.imageUrl}
+              alt={pet.dogName || 'Pet'}
               className="w-full h-full object-cover"
             />
           </div>

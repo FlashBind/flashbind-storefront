@@ -24,13 +24,13 @@ export const PRODUCT_ROUTES = {
 };
 
 export const meta: Route.MetaFunction = ({data, matches}) => {
-  const parentMeta = matches.flatMap((match) => match.meta ?? []);
+  const parentMeta = matches.flatMap((match) => match?.meta ?? []);
   return [
     ...parentMeta.filter(
       (m) => !('name' in m && m.name === 'description') && !('title' in m)
     ),
     {title: 'FlashBind | Premium NFC Products'},
-    {name: 'description', content: 'FlashBind sells premium NFC-powered products — Google Review stands, digital menu cards, guest WiFi cards, and pet tags. Tap to connect instantly, no app required.'},
+    {name: 'description', content: 'Explore FlashBind NFC products for Google Reviews, digital menus, guest Wi-Fi details, and pet profiles. No FlashBind app required.'},
     {property: 'og:title', content: 'FlashBind | Premium NFC Products'},
     {property: 'og:image', content: 'https://flashbind.com/hero_new_1.jpg'},
   ];
@@ -184,7 +184,7 @@ export default function Homepage() {
             <div className="bg-white rounded-[2.5rem] p-8 md:p-12 shadow-[0_8px_30px_rgb(0,0,0,0.08)] border border-slate-200 hover:border-[#1E3A8A]/30 hover:shadow-[0_8px_40px_rgb(0,0,0,0.12)] flex flex-col sm:flex-row items-center gap-8 group hover:-translate-y-2 transition-all duration-300">
               <div className="flex-1 text-center sm:text-left">
                 <h3 className="text-2xl font-bold text-slate-900 mb-4">Google Reviews</h3>
-                <p className="text-slate-600 leading-relaxed mb-8 text-sm md:text-base">Direct customers instantly to your Google Review page with a single tap. Built for storefronts, cafes, and reception desks.</p>
+                <p className="text-slate-600 leading-relaxed mb-8 text-sm md:text-base">Give customers a quick way to open your Google Review page with a tap. Built for storefronts, cafes, and reception desks.</p>
                 <Link to={PRODUCT_ROUTES.googleReview} className="text-slate-900 font-bold text-sm inline-flex items-center gap-2 hover:text-[#1E3A8A] transition-colors">
                   Learn more <span className="transform group-hover:translate-x-1 transition-transform">&rarr;</span>
                 </Link>
@@ -201,7 +201,7 @@ export default function Homepage() {
             <div className="bg-white rounded-[2.5rem] p-8 md:p-12 shadow-[0_8px_30px_rgb(0,0,0,0.08)] border border-slate-200 hover:border-[#1E3A8A]/30 hover:shadow-[0_8px_40px_rgb(0,0,0,0.12)] flex flex-col sm:flex-row items-center gap-8 group hover:-translate-y-2 transition-all duration-300">
               <div className="flex-1 text-center sm:text-left">
                 <h3 className="text-2xl font-bold text-slate-900 mb-4">Smart Pet Tags</h3>
-                <p className="text-slate-600 leading-relaxed mb-8 text-sm md:text-base">Keep your best friend safe. A quick tap by any smartphone reveals the owner's contact info and pet details instantly.</p>
+                <p className="text-slate-600 leading-relaxed mb-8 text-sm md:text-base">A finder can tap with most modern smartphones to open the pet profile and owner contact details.</p>
                 <Link to={PRODUCT_ROUTES.petTag} className="text-slate-900 font-bold text-sm inline-flex items-center gap-2 hover:text-[#1E3A8A] transition-colors">
                   Learn more <span className="transform group-hover:translate-x-1 transition-transform">&rarr;</span>
                 </Link>
@@ -218,7 +218,7 @@ export default function Homepage() {
             <div className="bg-white rounded-[2.5rem] p-8 md:p-12 shadow-[0_8px_30px_rgb(0,0,0,0.08)] border border-slate-200 hover:border-[#1E3A8A]/30 hover:shadow-[0_8px_40px_rgb(0,0,0,0.12)] flex flex-col sm:flex-row items-center gap-8 group hover:-translate-y-2 transition-all duration-300">
               <div className="flex-1 text-center sm:text-left">
                 <h3 className="text-2xl font-bold text-slate-900 mb-4">Tap-to-View Menus</h3>
-                <p className="text-slate-600 leading-relaxed mb-8 text-sm md:text-base">Modernize your hospitality business. Let customers tap your tabletop stands to view your digital menu instantly.</p>
+                <p className="text-slate-600 leading-relaxed mb-8 text-sm md:text-base">Let customers tap a tabletop stand to open the digital menu you already host online.</p>
                 <Link to={PRODUCT_ROUTES.menu} className="text-slate-900 font-bold text-sm inline-flex items-center gap-2 hover:text-[#1E3A8A] transition-colors">
                   Learn more <span className="transform group-hover:translate-x-1 transition-transform">&rarr;</span>
                 </Link>
@@ -235,7 +235,7 @@ export default function Homepage() {
             <div className="bg-white rounded-[2.5rem] p-8 md:p-12 shadow-[0_8px_30px_rgb(0,0,0,0.08)] border border-slate-200 hover:border-[#1E3A8A]/30 hover:shadow-[0_8px_40px_rgb(0,0,0,0.12)] flex flex-col sm:flex-row items-center gap-8 group hover:-translate-y-2 transition-all duration-300">
               <div className="flex-1 text-center sm:text-left">
                 <h3 className="text-2xl font-bold text-slate-900 mb-4">Guest Wi-Fi</h3>
-                <p className="text-slate-600 leading-relaxed mb-8 text-sm md:text-base">No more spelling out complex passwords. Customers can instantly connect to your guest Wi-Fi with a single tap.</p>
+                <p className="text-slate-600 leading-relaxed mb-8 text-sm md:text-base">Let guests tap to view your network name and copy the guest Wi-Fi password.</p>
                 <Link to={PRODUCT_ROUTES.wifi} className="text-slate-900 font-bold text-sm inline-flex items-center gap-2 hover:text-[#1E3A8A] transition-colors">
                   Learn more <span className="transform group-hover:translate-x-1 transition-transform">&rarr;</span>
                 </Link>
@@ -277,9 +277,9 @@ export default function Homepage() {
                 Google Reviews
               </h2>
               <div className="text-gray-600 text-lg leading-relaxed mb-6 space-y-3">
-                <p><strong>1. Instant Tap:</strong> Customers tap the stand or card with their iPhone or Android.</p>
-                <p><strong>2. Zero Friction:</strong> Your exact Google Review page opens instantly without any app downloads or typing.</p>
-                <p><strong>3. Effortless Rating:</strong> The customer leaves a review in seconds, before they even leave your business.</p>
+                <p><strong>1. Tap:</strong> Customers hold a compatible iPhone or Android phone near the stand.</p>
+                <p><strong>2. Open:</strong> Your chosen Google Review page opens in their browser without a FlashBind app.</p>
+                <p><strong>3. Review:</strong> The customer decides whether to leave an honest review directly on Google.</p>
               </div>
               <Link to={PRODUCT_ROUTES.googleReview} className="inline-flex items-center text-[#1E3A8A] font-semibold text-lg hover:text-[#172A66] transition-colors group">
                 Google Reviews
@@ -302,9 +302,9 @@ export default function Homepage() {
                 Tap-to-View Menus
               </h2>
               <div className="text-gray-600 text-lg leading-relaxed mb-6 space-y-3">
-                <p><strong>1. Dual Access:</strong> Diners can instantly tap via NFC or scan the printed QR code with their smartphone.</p>
-                <p><strong>2. Immediate Display:</strong> Your up-to-date digital menu opens directly in their browser without any app downloads.</p>
-                <p><strong>3. Effortless Browsing:</strong> Guests browse your offerings comfortably at their own pace, entirely contact-free.</p>
+                <p><strong>1. Tap:</strong> Diners hold a compatible smartphone near the NFC stand.</p>
+                <p><strong>2. Open:</strong> The menu URL selected by the restaurant opens in their browser.</p>
+                <p><strong>3. Browse:</strong> Guests view the restaurant’s existing online menu without a FlashBind app.</p>
               </div>
               <Link to={PRODUCT_ROUTES.menu} className="inline-flex items-center text-[#1E3A8A] font-semibold text-lg hover:text-[#172A66] transition-colors group">
                 Tap-to-View Menus
@@ -341,9 +341,9 @@ export default function Homepage() {
                 Guest Wi-Fi
               </h2>
               <div className="text-gray-600 text-lg leading-relaxed mb-6 space-y-3">
-                <p><strong>1. Zero Friction:</strong> Visitors tap the Wi-Fi stand at the counter or table.</p>
-                <p><strong>2. Secure Authentication:</strong> Their device automatically authenticates to your secure network.</p>
-                <p><strong>3. Instant Connection:</strong> Guests are online instantly, completely eliminating the need to type out complex passwords.</p>
+                <p><strong>1. Tap:</strong> Visitors hold a compatible phone near the Wi-Fi stand.</p>
+                <p><strong>2. View:</strong> A page displays the guest network name and password.</p>
+                <p><strong>3. Copy:</strong> Guests copy the password, then join through their phone’s Wi-Fi settings.</p>
               </div>
               <Link to={PRODUCT_ROUTES.wifi} className="inline-flex items-center text-[#1E3A8A] font-semibold text-lg hover:text-[#172A66] transition-colors group">
                 Guest Wi-Fi
@@ -366,9 +366,9 @@ export default function Homepage() {
                 Smart Pet Tags
               </h2>
               <div className="text-gray-600 text-lg leading-relaxed mb-6 space-y-3">
-                <p><strong>1. Easy Scanning:</strong> Anyone finding your pet simply taps the collar tag.</p>
-                <p><strong>2. Vital Information:</strong> The tag instantly displays your contact details and critical medical notes.</p>
-                <p><strong>3. Safe Return:</strong> The finder contacts you with a single tap to bring your pet home safely.</p>
+                <p><strong>1. Tap:</strong> A finder holds a compatible phone near the collar tag.</p>
+                <p><strong>2. View:</strong> The pet profile displays owner contact details and any saved medical notes.</p>
+                <p><strong>3. Contact:</strong> The finder can use the displayed phone number to reach the owner.</p>
               </div>
               <Link to={PRODUCT_ROUTES.petTag} className="inline-flex items-center text-[#1E3A8A] font-semibold text-lg hover:text-[#172A66] transition-colors group">
                 Smart Pet Tags
@@ -467,7 +467,7 @@ export default function Homepage() {
               
               <div className="relative z-10 mb-12">
                 <h3 className="text-3xl font-extrabold text-slate-900 mb-3">Universal Compatibility</h3>
-                <p className="text-slate-600 max-w-sm leading-relaxed">No app required. Instantly shares your links to 99% of modern smartphones with a single tap using native OS capabilities.</p>
+                <p className="text-slate-600 max-w-sm leading-relaxed">No FlashBind app required. NFC works with most modern smartphones; exact behavior depends on the phone model and settings.</p>
               </div>
 
               {/* Visual Apple/Android Graphic */}
@@ -520,7 +520,7 @@ export default function Homepage() {
                 </svg>
               </div>
               <h3 className="text-xl font-bold text-slate-900 mb-3">Premium Quality NFC</h3>
-              <p className="text-slate-600 leading-relaxed text-sm">Built with modern NTAG chips to ensure instant, reliable scans from up to 2 inches away.</p>
+              <p className="text-slate-600 leading-relaxed text-sm">Built with modern NTAG chips for quick, close-range NFC interactions.</p>
             </div>
 
             {/* Optional Software Plans Card (Spans 2 columns) */}
@@ -534,7 +534,7 @@ export default function Homepage() {
                   </svg>
                 </div>
                 <h3 className="text-2xl font-bold text-white mb-3">Optional Software Plans</h3>
-                <p className="text-slate-300 leading-relaxed max-w-md">Purchase the hardware once and use it without a monthly plan. Upgrade with optional FlashBind software when your business needs additional tools.</p>
+                <p className="text-slate-300 leading-relaxed max-w-md">Purchase the hardware once and use it without a monthly plan. Optional paid software tools are currently in development.</p>
               </div>
             </div>
 
@@ -573,7 +573,7 @@ export default function Homepage() {
                 </span>
               </summary>
               <p className="text-slate-600 px-6 pb-6 leading-relaxed">
-                Absolutely not! FlashBind uses native NFC technology that is already built into 99% of modern smartphones. Simply tap the card to the back of their phone, and your link will instantly appear on their screen.
+                No FlashBind app is required. NFC is available on most modern smartphones, although the exact tap position and behavior vary by phone model and settings.
               </p>
             </details>
 
@@ -586,7 +586,7 @@ export default function Homepage() {
                 </span>
               </summary>
               <p className="text-slate-600 px-6 pb-6 leading-relaxed">
-                No. FlashBind hardware works without a plan. Optional software plans add branded pages, customer-feedback tools, analytics and multi-location management.
+                No. FlashBind hardware works without a plan. Optional paid software tools for branded pages, feedback, analytics and multi-location management are currently in development.
               </p>
             </details>
 
@@ -612,7 +612,7 @@ export default function Homepage() {
                 </span>
               </summary>
               <p className="text-slate-600 px-6 pb-6 leading-relaxed">
-                100% secure. The card is "read-only", meaning it can only transmit the specific link URL you programmed into it. It cannot access any personal data on the phone that taps it, and it cannot extract any information from your customers.
+                An NFC tap shares the web destination stored on the product; it does not give FlashBind access to unrelated data on the customer’s phone. Customers should still treat the destination like any other web link.
               </p>
             </details>
           </div>
@@ -762,9 +762,9 @@ function RecommendedProducts({
                 {/* Mobile Dots */}
                 {displayProducts.length > 1 && (
                   <div className="md:hidden flex justify-center gap-2 mt-4">
-                    {displayProducts.map((_, idx) => (
-                      <button 
-                        key={idx} 
+                    {displayProducts.map((product, idx) => (
+                      <button
+                        key={product.id}
                         onClick={() => scrollToProduct(idx)}
                         className={`w-2 h-2 rounded-full transition-all duration-300 ${activeProductIndex === idx ? 'bg-[#1E3A8A] w-6' : 'bg-slate-300'}`}
                         aria-label={`Go to product ${idx + 1}`}

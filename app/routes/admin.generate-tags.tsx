@@ -2,6 +2,24 @@ import { Form, useActionData, useNavigation, redirect, isRouteErrorResponse, use
 import type { LoaderFunctionArgs, ActionFunctionArgs } from 'react-router';
 import { getSupabaseAdmin } from '~/utils/supabase.server';
 
+const ALLOWED_TAG_TYPES = new Set([
+  'pet_tag',
+  'google_review',
+  'menu',
+  'wifi',
+]);
+
+function generateActivationPin() {
+  const values = new Uint32Array(1);
+  const unbiasedLimit = Math.floor(0x100000000 / 900000) * 900000;
+
+  do {
+    crypto.getRandomValues(values);
+  } while (values[0] >= unbiasedLimit);
+
+  return String(100000 + (values[0] % 900000));
+}
+
 export const handle = {
   hideLayout: true,
 };
@@ -36,7 +54,7 @@ export async function action({ request, context }: ActionFunctionArgs) {
   const quantityStr = formData.get('quantity') as string;
   const quantity = parseInt(quantityStr, 10);
 
-  if (!type || !quantity || quantity < 1 || quantity > 100) {
+  if (!ALLOWED_TAG_TYPES.has(type) || !quantity || quantity < 1 || quantity > 100) {
     return { error: 'Invalid type or quantity (must be between 1 and 100).' };
   }
 
@@ -46,14 +64,14 @@ export async function action({ request, context }: ActionFunctionArgs) {
   for (let i = 1; i <= quantity; i++) {
     let newId;
     while (true) {
-      newId = crypto.randomUUID().split('-')[0];
+      newId = crypto.randomUUID();
       const { data } = await supabase.from('tags').select('id').eq('id', newId).single();
       if (!data) break; // Unique
     }
-    const activationPin = Math.floor(100000 + Math.random() * 900000).toString();
+    const activationPin = generateActivationPin();
     newTags.push({
       id: newId,
-      type: type,
+      type,
       settings: { activation_pin: activationPin },
       is_claimed: false,
       owner_email: null,
@@ -63,7 +81,7 @@ export async function action({ request, context }: ActionFunctionArgs) {
   const { error: insertError } = await supabase.from('tags').insert(newTags);
   if (insertError) {
     console.error('Supabase insert error:', insertError);
-    return { error: `Failed to insert new tags: ${insertError.message}` };
+    return { error: 'Failed to generate tags. Please try again.' };
   }
 
   const host = new URL(request.url).origin;
@@ -88,7 +106,7 @@ export default function AdminGenerateTagsPage() {
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
           <h1 className="text-3xl font-extrabold text-slate-900">Admin: Generate Tags</h1>
           <div className="flex items-center gap-6">
-            <a href="/admin/export-csv" download="flashbind_tags_order.csv" reloadDocument className="inline-flex items-center px-5 py-2.5 bg-slate-900 text-white text-sm font-bold rounded-xl hover:bg-slate-800 transition-colors shadow-sm">
+            <a href="/admin/export-csv" download="flashbind_tags_order.csv" className="inline-flex items-center px-5 py-2.5 bg-slate-900 text-white text-sm font-bold rounded-xl hover:bg-slate-800 transition-colors shadow-sm">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
               </svg>
@@ -205,7 +223,7 @@ export function ErrorBoundary() {
           </div>
           <h1 className="text-2xl font-extrabold text-slate-900 mb-2">Not Authorized</h1>
           <p className="text-slate-500 font-medium mb-8">
-            You don't have permission to access the admin tools.
+            You don&apos;t have permission to access the admin tools.
           </p>
           <a 
             href="/dashboard" 

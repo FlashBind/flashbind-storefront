@@ -59,7 +59,7 @@ export default function SetupSuccessPage() {
         <div className="bg-slate-50 p-6 rounded-2xl border border-slate-100 mb-8">
           <p className="text-slate-600 font-medium">
             {type === 'pet_tag' && (
-              <>{petName || 'Your pet'}'s profile is now live.</>
+              <>{petName || 'Your pet'}&apos;s profile is now live.</>
             )}
             {(type === 'google_review' || type === 'menu') && (
               <>Customers will now be redirected to: <br/><strong className="text-slate-900 break-all">{settings.destination_url}</strong></>

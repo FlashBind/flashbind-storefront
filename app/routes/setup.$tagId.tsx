@@ -1,6 +1,11 @@
 import { Form, redirect, useActionData, useNavigation, useLoaderData, useNavigate } from 'react-router';
 import { useEffect } from 'react';
 import type { LoaderFunctionArgs, ActionFunctionArgs } from 'react-router';
+import {
+  getFormText,
+  hashRateLimitIdentifier,
+  normalizeHttpUrl,
+} from '~/utils/requestSecurity.server';
 
 
 export const handle = {
@@ -77,46 +82,58 @@ export async function action({ request, params, context }: ActionFunctionArgs) {
 
   if (!tagData.owner_email) {
     // Rate Limiting Check
-    const clientIp = request.headers.get('x-forwarded-for') || 'unknown';
-    const { data: limitData } = await adminSupabase
+    const forwardedIp =
+      request.headers.get('cf-connecting-ip')?.trim() ||
+      request.headers.get('x-forwarded-for')?.split(',')[0]?.trim();
+    const clientIdentifiers = [
+      `u:${(await hashRateLimitIdentifier(userEmail)).slice(0, 40)}`,
+      ...(forwardedIp && forwardedIp.length <= 45 ? [forwardedIp] : []),
+    ];
+    const { data: limitRows } = await adminSupabase
       .from('rate_limits')
       .select('*')
       .eq('tag_id', tagId)
-      .eq('ip_address', clientIp)
-      .single();
+      .in('ip_address', clientIdentifiers);
 
-    if (limitData) {
+    const blocked = limitRows?.some((limitData) => {
       const lastAttempt = new Date(limitData.last_attempt_at);
       const minutesSinceLast = (Date.now() - lastAttempt.getTime()) / 60000;
-      
-      if (limitData.attempts >= 5 && minutesSinceLast < 15) {
-        return { error: 'Too many failed attempts. Please try again in 15 minutes.' };
-      }
+      return limitData.attempts >= 5 && minutesSinceLast < 15;
+    });
+
+    if (blocked) {
+      return { error: 'Too many failed attempts. Please try again in 15 minutes.' };
     }
 
     // It's a new orphan tag. Validate the activation PIN.
-    const activationPin = formData.get('activation_pin') as string;
+    const activationPin = getFormText(formData, 'activation_pin', 12);
     if (!activationPin || tagData.settings?.activation_pin !== activationPin) {
       // Record failed attempt
-      if (limitData) {
-        // Reset attempts if the 15-minute window has passed, otherwise increment
-        const attempts = (new Date(limitData.last_attempt_at).getTime() > Date.now() - 15 * 60000) 
-          ? limitData.attempts + 1 
-          : 1;
-        await adminSupabase.from('rate_limits')
-          .update({ attempts, last_attempt_at: new Date().toISOString() })
-          .eq('id', limitData.id);
-      } else {
-        await adminSupabase.from('rate_limits')
-          .insert({ tag_id: tagId, ip_address: clientIp, attempts: 1 });
+      for (const identifier of clientIdentifiers) {
+        const limitData = limitRows?.find(
+          (row) => row.ip_address === identifier,
+        );
+
+        if (limitData) {
+          const attempts = (new Date(limitData.last_attempt_at).getTime() > Date.now() - 15 * 60000)
+            ? limitData.attempts + 1
+            : 1;
+          await adminSupabase.from('rate_limits')
+            .update({ attempts, last_attempt_at: new Date().toISOString() })
+            .eq('id', limitData.id);
+        } else {
+          await adminSupabase.from('rate_limits')
+            .insert({ tag_id: tagId, ip_address: identifier, attempts: 1 });
+        }
       }
       return { error: 'Invalid Activation PIN. Please check the code included in your packaging.' };
     }
     
     // Clear rate limits on success
-    if (limitData) {
-      await adminSupabase.from('rate_limits').delete().eq('id', limitData.id);
-    }
+    await adminSupabase.from('rate_limits')
+      .delete()
+      .eq('tag_id', tagId)
+      .in('ip_address', clientIdentifiers);
   }
 
   const type = tagData.type || 'pet_tag';
@@ -127,7 +144,8 @@ export async function action({ request, params, context }: ActionFunctionArgs) {
   };
 
   if (type === 'pet_tag') {
-    const imageBase64 = formData.get('imageBase64') as string;
+    const imageValue = formData.get('imageBase64');
+    const imageBase64 = typeof imageValue === 'string' ? imageValue : '';
     let imageUrl = 'https://images.unsplash.com/photo-1543466835-00a7907e9de1?q=80&w=800&auto=format&fit=crop';
     if (imageBase64 && imageBase64.startsWith('data:image')) {
       if (!imageBase64.startsWith('data:image/jpeg;base64,') && !imageBase64.startsWith('data:image/png;base64,')) {
@@ -140,13 +158,17 @@ export async function action({ request, params, context }: ActionFunctionArgs) {
       imageUrl = imageBase64;
     }
 
-    const dogName = formData.get('dogName') as string;
-    const ownerName = formData.get('ownerName') as string;
-    const ownerPhone = formData.get('ownerPhone') as string;
-    const medicalNotes = formData.get('medicalNotes') as string;
+    const dogName = getFormText(formData, 'dogName', 100);
+    const ownerName = getFormText(formData, 'ownerName', 100);
+    const ownerPhone = getFormText(formData, 'ownerPhone', 40);
+    const medicalValue = formData.get('medicalNotes');
+    const medicalNotes = typeof medicalValue === 'string' ? medicalValue.trim() : '';
 
     if (!dogName || !ownerName || !ownerPhone) {
-      return { error: 'Please fill in all required fields' };
+      return { error: 'Please check the required fields and their lengths.' };
+    }
+    if (medicalNotes.length > 2000) {
+      return { error: 'Medical notes must be 2,000 characters or fewer.' };
     }
 
     updatePayload = {
@@ -158,28 +180,17 @@ export async function action({ request, params, context }: ActionFunctionArgs) {
       image_url: imageUrl,
     };
   } else if (type === 'google_review' || type === 'menu') {
-    let destinationUrl = formData.get('destinationUrl') as string;
+    const destinationUrl = normalizeHttpUrl(formData.get('destinationUrl'));
     if (!destinationUrl) {
-      return { error: 'Destination URL is required' };
-    }
-    
-    // Automatically prepend https:// if the user forgets it
-    if (!destinationUrl.startsWith('http://') && !destinationUrl.startsWith('https://')) {
-      destinationUrl = 'https://' + destinationUrl;
-    }
-
-    try {
-      new URL(destinationUrl);
-    } catch {
-      return { error: 'Please enter a valid URL' };
+      return { error: 'Enter a valid HTTP or HTTPS destination URL.' };
     }
     updatePayload = {
       ...updatePayload,
       settings: { destination_url: destinationUrl }
     };
   } else if (type === 'wifi') {
-    const networkName = formData.get('networkName') as string;
-    const networkPassword = formData.get('networkPassword') as string;
+    const networkName = getFormText(formData, 'networkName', 64);
+    const networkPassword = getFormText(formData, 'networkPassword', 128);
     if (!networkName || !networkPassword) {
       return { error: 'Network Name and Password are required' };
     }
@@ -212,11 +223,11 @@ export default function SetupTagPage() {
 
   useEffect(() => {
     if (actionData?.success && actionData?.redirectUrl) {
-      navigate(actionData.redirectUrl);
+      void navigate(actionData.redirectUrl);
     }
   }, [actionData, navigate]);
 
-  let title = 'Activate Tag';
+  const title = 'Activate Tag';
   let description = 'Set up your tag to get started.';
   if (type === 'pet_tag') {
     description = "Set up your pet's public profile to ensure they can find their way home safely.";
@@ -271,6 +282,7 @@ export default function SetupTagPage() {
                     type="text" 
                     id="activation_pin" 
                     name="activation_pin" 
+                    maxLength={12}
                     required
                     placeholder="6-digit PIN"
                     className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all font-mono tracking-widest text-lg"
@@ -288,6 +300,7 @@ export default function SetupTagPage() {
                       type="text" 
                       id="dogName" 
                       name="dogName" 
+                      maxLength={100}
                       required
                       placeholder="e.g. Buddy"
                       className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
@@ -303,6 +316,7 @@ export default function SetupTagPage() {
                       type="text" 
                       id="ownerName" 
                       name="ownerName" 
+                      maxLength={100}
                       required
                       placeholder="e.g. Alice Smith"
                       className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
@@ -318,6 +332,7 @@ export default function SetupTagPage() {
                       type="tel" 
                       id="ownerPhone" 
                       name="ownerPhone" 
+                      maxLength={40}
                       required
                       placeholder="e.g. (555) 123-4567"
                       className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
@@ -348,6 +363,7 @@ export default function SetupTagPage() {
                     <textarea 
                       id="medicalNotes" 
                       name="medicalNotes" 
+                      maxLength={2000}
                       rows={3}
                       placeholder="Allergies, medications, or special needs..."
                       className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
@@ -397,6 +413,7 @@ export default function SetupTagPage() {
                     type="url" 
                     id="destinationUrl" 
                     name="destinationUrl" 
+                    maxLength={2048}
                     required
                     defaultValue="https://"
                     placeholder="e.g. yourwebsite.com"
@@ -418,6 +435,7 @@ export default function SetupTagPage() {
                       type="text" 
                       id="networkName" 
                       name="networkName" 
+                      maxLength={64}
                       required
                       placeholder="e.g. Guest_Network_5G"
                       className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
@@ -431,6 +449,7 @@ export default function SetupTagPage() {
                       type="text" 
                       id="networkPassword" 
                       name="networkPassword" 
+                      maxLength={128}
                       required
                       placeholder="Enter the Wi-Fi password"
                       className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
@@ -449,12 +468,13 @@ export default function SetupTagPage() {
                 {isSubmitting ? 'Activating...' : 'Activate Tag'}
               </button>
               
-              <a 
-                href="javascript:history.back()" 
+              <button
+                type="button"
+                onClick={() => void navigate(-1)}
                 className="text-center text-sm font-medium text-slate-500 hover:text-slate-700 transition-colors"
               >
                 Cancel
-              </a>
+              </button>
             </div>
             
           </Form>

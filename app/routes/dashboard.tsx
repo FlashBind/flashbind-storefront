@@ -1,5 +1,10 @@
-import { Form, redirect, useLoaderData, type HeadersFunction } from 'react-router';
-import type { LoaderFunctionArgs } from 'react-router';
+import {
+  Form,
+  redirect,
+  useLoaderData,
+  type HeadersFunction,
+  type LoaderFunctionArgs,
+} from 'react-router';
 import { getSupabaseAdmin } from '~/utils/supabase.server';
 import { sanitizeTagSettings } from '~/utils/tagSanitizer.server';
 
@@ -39,7 +44,7 @@ export async function loader({ context }: LoaderFunctionArgs) {
     return {
       id: rawTag.id,
       isClaimed: rawTag.is_claimed,
-      type: type,
+      type,
       settings: safeSettings,
       dogName: rawTag.pet_name,
       ownerName: rawTag.owner_name,
@@ -110,7 +115,7 @@ export default function DashboardPage() {
             </div>
             <h3 className="text-xl font-bold text-slate-900 mb-2">No active tags yet</h3>
             <p className="text-slate-500 font-medium max-w-sm text-sm">
-              You don't have any active tags yet. Tap a new FlashBind tag with your phone to claim it and set it up.
+              You don&apos;t have any active tags yet. Tap a new FlashBind tag with your phone to claim it and set it up.
             </p>
           </div>
         ) : (

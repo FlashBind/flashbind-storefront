@@ -1,5 +1,6 @@
 import {redirect} from 'react-router';
 import type {Route} from './+types/discount.$code';
+import {safeRedirectPath} from '~/utils/requestSecurity.server';
 
 /**
  * Automatically applies a discount found on the url
@@ -18,18 +19,17 @@ export async function loader({request, context, params}: Route.LoaderArgs) {
 
   const url = new URL(request.url);
   const searchParams = new URLSearchParams(url.search);
-  let redirectParam =
-    searchParams.get('redirect') || searchParams.get('return_to') || '/';
-
-  if (redirectParam.includes('//')) {
-    // Avoid redirecting to external URLs to prevent phishing attacks
-    redirectParam = '/';
-  }
+  const redirectParam = safeRedirectPath(
+    searchParams.get('redirect') || searchParams.get('return_to'),
+  );
 
   searchParams.delete('redirect');
   searchParams.delete('return_to');
 
-  const redirectUrl = `${redirectParam}?${searchParams}`;
+  const separator = redirectParam.includes('?') ? '&' : '?';
+  const redirectUrl = searchParams.size
+    ? `${redirectParam}${separator}${searchParams}`
+    : redirectParam;
 
   if (!code) {
     return redirect(redirectUrl);

@@ -11,32 +11,18 @@ CREATE TABLE IF NOT EXISTS public.contact_messages (
     attachment_url TEXT
 );
 
--- Enable RLS but allow inserting from our server
+-- Enable RLS. The server uses the Supabase service role, which bypasses RLS.
 ALTER TABLE public.contact_messages ENABLE ROW LEVEL SECURITY;
-
--- Create policy to allow service role (admin) to do everything
-CREATE POLICY "Enable all access for service role"
-ON public.contact_messages
-FOR ALL
-USING (true)
-WITH CHECK (true);
+REVOKE ALL PRIVILEGES ON TABLE public.contact_messages FROM anon, authenticated;
+GRANT ALL PRIVILEGES ON TABLE public.contact_messages TO service_role;
 
 -- 2. Create the Storage Bucket for attachments
-INSERT INTO storage.buckets (id, name, public) 
-VALUES ('attachments', 'attachments', true)
-ON CONFLICT (id) DO NOTHING;
+INSERT INTO storage.buckets (id, name, public)
+VALUES ('attachments', 'attachments', false)
+ON CONFLICT (id) DO UPDATE SET public = false;
 
--- Enable public access to the bucket
-CREATE POLICY "Public Access" 
-ON storage.objects FOR SELECT 
-USING ( bucket_id = 'attachments' );
-
--- Allow service role to insert/upload objects
-CREATE POLICY "Service Role Upload" 
-ON storage.objects FOR INSERT 
-WITH CHECK ( bucket_id = 'attachments' );
-
--- Allow service role to update/delete objects
-CREATE POLICY "Service Role Update/Delete" 
-ON storage.objects FOR ALL 
-USING ( bucket_id = 'attachments' );
+-- Do not add anon/authenticated storage policies for this bucket. Quote files are
+-- uploaded with the service role and shared only through short-lived signed URLs.
+DROP POLICY IF EXISTS "Public Access" ON storage.objects;
+DROP POLICY IF EXISTS "Service Role Upload" ON storage.objects;
+DROP POLICY IF EXISTS "Service Role Update/Delete" ON storage.objects;

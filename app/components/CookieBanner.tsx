@@ -1,25 +1,49 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router';
+import {useAnalytics} from '@shopify/hydrogen';
 
 export function CookieBanner() {
   const [isVisible, setIsVisible] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [consentError, setConsentError] = useState<string | null>(null);
+  const {customerPrivacy} = useAnalytics();
 
   useEffect(() => {
-    const consent = localStorage.getItem('flashbind_cookie_consent');
-    if (!consent) {
-      setIsVisible(true);
+    if (customerPrivacy?.shouldShowBanner()) setIsVisible(true);
+
+    const showPreferences = () => setIsVisible(true);
+    window.addEventListener('flashbind:show-cookie-preferences', showPreferences);
+
+    return () => {
+      window.removeEventListener('flashbind:show-cookie-preferences', showPreferences);
+    };
+  }, [customerPrivacy]);
+
+  const saveConsent = (allowOptionalCookies: boolean) => {
+    if (!customerPrivacy) {
+      setConsentError('Privacy controls are still loading. Please try again.');
+      return;
     }
-  }, []);
 
-  const handleAccept = () => {
-    localStorage.setItem('flashbind_cookie_consent', 'all');
-    setIsVisible(false);
-    // Here you would typically trigger tracking scripts to load
-  };
+    setIsSaving(true);
+    setConsentError(null);
+    customerPrivacy.setTrackingConsent(
+      {
+        analytics: allowOptionalCookies,
+        marketing: allowOptionalCookies,
+        preferences: allowOptionalCookies,
+        sale_of_data: false,
+      },
+      (result) => {
+        setIsSaving(false);
+        if (result?.error) {
+          setConsentError('We could not save your choice. Please try again.');
+          return;
+        }
 
-  const handleReject = () => {
-    localStorage.setItem('flashbind_cookie_consent', 'essential_only');
-    setIsVisible(false);
+        setIsVisible(false);
+      },
+    );
   };
 
   if (!isVisible) return null;
@@ -38,23 +62,30 @@ export function CookieBanner() {
             <h3 className="text-lg font-bold text-slate-900">Your Privacy, Your Choice</h3>
           </div>
           <p className="text-sm text-slate-600 leading-relaxed max-w-3xl">
-            We use cookies and similar tracking technologies to ensure our website functions securely, analyze traffic, and personalize your experience. Under international privacy laws (GDPR, CCPA), you have the right to choose which cookies you allow. 
+            Essential cookies keep the store and checkout working. With your permission, optional cookies help us understand site usage and improve our marketing. We do not sell personal information.
             Read our <Link to="/cookie-policy" className="text-[#1E3A8A] font-semibold hover:underline">Cookie Policy</Link> or <Link to="/privacy-policy" className="text-[#1E3A8A] font-semibold hover:underline">Privacy Policy</Link> for details.
           </p>
+          {consentError && (
+            <p className="mt-3 text-sm font-semibold text-red-700" role="alert">
+              {consentError}
+            </p>
+          )}
         </div>
 
         <div className="flex flex-col sm:flex-row gap-3 min-w-fit">
           <button 
-            onClick={handleReject}
+            onClick={() => saveConsent(false)}
+            disabled={isSaving}
             className="px-6 py-3 rounded-full text-sm font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 transition-colors whitespace-nowrap"
           >
             Reject Non-Essential
           </button>
           <button 
-            onClick={handleAccept}
+            onClick={() => saveConsent(true)}
+            disabled={isSaving}
             className="px-6 py-3 rounded-full text-sm font-bold text-white bg-[#1E3A8A] hover:bg-[#172A66] shadow-[0_4px_15px_rgba(30,58,138,0.2)] transition-all whitespace-nowrap"
           >
-            Accept All Cookies
+            Allow Optional Cookies
           </button>
         </div>
       </div>

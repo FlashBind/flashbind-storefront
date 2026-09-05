@@ -1,7 +1,18 @@
-import { Form, useActionData, useNavigation, useSearchParams } from 'react-router';
-import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
-import { redirect } from 'react-router';
+import {
+  Form,
+  redirect,
+  useActionData,
+  useNavigation,
+  useSearchParams,
+  type ActionFunctionArgs,
+  type LoaderFunctionArgs,
+} from 'react-router';
 import { getSupabase } from '~/utils/supabase.server';
+import {
+  getFormPassword,
+  normalizeEmail,
+  safeRedirectPath,
+} from '~/utils/requestSecurity.server';
 
 export const handle = {
   hideLayout: true,
@@ -11,7 +22,7 @@ export async function loader({ context, request }: LoaderFunctionArgs) {
   const email = context.session.get('userEmail');
   if (email) {
     const url = new URL(request.url);
-    const redirectTo = url.searchParams.get('redirectTo') || '/';
+    const redirectTo = safeRedirectPath(url.searchParams.get('redirectTo'));
     return redirect(redirectTo);
   }
   return null;
@@ -19,11 +30,14 @@ export async function loader({ context, request }: LoaderFunctionArgs) {
 
 export async function action({ request, context }: ActionFunctionArgs) {
   const formData = await request.formData();
-  const email = formData.get('email') as string;
-  const password = formData.get('password') as string;
+  const email = normalizeEmail(formData.get('email'));
+  const password = getFormPassword(formData, 'password');
   const intent = formData.get('intent') as string;
   const url = new URL(request.url);
-  const redirectTo = url.searchParams.get('redirectTo') || '/dashboard';
+  const redirectTo = safeRedirectPath(
+    url.searchParams.get('redirectTo'),
+    '/dashboard',
+  );
 
   if (intent === 'resend') {
     if (!email) return Response.json({ error: 'Email is required to resend confirmation.' }, { status: 400 });
@@ -64,8 +78,6 @@ export async function action({ request, context }: ActionFunctionArgs) {
       needsConfirmation = true;
     } else if (error?.name === 'AuthRetryableFetchError') {
       errorMessage = 'Unable to connect to the authentication server. Please check your internet connection or try again later.';
-    } else if (error?.message && error.message !== '{}') {
-      errorMessage = error.message;
     }
 
     return Response.json(
@@ -180,7 +192,7 @@ export default function LoginPage() {
 
           <div className="text-center mt-6">
             <p className="text-sm font-medium text-slate-500">
-              Don't have an account?{' '}
+              Don’t have an account?{' '}
               <a href={`/register?redirectTo=${encodeURIComponent(redirectTo)}`} className="text-blue-600 hover:text-blue-700 font-semibold transition-colors">
                 Create one
               </a>

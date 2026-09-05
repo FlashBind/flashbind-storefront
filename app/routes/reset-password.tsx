@@ -2,34 +2,38 @@ import { data, type ActionFunctionArgs, redirect } from 'react-router';
 import { useEffect, useState } from 'react';
 import { Form, useActionData, useNavigation } from 'react-router';
 import { getSupabase } from '~/utils/supabase.server';
+import {getFormPassword} from '~/utils/requestSecurity.server';
 
 export async function action({ request, context }: ActionFunctionArgs) {
   const formData = await request.formData();
-  const password = String(formData.get('password'));
-  const access_token = String(formData.get('access_token') || '');
-  const refresh_token = String(formData.get('refresh_token') || '');
+  const password = getFormPassword(formData, 'password');
+  const accessToken = String(formData.get('access_token') || '');
+  const refreshToken = String(formData.get('refresh_token') || '');
 
-  if (!password || password.length < 6) {
-    return data({ error: 'Password must be at least 6 characters' }, { status: 400 });
+  if (!password || password.length < 8) {
+    return data({ error: 'Password must be at least 8 characters' }, { status: 400 });
   }
 
-  if (!access_token) {
+  if (!accessToken) {
     return data({ error: 'Missing authentication tokens. Please click the reset link in your email again.' }, { status: 400 });
   }
 
   const supabase = getSupabase(context);
-  const { error: sessionError } = await supabase.auth.setSession({ access_token, refresh_token });
+  const { error: sessionError } = await supabase.auth.setSession({
+    access_token: accessToken,
+    refresh_token: refreshToken,
+  });
   
   if (sessionError) {
     return data({ error: 'Invalid or expired reset link. Please request a new one.' }, { status: 400 });
   }
 
   const { error } = await supabase.auth.updateUser({
-    password: password
+    password,
   });
 
   if (error) {
-    return data({ error: String(error.message) }, { status: 400 });
+    return data({ error: 'Unable to update the password. Please request a new reset link.' }, { status: 400 });
   }
 
   return redirect('/login');
@@ -46,10 +50,10 @@ export default function ResetPassword() {
     const hash = window.location.hash;
     if (hash) {
       const params = new URLSearchParams(hash.replace('#', '?'));
-      const access_token = params.get('access_token');
-      const refresh_token = params.get('refresh_token');
-      if (access_token && refresh_token) {
-        setTokens({ accessToken: access_token, refreshToken: refresh_token });
+      const accessToken = params.get('access_token');
+      const refreshToken = params.get('refresh_token');
+      if (accessToken && refreshToken) {
+        setTokens({accessToken, refreshToken});
       }
     }
   }, []);
@@ -83,7 +87,8 @@ export default function ResetPassword() {
               name="password"
               type="password"
               required
-              minLength={6}
+              minLength={8}
+              maxLength={128}
               className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#1E3A8A] focus:border-transparent transition-all"
               placeholder="••••••••"
             />

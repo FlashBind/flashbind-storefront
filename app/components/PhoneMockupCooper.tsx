@@ -7,9 +7,9 @@ export default function PhoneMockupCooper() {
         <div className="w-full flex flex-col min-h-[800px]">
           {/* Pet Image */}
           <div className="h-72 w-full bg-slate-200 flex-shrink-0">
-            <img 
-              src="https://images.unsplash.com/photo-1552053831-71594a27632d?auto=format&fit=crop&q=80&w=800" 
-              alt="Photo of Cooper" 
+            <img
+              src="https://images.unsplash.com/photo-1552053831-71594a27632d?auto=format&fit=crop&q=80&w=800"
+              alt="Cooper"
               className="w-full h-full object-cover"
             />
           </div>

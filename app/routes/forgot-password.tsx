@@ -1,13 +1,14 @@
 import { data, type ActionFunctionArgs } from 'react-router';
 import { Form, useActionData, useNavigation } from 'react-router';
 import { getSupabase } from '~/utils/supabase.server';
+import {normalizeEmail} from '~/utils/requestSecurity.server';
 
 export async function action({ request, context }: ActionFunctionArgs) {
   const formData = await request.formData();
-  const email = String(formData.get('email'));
+  const email = normalizeEmail(formData.get('email'));
 
   if (!email) {
-    return data({ error: 'Email is required', success: false }, { status: 400 });
+    return data({ error: 'Enter a valid email address.', success: false }, { status: 400 });
   }
 
   const isLocalhost = request.url.includes('localhost') || request.url.includes('127.0.0.1');

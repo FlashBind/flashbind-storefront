@@ -19,9 +19,9 @@ export function BusinessBenefits({ isProductPage = false }: { isProductPage?: bo
             </div>
             <h3 className="text-xl font-bold text-slate-900 mb-3">{isProductPage ? 'Real-Time Updates' : 'Bulk Encoding'}</h3>
             <p className="text-slate-500 text-[15px] leading-relaxed">
-              {isProductPage 
-                ? 'Update your destination URL instantly from our free dashboard anytime, anywhere.' 
-                : 'Zero manual setup. We pre-program your entire order with custom payloads before shipping.'}
+              {isProductPage
+                ? 'Update your destination URL from your dashboard without replacing the physical product.'
+                : 'Ask us about pre-encoding compatible products for a coordinated business rollout.'}
             </p>
           </div>
           
@@ -36,11 +36,11 @@ export function BusinessBenefits({ isProductPage = false }: { isProductPage?: bo
                 )}
               </svg>
             </div>
-            <h3 className="text-xl font-bold text-slate-900 mb-3">{isProductPage ? 'Commercial Grade' : '100% White-Labeled'}</h3>
+            <h3 className="text-xl font-bold text-slate-900 mb-3">{isProductPage ? 'Premium Finish' : 'Custom Branding'}</h3>
             <p className="text-slate-500 text-[15px] leading-relaxed">
-              {isProductPage 
-                ? 'Built to withstand high-traffic hospitality and retail environments. Premium UV-printed and water-resistant.' 
-                : 'Your brand is the star. Upload your own artwork, or let us handle the custom design layout for you at no extra cost. Premium UV printing ensures your logo looks perfect in any environment.'}
+              {isProductPage
+                ? 'Designed as a clean, professional touchpoint for hospitality and retail environments.'
+                : 'Send your artwork and requirements with a quote request. We will confirm the available print method, proofing and price before production.'}
             </p>
           </div>
           
@@ -52,7 +52,7 @@ export function BusinessBenefits({ isProductPage = false }: { isProductPage?: bo
               </svg>
             </div>
             <h3 className="text-xl font-bold text-slate-900 mb-3">Optional Software</h3>
-            <p className="text-slate-500 text-[15px] leading-relaxed">Purchase the hardware once and use it without a monthly plan. Upgrade with optional FlashBind software when your business needs additional tools.</p>
+            <p className="text-slate-500 text-[15px] leading-relaxed">Purchase the hardware once and use it without a monthly plan. Optional paid software tools are currently in development.</p>
           </div>
         </div>
       </div>

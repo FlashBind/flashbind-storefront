@@ -102,7 +102,7 @@ export function ProductForm({
 
       {/* Quantity Selector */}
       <div className="flex flex-col gap-3">
-        <label className="text-sm font-bold uppercase tracking-wider text-slate-700">Quantity</label>
+        <span className="text-sm font-bold uppercase tracking-wider text-slate-700">Quantity</span>
         <div className="flex items-center border-2 border-slate-200 rounded-lg w-fit overflow-hidden bg-white">
           <button 
             type="button"

@@ -1,6 +1,7 @@
 import { redirect } from 'react-router';
 import type { LoaderFunctionArgs } from 'react-router';
 import { getSupabaseAdmin } from '~/utils/supabase.server';
+import {normalizeHttpUrl} from '~/utils/requestSecurity.server';
 
 export async function loader({ params, context }: LoaderFunctionArgs) {
   const { id } = params;
@@ -24,5 +25,6 @@ export async function loader({ params, context }: LoaderFunctionArgs) {
   }
 
   // Instantly redirect the user to the destination_url
-  return redirect(data.destination_url);
+  const destinationUrl = normalizeHttpUrl(data.destination_url);
+  return redirect(destinationUrl || '/');
 }

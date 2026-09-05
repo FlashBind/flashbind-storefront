@@ -4,77 +4,77 @@ import { useRef, useState } from 'react';
 const TUTORIAL_DATA: Record<string, any> = {
   'google-review-stand': {
     title: 'How FlashBind Works',
-    description: 'Get your smart stand set up in seconds. No apps to download, no batteries to charge. Just tap and boost your reviews.',
+    description: 'Link the stand to your Google Review page. Customers tap with a compatible phone and choose whether to leave a review.',
     steps: [
       {
         title: 'Tap',
-        description: 'Customer taps the stand with their smartphone. Our built-in NFC chip instantly communicates—no app required.',
+        description: 'A customer holds a compatible smartphone near the stand. No FlashBind app is required.',
       },
       {
         title: 'Connect',
-        description: 'They are instantly routed to your exact Google Review page without having to search or type anything.',
+        description: 'Their browser opens the Google Review page selected by the business.',
       },
       {
-        title: 'Boost',
-        description: 'Watch your 5-star reviews multiply with zero friction, leading to more customers and higher local rankings.',
+        title: 'Review',
+        description: 'The customer can leave an honest review directly on Google.',
       }
     ],
     dashboardTitle: 'Manage Your Links',
     dashboardDesc: 'Update your review link anytime, anywhere. Our intuitive dashboard makes it easy to keep information up to date.',
     dashboardPoints: [
       { title: 'Update instantly', desc: 'Change the destination URL on the fly.' },
-      { title: 'Secure cloud storage', desc: 'Your links are safely stored in the cloud.' },
-      { title: 'Track performance', desc: 'Monitor how many taps your stand receives.' }
+      { title: 'No reprinting', desc: 'Keep using the same stand after a link change.' },
+      { title: 'No app required', desc: 'Customers use their phone\'s built-in NFC reader.' }
     ]
   },
   'nfc-restaurant-menu-stand': {
     title: 'How FlashBind Works',
-    description: 'Get your digital menu set up in seconds. No apps to download, no QR codes to squint at. Just tap and view.',
+    description: 'Connect the stand to an existing menu page or website. No FlashBind app is required for guests.',
     steps: [
       {
         title: 'Tap',
-        description: 'Diners simply tap the table stand with their smartphone. The menu opens instantly on their device.',
+        description: 'Diners hold a compatible smartphone near the table stand.',
       },
       {
-        title: 'Upload',
-        description: 'Instantly link the stand to your live digital menu URL or upload a PDF from your free dashboard.',
+        title: 'Open',
+        description: 'The stand opens the menu URL configured by the restaurant.',
       },
       {
         title: 'Serve',
-        description: 'Guests browse the menu contact-free, instantly. Update your menu anytime without re-printing.',
+        description: 'Guests browse the restaurant\'s existing menu page in their browser.',
       }
     ],
     dashboardTitle: 'Menu Management',
-    dashboardDesc: 'Manage your digital menus anytime, anywhere. Update specials or prices instantly without re-printing.',
+    dashboardDesc: 'Point the stand to a different menu URL without replacing the physical product.',
     dashboardPoints: [
-      { title: 'Update instantly', desc: 'Change the menu link or PDF on the fly.' },
-      { title: 'Secure cloud storage', desc: 'Your menus are safely stored in the cloud.' },
-      { title: 'Track performance', desc: 'Monitor how many times your menu is viewed.' }
+      { title: 'Use your website', desc: 'Link directly to a menu you already host.' },
+      { title: 'Change the link', desc: 'Update the destination from your dashboard.' },
+      { title: 'No reprinting', desc: 'Keep the same stand when your menu URL changes.' }
     ]
   },
   'guest-wi-fi-hub': {
     title: 'How FlashBind Works',
-    description: 'Get your Wi-Fi Hub set up in seconds. Stop spelling out long passwords and get guests connected instantly.',
+    description: 'Give guests a simple way to view and copy your guest-network password.',
     steps: [
       {
         title: 'Tap',
-        description: 'Guests tap the hub with their smartphone to instantly prompt a connection to your secure Wi-Fi network.',
+        description: 'Guests hold a compatible smartphone near the hub to open the Wi-Fi details page.',
       },
       {
         title: 'Configure',
-        description: 'You securely input your network credentials into the dashboard once. The hub encrypts and stores the data.',
+        description: 'You enter the guest network name and password in your FlashBind dashboard.',
       },
       {
-        title: 'Connect',
-        description: 'Guests join your network instantly without typing a password, improving their experience at your venue.',
+        title: 'Copy',
+        description: 'Guests copy the displayed password, then use their phone\'s Wi-Fi settings to join.',
       }
     ],
     dashboardTitle: 'Network Settings',
-    dashboardDesc: 'Manage your Wi-Fi settings securely. Update your password anytime without needing to replace the hub.',
+    dashboardDesc: 'Manage the displayed Wi-Fi details and update the password without replacing the hub.',
     dashboardPoints: [
       { title: 'Update instantly', desc: 'Change your Wi-Fi password on the fly.' },
-      { title: 'Encrypted storage', desc: 'Your credentials are encrypted and secure.' },
-      { title: 'No more signs', desc: 'Never write a password on a chalkboard again.' }
+      { title: 'Owner-managed', desc: 'Only the tag owner can edit the saved details.' },
+      { title: 'Easy to share', desc: 'Guests can copy the password from the page.' }
     ]
   },
   'smart-pet-collar-tag': {
@@ -83,11 +83,11 @@ const TUTORIAL_DATA: Record<string, any> = {
     steps: [
       {
         title: 'Tap',
-        description: 'Simply tap your smartphone to the FlashBind tag. Our built-in NFC chip instantly communicates with any modern smartphone.',
+        description: 'Hold most modern smartphones near the FlashBind tag to open its page.',
       },
       {
         title: 'Setup',
-        description: 'Create your account in seconds and fill out your pet\'s profile. Add photos, medical info, and emergency contacts securely.',
+        description: 'Create your account and fill out your pet\'s profile with a photo, medical notes, and owner contact details.',
       },
       {
         title: 'Protect',
@@ -98,8 +98,8 @@ const TUTORIAL_DATA: Record<string, any> = {
     dashboardDesc: 'Manage your pet\'s profile anytime, anywhere. Our intuitive dashboard makes it easy to keep information up to date.',
     dashboardPoints: [
       { title: 'Update info instantly', desc: 'Change phone numbers or medical info on the fly.' },
-      { title: 'Secure cloud storage', desc: 'Your data is encrypted and safely stored in the cloud.' },
-      { title: 'Emergency contact alerts', desc: 'Ensure multiple trusted contacts can be reached.' }
+      { title: 'Owner-managed profile', desc: 'Only the signed-in owner can edit the saved details.' },
+      { title: 'No finder app', desc: 'The public profile opens in the finder\'s browser.' }
     ]
   },
   'default': {
@@ -108,7 +108,7 @@ const TUTORIAL_DATA: Record<string, any> = {
     steps: [
       {
         title: 'Tap',
-        description: 'Tap the product with any modern smartphone. Our built-in NFC chip instantly communicates—no app required.',
+        description: 'Hold a compatible smartphone near the product. No FlashBind app is required.',
       },
       {
         title: 'Setup',
@@ -116,15 +116,15 @@ const TUTORIAL_DATA: Record<string, any> = {
       },
       {
         title: 'Update',
-        description: 'Change the link or information anytime from your free dashboard. It updates instantly in real-time.',
+        description: 'Change the link or information later from your dashboard.',
       }
     ],
     dashboardTitle: 'Total Control in Your Pocket',
     dashboardDesc: 'Manage your product settings anytime, anywhere. Our intuitive dashboard makes it easy to keep information up to date.',
     dashboardPoints: [
       { title: 'Update instantly', desc: 'Change your destination link on the fly.' },
-      { title: 'Secure cloud storage', desc: 'Your settings are encrypted and safely stored.' },
-      { title: 'Track performance', desc: 'Monitor how many times your product is tapped.' }
+      { title: 'Owner-managed settings', desc: 'Only the signed-in owner can edit the product.' },
+      { title: 'No reprinting', desc: 'Keep the same product when its destination changes.' }
     ]
   }
 };
@@ -151,7 +151,7 @@ export function ProductTutorial({ productHandle }: { productHandle: string }) {
   // SVG Icons for the 3 steps
   const SVGs = [
     (
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-8 h-8 md:w-10 md:h-10">
+      <svg key="tap" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-8 h-8 md:w-10 md:h-10">
         <path d="M6 8.32a7.43 7.43 0 0 1 0 7.36" />
         <path d="M9.46 6.21a11.76 11.76 0 0 1 0 11.58" />
         <path d="M12.91 4.1a15.91 15.91 0 0 1 .01 15.8" />
@@ -159,12 +159,12 @@ export function ProductTutorial({ productHandle }: { productHandle: string }) {
       </svg>
     ),
     (
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-8 h-8 md:w-10 md:h-10">
+      <svg key="open" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-8 h-8 md:w-10 md:h-10">
         <path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z" />
       </svg>
     ),
     (
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-8 h-8 md:w-10 md:h-10">
+      <svg key="action" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-8 h-8 md:w-10 md:h-10">
         <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
         <path d="M14.05 2a9 9 0 0 1 8 7.94" />
         <path d="M14.05 6A5 5 0 0 1 18 10" />
@@ -221,7 +221,7 @@ export function ProductTutorial({ productHandle }: { productHandle: string }) {
             `}} />
             
             {content.steps.map((step: any, index: number) => (
-              <div key={index} className="w-[85vw] md:w-auto flex-shrink-0 snap-center bg-white/80 backdrop-blur-xl p-8 md:p-16 rounded-3xl md:rounded-[3rem] border border-slate-100 shadow-[0_8px_40px_rgb(0,0,0,0.06)] hover:-translate-y-3 transition-transform duration-300 group">
+              <div key={step.title} className="w-[85vw] md:w-auto flex-shrink-0 snap-center bg-white/80 backdrop-blur-xl p-8 md:p-16 rounded-3xl md:rounded-[3rem] border border-slate-100 shadow-[0_8px_40px_rgb(0,0,0,0.06)] hover:-translate-y-3 transition-transform duration-300 group">
                 <div className="w-16 h-16 md:w-20 md:h-20 bg-[#1E3A8A]/10 text-[#1E3A8A] rounded-2xl md:rounded-[1.5rem] flex items-center justify-center mb-6 md:mb-10 group-hover:scale-110 transition-transform duration-300">
                   {SVGs[index]}
                 </div>

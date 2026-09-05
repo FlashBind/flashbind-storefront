@@ -57,6 +57,9 @@ export default function FeedbackLanding() {
 
       {/* Main Card Container */}
       <div className="w-full max-w-[420px] bg-white rounded-[28px] shadow-[0_20px_40px_rgb(0,0,0,0.06)] overflow-hidden relative z-10">
+        <div className="bg-amber-50 px-5 py-2 text-center text-xs font-bold text-amber-900">
+          Interactive prototype — private messages are not sent
+        </div>
         
         {/* Brand Accent Top Line */}
         <div className="h-2 w-full bg-[#E51C23]"></div>
@@ -122,19 +125,18 @@ export default function FeedbackLanding() {
               </div>
               <h3 className="text-2xl font-bold text-[#313131] mb-2 tracking-tight">Ačiū!</h3>
               <p className="text-gray-500 text-center px-2 leading-relaxed text-[15px] font-medium">
-                Jūsų žinutė sėkmingai perduota padalinio vadovui.
+                Tai demonstracinė versija. Žinutė nebuvo išsiųsta.
               </p>
             </div>
           ) : (
             /* Private Feedback Form */
-            <form onSubmit={handleSubmit} className="flex flex-col gap-4 animate-in slide-in-from-bottom-4 fade-in duration-400">
+            <form onSubmit={(event) => void handleSubmit(event)} className="flex flex-col gap-4 animate-in slide-in-from-bottom-4 fade-in duration-400">
               <div className="relative">
                 <textarea
                   value={feedbackText}
                   onChange={(e) => setFeedbackText(e.target.value)}
                   placeholder="Parašykite, kaip galėtume tobulėti..."
                   className="w-full h-36 p-5 bg-gray-50 border-2 border-gray-200 rounded-2xl text-[#313131] placeholder-gray-400 focus:outline-none focus:bg-white focus:border-[#E51C23] focus:ring-4 focus:ring-[#E51C23]/10 resize-none transition-all text-[15px] leading-relaxed font-medium"
-                  autoFocus
                   required
                 />
               </div>

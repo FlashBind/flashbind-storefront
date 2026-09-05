@@ -19,6 +19,12 @@ export default async function handleRequest(
       checkoutDomain: context.env.PUBLIC_CHECKOUT_DOMAIN || context.env.PUBLIC_STORE_DOMAIN || 'sx8eip-td.myshopify.com',
       storeDomain: context.env.PUBLIC_STORE_DOMAIN,
     },
+    imgSrc: ["'self'", 'data:', 'blob:', 'https:'],
+    styleSrc: ['https://fonts.googleapis.com'],
+    fontSrc: ["'self'", 'data:', 'https://fonts.gstatic.com'],
+    objectSrc: ["'none'"],
+    baseUri: ["'self'"],
+    frameAncestors: ["'none'"],
   });
 
   const body = await renderToReadableStream(
@@ -45,29 +51,7 @@ export default async function handleRequest(
 
   responseHeaders.set('Content-Type', 'text/html');
   
-  // Append img-src to allow base64 data URIs and Unsplash placeholders
-  let customHeader = header;
-  if (!customHeader.includes('img-src')) {
-    customHeader += `; img-src 'self' data: https://cdn.shopify.com https://images.unsplash.com;`;
-  } else {
-    customHeader = customHeader.replace('img-src', "img-src data: https://images.unsplash.com ");
-  }
-
-  // Allow Google Fonts styles
-  if (!customHeader.includes('style-src')) {
-    customHeader += `; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;`;
-  } else {
-    customHeader = customHeader.replace('style-src', "style-src https://fonts.googleapis.com ");
-  }
-
-  // Allow Google Fonts fonts
-  if (!customHeader.includes('font-src')) {
-    customHeader += `; font-src 'self' https://fonts.gstatic.com;`;
-  } else {
-    customHeader = customHeader.replace('font-src', "font-src https://fonts.gstatic.com ");
-  }
-
-  responseHeaders.set('Content-Security-Policy', customHeader);
+  responseHeaders.set('Content-Security-Policy', header);
 
   return new Response(body, {
     headers: responseHeaders,

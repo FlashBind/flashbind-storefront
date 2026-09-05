@@ -14,23 +14,23 @@
   },
   "prettier": "@shopify/prettier-config",
   "dependencies": {
-    "@shopify/hydrogen": "latest",
+    "@shopify/hydrogen": "2026.4.5",
     "@supabase/supabase-js": "^2.110.5",
     "graphql": "^16.10.0",
     "graphql-tag": "^2.12.6",
     "isbot": "^5.1.22",
-    "react": "latest",
-    "react-dom": "latest",
-    "react-router": "7.16.0",
-    "react-router-dom": "7.16.0"
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "react-router": "7.18.3",
+    "react-router-dom": "7.18.3"
   },
   "devDependencies": {
     "@eslint/compat": "^1.2.5",
     "@eslint/eslintrc": "^3.2.0",
     "@eslint/js": "^9.18.0",
     "@graphql-codegen/cli": "5.0.2",
-    "@react-router/dev": "7.16.0",
-    "@react-router/fs-routes": "7.16.0",
+    "@react-router/dev": "7.18.3",
+    "@react-router/fs-routes": "7.18.3",
     "@shopify/cli": "3.93.2",
     "@shopify/hydrogen-codegen": "latest",
     "@shopify/mini-oxygen": "latest",
@@ -55,11 +55,21 @@
     "eslint-plugin-react-hooks": "^5.1.0",
     "globals": "^15.14.0",
     "graphql-config": "^5.0.3",
-    "postcss": "^8.5.16",
+    "postcss": "^8.5.28",
     "prettier": "^3.4.2",
     "tailwindcss": "^3.4.19",
     "typescript": "^5.9.2",
     "vite": "^8.0.1"
+  },
+  "overrides": {
+    "browserslist": "4.28.9",
+    "esbuild": "0.28.2",
+    "lodash": "4.18.1",
+    "nanoid": "3.3.18",
+    "react-router": "7.18.3",
+    "react-router-dom": "7.18.3",
+    "@react-router/dev": "7.18.3",
+    "@react-router/fs-routes": "7.18.3"
   },
   "engines": {
     "node": "^22 || ^24"

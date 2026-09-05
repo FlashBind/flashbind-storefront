@@ -86,7 +86,7 @@ export function ProductItem({
 
       
       <p className="text-sm text-slate-500 leading-relaxed mb-8 flex-grow">
-        Perfect for your business. Let customers connect instantly with a single tap.
+        {product.description || 'Open the assigned digital experience with a simple NFC tap.'}
       </p>
       
       <div className="flex items-center justify-between mt-auto pt-2">

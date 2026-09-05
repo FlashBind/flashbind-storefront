@@ -27,7 +27,7 @@ const PRICING_TIERS = [
     name: 'FlashBind Growth',
     price: '€9.99 / month',
     billingLabel: 'per business location',
-    badge: 'MOST POPULAR',
+    badge: 'RECOMMENDED',
     features: [
       'Everything included with the hardware',
       'Branded smart landing pages',
@@ -38,8 +38,8 @@ const PRICING_TIERS = [
       'Menu, social media and review-page buttons',
       'Downloadable monthly reports'
     ],
-    ctaText: 'Start with Growth',
-    ctaLink: '#',
+    ctaText: 'Discuss Growth',
+    ctaLink: '/contact?subject=software',
     isPopular: true,
   },
   {
@@ -97,7 +97,7 @@ const FAQS = [
   },
   {
     q: "What happens if I cancel Growth?",
-    a: "Cancelling Growth disables premium pages and analytics but keeps the product connected to its last direct destination."
+    a: "When paid plans launch, cancelling Growth will disable premium pages and analytics while keeping the product connected to its last direct destination."
   },
   {
     q: "What do Guest Wi-Fi analytics track?",
@@ -126,13 +126,16 @@ export default function SoftwarePrototype() {
       <section className="pt-16 md:pt-24 pb-12 md:pb-16 px-4 sm:px-6 relative z-10 text-center">
         <div className="max-w-4xl mx-auto">
           <div className="inline-block mb-4 md:mb-6 px-4 py-2 rounded-full border border-[#1E3A8A]/20 bg-[#1E3A8A]/5 text-[#1E3A8A] text-xs md:text-sm font-bold tracking-widest uppercase">
-            Software & Subscriptions
+            Software Preview
           </div>
           <h1 className="text-3xl sm:text-4xl md:text-6xl font-extrabold text-slate-900 tracking-tight mb-4 md:mb-6 leading-[1.1] sm:leading-tight">
             One dashboard.<br className="block sm:hidden" /> Smarter NFC experiences.
           </h1>
           <p className="text-slate-500 text-base md:text-xl max-w-2xl mx-auto leading-relaxed px-2">
             Keep every FlashBind destination current, understand how your products are used, and manage customer interactions from one place.
+          </p>
+          <p className="mt-4 text-sm font-semibold text-[#1E3A8A]">
+            Paid software plans are in development and are not available to purchase yet.
           </p>
         </div>
       </section>
@@ -173,8 +176,8 @@ export default function SoftwarePrototype() {
               </Link>
               
               <ul className="space-y-3 md:space-y-4 flex-grow">
-                {tier.features.map((feature, i) => (
-                  <li key={i} className="flex items-start text-slate-600 text-sm md:text-base">
+                {tier.features.map((feature) => (
+                  <li key={feature} className="flex items-start text-slate-600 text-sm md:text-base">
                     <svg className={`w-5 h-5 mr-3 mt-0.5 shrink-0 ${tier.isPopular ? 'text-[#1E3A8A]' : 'text-slate-400'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
                     </svg>
@@ -242,8 +245,8 @@ export default function SoftwarePrototype() {
         <div className="max-w-3xl mx-auto">
           <h2 className="text-2xl md:text-3xl font-extrabold text-slate-900 mb-6 md:mb-8 text-center md:text-left">Important Details</h2>
           <div className="space-y-3 md:space-y-4">
-            {FAQS.map((faq, index) => (
-              <details key={index} className="group border border-slate-200 rounded-xl bg-white shadow-sm [&_summary::-webkit-details-marker]:hidden">
+            {FAQS.map((faq) => (
+              <details key={faq.q} className="group border border-slate-200 rounded-xl bg-white shadow-sm [&_summary::-webkit-details-marker]:hidden">
                 <summary className="flex cursor-pointer items-center justify-between gap-1.5 p-5 md:p-6 text-slate-900 font-bold transition-colors hover:text-blue-600 min-h-[44px]">
                   <span className="text-sm md:text-base pr-4">{faq.q}</span>
                   <span className="shrink-0 transition duration-300 group-open:-rotate-180 text-slate-400">
@@ -263,4 +266,3 @@ export default function SoftwarePrototype() {
     </div>
   );
 }
-

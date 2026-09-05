@@ -220,7 +220,8 @@ export function ErrorBoundary() {
     errorMessage = error?.data?.message ?? error.data;
     errorStatus = error.status;
   } else if (error instanceof Error) {
-    errorMessage = error.message;
+    console.error(error);
+    errorMessage = 'Something went wrong. Please try again.';
   }
 
   return (

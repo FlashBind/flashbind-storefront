@@ -17,6 +17,23 @@ interface HeaderProps {
 
 type Viewport = 'desktop' | 'mobile';
 
+const MARQUEE_MESSAGES = [
+  'PREMIUM NFC HARDWARE',
+  'COMPATIBLE WITH MOST MODERN SMARTPHONES',
+  'NO APP REQUIRED',
+  'EDITABLE ANYTIME',
+];
+const MARQUEE_COPIES = [
+  'copy-1',
+  'copy-2',
+  'copy-3',
+  'copy-4',
+  'copy-5',
+  'copy-6',
+  'copy-7',
+  'copy-8',
+];
+
 export function Header({
   header,
   isLoggedIn,
@@ -45,15 +62,10 @@ export function Header({
         {/* Trust Signal Bar (Premium Marquee) */}
         <div className="w-full bg-gradient-to-r from-[#172A66] via-[#1E3A8A] to-[#172A66] py-2.5 overflow-hidden flex whitespace-nowrap pointer-events-none border-b border-white/10 shadow-inner">
           <div className="flex w-max" style={{ animation: 'marquee 80s linear infinite' }}>
-            {[...Array(8)].map((_, i) => (
-              <div key={i} className="flex items-center">
-                {[
-                  "PREMIUM NFC HARDWARE",
-                  "COMPATIBLE WITH MOST MODERN SMARTPHONES",
-                  "NO APP REQUIRED",
-                  "EDITABLE ANYTIME"
-                ].map((statement, j) => (
-                  <div key={j} className="flex items-center">
+            {MARQUEE_COPIES.map((copy) => (
+              <div key={copy} className="flex items-center">
+                {MARQUEE_MESSAGES.map((statement) => (
+                  <div key={statement} className="flex items-center">
                     <span className="text-[11px] font-bold text-white tracking-widest uppercase drop-shadow-md">{statement}</span>
                     <span className="w-1.5 h-1.5 rounded-full bg-[#60A5FA] mx-6 shadow-[0_0_8px_rgba(96,165,250,0.8)]"></span>
                   </div>
@@ -181,6 +193,9 @@ export function Header({
             <NavLink to="/services" onClick={close} className="text-lg font-semibold text-slate-900 hover:text-[#1E3A8A] py-3 border-b border-slate-50">
               Custom Solutions
             </NavLink>
+            <NavLink to="/software" onClick={close} className="text-lg font-semibold text-slate-900 hover:text-[#1E3A8A] py-3 border-b border-slate-50">
+              Software Preview
+            </NavLink>
             <NavLink to="/blog" onClick={close} className="text-lg font-semibold text-slate-900 hover:text-[#1E3A8A] py-3">
               Blog
             </NavLink>
@@ -253,6 +268,7 @@ export function HeaderMenu({
         subItems: [
           { id: 'sub-1', title: 'All Products', url: '/business' },
           { id: 'sub-2', title: 'Custom Solutions', url: '/services' },
+          { id: 'sub-3', title: 'Software Preview', url: '/software' },
         ]
       },
       { id: 'nav-b2c', title: 'For Individuals', url: '/personal' },

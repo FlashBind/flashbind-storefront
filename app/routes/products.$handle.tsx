@@ -99,6 +99,8 @@ export default function Product() {
   });
 
   const {title, descriptionHtml} = product;
+  const isWifiProduct = product.handle === 'guest-wi-fi-hub';
+  const isPetProduct = product.handle === 'smart-pet-collar-tag';
   const productImages = product.images?.nodes || [];
   
   // Local state for the main displayed image
@@ -203,8 +205,8 @@ export default function Product() {
                         <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
                       </svg>
                     </div>
-                    <h4 className="font-bold text-slate-900 text-sm mb-1">Instant Setup</h4>
-                    <p className="text-xs text-slate-500">Tap and go</p>
+                    <h4 className="font-bold text-slate-900 text-sm mb-1">Guided Setup</h4>
+                    <p className="text-xs text-slate-500">Tap to activate</p>
                   </div>
                   
                   <div className="w-full sm:w-auto flex-shrink-0 snap-center bg-white border border-slate-200 rounded-2xl p-5 shadow-[0_4px_20px_rgb(0,0,0,0.03)] flex flex-col items-center text-center group hover:-translate-y-1 transition-transform duration-300">
@@ -223,8 +225,8 @@ export default function Product() {
                         <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                       </svg>
                     </div>
-                    <h4 className="font-bold text-slate-900 text-sm mb-1">Editable</h4>
-                    <p className="text-xs text-slate-500">Update destination anytime</p>
+                    <h4 className="font-bold text-slate-900 text-sm mb-1">Owner Editable</h4>
+                    <p className="text-xs text-slate-500">Update saved details</p>
                   </div>
                 </div>
                 
@@ -273,7 +275,7 @@ export default function Product() {
                   </span>
                 </summary>
                 <div className="px-6 pb-6 text-slate-600 leading-relaxed text-base">
-                  <p>Absolutely not! The NFC chip communicates directly with the native operating system on almost all modern smartphones. Just tap and go.</p>
+                  <p>No FlashBind app is required. NFC works with most modern smartphones, although the tap position and behavior vary by phone model and settings.</p>
                 </div>
               </details>
               
@@ -287,13 +289,15 @@ export default function Product() {
                   </span>
                 </summary>
                 <div className="px-6 pb-6 text-slate-600 leading-relaxed text-base">
-                  <p>No. FlashBind hardware works without a plan. Optional software plans add branded pages, customer-feedback tools, analytics and multi-location management.</p>
+                  <p>No. FlashBind hardware works without a plan. Optional paid software tools for branded pages, feedback and analytics are currently in development.</p>
                 </div>
               </details>
 
               <details className="group border border-slate-200 rounded-xl bg-white shadow-sm [&_summary::-webkit-details-marker]:hidden">
                 <summary className="flex cursor-pointer items-center justify-between gap-1.5 p-6 text-slate-900 font-bold transition-colors hover:text-blue-600">
-                  How do I change where the product links to?
+                  {isPetProduct || isWifiProduct
+                    ? 'How do I update the saved details?'
+                    : 'How do I change where the product links to?'}
                   <span className="shrink-0 transition duration-300 group-open:-rotate-180 text-slate-400">
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                       <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
@@ -301,7 +305,13 @@ export default function Product() {
                   </span>
                 </summary>
                 <div className="px-6 pb-6 text-slate-600 leading-relaxed text-base">
-                  <p>When you receive your product, you will tap it to create your account. From then on, you can log in to your dashboard to instantly update the URL destination.</p>
+                  <p>
+                    {isPetProduct
+                      ? 'After activation, sign in to your dashboard to update the pet profile and owner contact details.'
+                      : isWifiProduct
+                        ? 'After activation, sign in to your dashboard to update the guest network name and displayed password.'
+                        : 'After activation, sign in to your dashboard to update the HTTP or HTTPS destination URL.'}
+                  </p>
                 </div>
               </details>
             </div>
