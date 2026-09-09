@@ -2,23 +2,7 @@ import { Form, useActionData, useNavigation, redirect, isRouteErrorResponse, use
 import type { LoaderFunctionArgs, ActionFunctionArgs } from 'react-router';
 import { getSupabaseAdmin } from '~/utils/supabase.server';
 
-const ALLOWED_TAG_TYPES = new Set([
-  'pet_tag',
-  'google_review',
-  'menu',
-  'wifi',
-]);
-
-function generateActivationPin() {
-  const values = new Uint32Array(1);
-  const unbiasedLimit = Math.floor(0x100000000 / 900000) * 900000;
-
-  do {
-    crypto.getRandomValues(values);
-  } while (values[0] >= unbiasedLimit);
-
-  return String(100000 + (values[0] % 900000));
-}
+import { generateBatch } from '~/utils/tagAdmin.server';
 
 export const handle = {
   hideLayout: true,
@@ -50,49 +34,25 @@ export async function action({ request, context }: ActionFunctionArgs) {
   }
 
   const formData = await request.formData();
-  const type = formData.get('type') as string;
-  const quantityStr = formData.get('quantity') as string;
-  const quantity = parseInt(quantityStr, 10);
+  const rawBatchRef = formData.get('batchReference');
+  const batchReference = typeof rawBatchRef === 'string' ? rawBatchRef.trim().toUpperCase() : '';
 
-  if (!ALLOWED_TAG_TYPES.has(type) || !quantity || quantity < 1 || quantity > 100) {
-    return { error: 'Invalid type or quantity (must be between 1 and 100).' };
+  if (!/^[A-Z0-9.\-_]{3,64}$/.test(batchReference)) {
+    return { error: 'Please provide a valid Batch Reference (3-64 characters: uppercase letters, digits, periods, underscores, hyphens).' };
   }
 
   const supabase = getSupabaseAdmin(context);
   
-  const newTags = [];
-  for (let i = 1; i <= quantity; i++) {
-    let newId;
-    while (true) {
-      newId = crypto.randomUUID();
-      const { data } = await supabase.from('tags').select('id').eq('id', newId).single();
-      if (!data) break; // Unique
-    }
-    const activationPin = generateActivationPin();
-    newTags.push({
-      id: newId,
-      type,
-      settings: { activation_pin: activationPin },
-      is_claimed: false,
-      owner_email: null,
-    });
+  const result = await generateBatch(batchReference.trim(), supabase);
+  if (result.error) {
+    return { error: result.error };
   }
 
-  const { error: insertError } = await supabase.from('tags').insert(newTags);
-  if (insertError) {
-    console.error('Supabase insert error:', insertError);
-    return { error: 'Failed to generate tags. Please try again.' };
-  }
-
-  const host = new URL(request.url).origin;
-  const results = newTags.map(tag => ({
-    id: tag.id,
-    type: tag.type,
-    pin: tag.settings.activation_pin,
-    url: `${host}/p/${tag.id}`,
-  }));
-
-  return { success: true, results };
+  return {
+    success: true,
+    batchId: result.batchId,
+    message: result.message
+  };
 }
 
 export default function AdminGenerateTagsPage() {
@@ -106,12 +66,12 @@ export default function AdminGenerateTagsPage() {
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
           <h1 className="text-3xl font-extrabold text-slate-900">Admin: Generate Tags</h1>
           <div className="flex items-center gap-6">
-            <a href="/admin/export-csv" download="flashbind_tags_order.csv" className="inline-flex items-center px-5 py-2.5 bg-slate-900 text-white text-sm font-bold rounded-xl hover:bg-slate-800 transition-colors shadow-sm">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-              </svg>
-              Export Order CSV
-            </a>
+              <button disabled className="inline-flex items-center px-5 py-2.5 bg-slate-200 text-slate-500 text-sm font-bold rounded-xl cursor-not-allowed shadow-sm" title="Generate a batch first to export">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                </svg>
+                Export Order CSV
+              </button>
             <a href="/dashboard" className="text-blue-600 font-semibold hover:underline">
               Back to Dashboard
             </a>
@@ -128,38 +88,23 @@ export default function AdminGenerateTagsPage() {
           )}
 
           <Form method="post" className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 gap-6">
               <div>
-                <label htmlFor="type" className="block text-sm font-semibold text-slate-700 mb-2">
-                  Tag Type
+                <label htmlFor="batchReference" className="block text-sm font-semibold text-slate-700 mb-2">
+                  Batch Reference Name
                 </label>
-                <select 
-                  id="type" 
-                  name="type" 
+                <input
+                  type="text"
+                  id="batchReference"
+                  name="batchReference"
+                  placeholder="e.g. FACTORY-ORDER-100"
                   required
+                  minLength={3}
                   className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all font-medium text-slate-700"
-                >
-                  <option value="pet_tag">Pet Tag</option>
-                  <option value="google_review">Google Review</option>
-                  <option value="menu">Menu</option>
-                  <option value="wifi">Wi-Fi</option>
-                </select>
-              </div>
-
-              <div>
-                <label htmlFor="quantity" className="block text-sm font-semibold text-slate-700 mb-2">
-                  Quantity to Generate
-                </label>
-                <input 
-                  type="number" 
-                  id="quantity" 
-                  name="quantity" 
-                  min="1"
-                  max="100"
-                  defaultValue="10"
-                  required
-                  className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                 />
+                <p className="text-xs text-slate-500 mt-2">
+                  This will generate exactly 100 tags: 25 Menu, 25 Wi-Fi, 25 Black Pet Tags, 25 White Pet Tags.
+                </p>
               </div>
             </div>
 
@@ -173,34 +118,20 @@ export default function AdminGenerateTagsPage() {
           </Form>
         </div>
 
-        {actionData?.success && actionData.results && (
+        {actionData?.success && actionData.batchId && (
           <div className="bg-green-50 rounded-3xl border border-green-200 p-8">
-            <h3 className="text-xl font-bold text-green-900 mb-2">Successfully Generated!</h3>
+            <h3 className="text-xl font-bold text-green-900 mb-2">{actionData.message}</h3>
             <p className="text-green-800 text-sm mb-6">
-              You can copy these URLs to program your NFC tags.
+              The batch has been secured. You can now download the exports for manufacturing.
             </p>
             
-            <div className="bg-white rounded-xl border border-green-200 overflow-hidden">
-              <table className="w-full text-left text-sm">
-                <thead className="bg-slate-50 border-b border-slate-200">
-                  <tr>
-                    <th className="px-4 py-3 font-semibold text-slate-700">ID</th>
-                    <th className="px-4 py-3 font-semibold text-slate-700">Type</th>
-                    <th className="px-4 py-3 font-semibold text-slate-700">Activation PIN</th>
-                    <th className="px-4 py-3 font-semibold text-slate-700">Public URL</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-100">
-                  {actionData.results.map((tag: any) => (
-                    <tr key={tag.id} className="hover:bg-slate-50">
-                      <td className="px-4 py-3 font-mono text-slate-900">#{tag.id}</td>
-                      <td className="px-4 py-3 text-slate-600">{tag.type}</td>
-                      <td className="px-4 py-3 font-mono text-red-600 font-bold">{tag.pin}</td>
-                      <td className="px-4 py-3 font-mono text-blue-600">{tag.url}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+            <div className="flex gap-4">
+              <a href={`/admin/export-csv?batchId=${actionData.batchId}`} className="inline-flex items-center px-6 py-3 bg-green-600 text-white font-bold rounded-xl hover:bg-green-700 transition-colors shadow-sm">
+                Download Supplier CSV
+              </a>
+              <a href={`/admin/export-internal?batchId=${actionData.batchId}`} className="inline-flex items-center px-6 py-3 bg-red-600 text-white font-bold rounded-xl hover:bg-red-700 transition-colors shadow-sm">
+                Download Internal CSV (With PINs)
+              </a>
             </div>
           </div>
         )}
@@ -236,16 +167,19 @@ export function ErrorBoundary() {
     );
   }
 
-  const errorMessage = error instanceof Error ? error.message : String(error);
+  console.error('[ADMIN GENERATE TAGS ERROR] An error occurred during batch generation. (Raw error omitted for safety)');
 
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-8">
-      <div className="bg-white p-8 rounded-2xl shadow-sm border border-red-100 max-w-2xl w-full">
+      <div className="bg-white p-8 rounded-2xl shadow-sm border border-red-100 max-w-2xl w-full text-center">
         <h1 className="text-xl font-bold text-red-600 mb-4">Error</h1>
-        <p className="text-slate-700 font-medium mb-4">An unexpected error occurred:</p>
-        <pre className="bg-slate-100 p-4 rounded-xl text-sm overflow-auto text-red-800 break-words whitespace-pre-wrap">
-          {errorMessage}
-        </pre>
+        <p className="text-slate-700 font-medium mb-4">An unexpected error occurred. Please try again later.</p>
+        <a
+          href="/dashboard"
+          className="inline-block px-6 py-3 bg-slate-900 hover:bg-black text-white font-bold rounded-full transition-colors mt-4"
+        >
+          Return to Dashboard
+        </a>
       </div>
     </div>
   );

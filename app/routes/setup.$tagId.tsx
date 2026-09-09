@@ -21,10 +21,10 @@ export async function loader({ params, context }: LoaderFunctionArgs) {
 
   const { getSupabaseAdmin } = await import('~/utils/supabase.server');
   const adminSupabase = getSupabaseAdmin(context);
-  const { data: tagData, error } = await adminSupabase.from('tags').select('*').eq('id', tagId).single();
+  const { data: tagData, error } = await adminSupabase.from('tags').select('id, owner_email, is_claimed, type, settings').eq('id', tagId).single();
 
   if (error || !tagData) {
-    console.error(`[SETUP] 404 for tag ${tagId}. Error:`, error, 'Data:', tagData);
+    console.error(`[SETUP] 404 for tag ${tagId}. Error code:`, error?.code || 'unknown');
     throw new Response('Not Found', { status: 404 });
   }
 
@@ -55,8 +55,9 @@ export async function action({ request, params, context }: ActionFunctionArgs) {
   }
 
   const { getSupabaseAdmin } = await import('~/utils/supabase.server');
+  const { claimTagAtomically, removePinFromSettings } = await import('~/utils/tagAdmin.server');
   const adminSupabase = getSupabaseAdmin(context);
-  const { data: tagData, error: fetchError } = await adminSupabase.from('tags').select('*').eq('id', tagId).single();
+  const { data: tagData, error: fetchError } = await adminSupabase.from('tags').select('id, owner_email, is_claimed, type, settings').eq('id', tagId).single();
 
   if (fetchError || !tagData) {
     throw new Response('Not Found', { status: 404 });
@@ -80,7 +81,9 @@ export async function action({ request, params, context }: ActionFunctionArgs) {
     return { error: 'This tag has already been activated.' };
   }
 
-  if (!tagData.owner_email) {
+  const isOrphan = !tagData.owner_email;
+
+  if (isOrphan) {
     // Rate Limiting Check
     const forwardedIp =
       request.headers.get('cf-connecting-ip')?.trim() ||
@@ -138,9 +141,12 @@ export async function action({ request, params, context }: ActionFunctionArgs) {
 
   const type = tagData.type || 'pet_tag';
   
+  const newSettings = removePinFromSettings(tagData.settings) || {};
+
   let updatePayload: any = {
     is_claimed: true,
     owner_email: userEmail,
+    settings: newSettings,
   };
 
   if (type === 'pet_tag') {
@@ -184,31 +190,28 @@ export async function action({ request, params, context }: ActionFunctionArgs) {
     if (!destinationUrl) {
       return { error: 'Enter a valid HTTP or HTTPS destination URL.' };
     }
-    updatePayload = {
-      ...updatePayload,
-      settings: { destination_url: destinationUrl }
-    };
+    updatePayload.settings.destination_url = destinationUrl;
   } else if (type === 'wifi') {
     const networkName = getFormText(formData, 'networkName', 64);
     const networkPassword = getFormText(formData, 'networkPassword', 128);
     if (!networkName || !networkPassword) {
       return { error: 'Network Name and Password are required' };
     }
-    updatePayload = {
-      ...updatePayload,
-      settings: { network_name: networkName, network_password: networkPassword }
-    };
+    updatePayload.settings.network_name = networkName;
+    updatePayload.settings.network_password = networkPassword;
   }
 
-  // Update live Supabase database
-  const { error: updateError } = await adminSupabase
-    .from('tags')
-    .update(updatePayload)
-    .eq('id', tagId);
+  // Update live Supabase database with atomic claiming
+  const claimResult = await claimTagAtomically(
+    adminSupabase,
+    tagId,
+    userEmail,
+    isOrphan,
+    updatePayload
+  );
 
-  if (updateError) {
-    console.error('Supabase Update Error:', updateError);
-    return { error: 'Failed to save to database. Please try again.' };
+  if (claimResult.error) {
+    return { error: claimResult.error };
   }
 
   return { success: true, redirectUrl: `/setup/${tagId}/success` };

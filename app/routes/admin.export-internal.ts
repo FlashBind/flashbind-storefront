@@ -1,7 +1,7 @@
 import { redirect } from 'react-router';
 import type { LoaderFunctionArgs } from 'react-router';
 import { getSupabaseAdmin } from '~/utils/supabase.server';
-import { getSupplierCSV } from '~/utils/tagAdmin.server';
+import { getInternalCSV } from '~/utils/tagAdmin.server';
 
 export async function loader({ context, request }: LoaderFunctionArgs) {
   const userEmail = context.session.get('userEmail');
@@ -23,8 +23,8 @@ export async function loader({ context, request }: LoaderFunctionArgs) {
 
   try {
     const supabase = getSupabaseAdmin(context);
-    const result = await getSupplierCSV(batchId, supabase);
-    
+    const result = await getInternalCSV(batchId, supabase);
+
     if (result.error) {
       return new Response(result.error, { status: 400 });
     }
@@ -34,11 +34,11 @@ export async function loader({ context, request }: LoaderFunctionArgs) {
       headers: {
         'Content-Type': 'text/csv; charset=utf-8',
         'Cache-Control': 'private, no-store, max-age=0',
-        'Content-Disposition': `attachment; filename="flashbind_tags_supplier_${batchId.slice(0, 8)}.csv"`
+        'Content-Disposition': `attachment; filename="flashbind_tags_internal_${batchId.slice(0, 8)}.csv"`
       }
     });
   } catch (err: any) {
-    console.error('[EXPORT CSV ERROR] Unexpected server error.');
+    console.error('[EXPORT INTERNAL CSV ERROR] Unexpected server error.');
     return new Response('Server error generating CSV. Please try again.', { status: 500 });
   }
 }
