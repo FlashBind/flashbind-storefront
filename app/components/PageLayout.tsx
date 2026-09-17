@@ -1,5 +1,5 @@
 import {Await, Link} from 'react-router';
-import {Suspense, useId} from 'react';
+import {Suspense, useEffect, useId, useState} from 'react';
 import type {
   CartApiQueryFragment,
   FooterQuery,
@@ -55,15 +55,30 @@ export function PageLayout({
 }
 
 function CartAside({cart}: {cart: PageLayoutProps['cart']}) {
+  // The cart drawer is hidden (via CSS) until opened, but was still mounting
+  // its own <Suspense><Await resolve={cart}> on every page load — a second
+  // boundary racing the header's cart-badge boundary for the same promise,
+  // which triggered a React hydration error (#421). Deferring the mount
+  // until the drawer is actually opened (a client-only interaction, safely
+  // after hydration) avoids that without changing what the user sees.
+  const {type} = useAside();
+  const [hasOpened, setHasOpened] = useState(false);
+
+  useEffect(() => {
+    if (type === 'cart') setHasOpened(true);
+  }, [type]);
+
   return (
     <Aside type="cart" heading="CART">
-      <Suspense fallback={<p>Loading cart ...</p>}>
-        <Await resolve={cart}>
-          {(cart) => {
-            return <CartMain cart={cart} layout="aside" />;
-          }}
-        </Await>
-      </Suspense>
+      {hasOpened ? (
+        <Suspense fallback={<p>Loading cart ...</p>}>
+          <Await resolve={cart}>
+            {(cart) => {
+              return <CartMain cart={cart} layout="aside" />;
+            }}
+          </Await>
+        </Suspense>
+      ) : null}
     </Aside>
   );
 }
