@@ -16,9 +16,23 @@ import {ProductImage} from '~/components/ProductImage';
 import {ProductForm} from '~/components/ProductForm';
 import {redirectIfHandleIsLocalized} from '~/lib/redirect';
 
-export const meta: Route.MetaFunction = ({data}) => {
+export const meta: Route.MetaFunction = ({data, matches}) => {
+  const parentMeta = matches.flatMap((match) => match?.meta ?? []);
+  const description =
+    data?.product.seo?.description || data?.product.description || undefined;
+  const ogImage = data?.product.images?.nodes?.[0]?.url;
+
   return [
+    ...parentMeta.filter(
+      (m) => !('name' in m && m.name === 'description') && !('title' in m),
+    ),
     {title: `FlashBind | ${data?.product.title ?? ''}`},
+    ...(description ? [{name: 'description', content: description}] : []),
+    {
+      property: 'og:title',
+      content: data?.product.seo?.title || data?.product.title || 'FlashBind',
+    },
+    ...(ogImage ? [{property: 'og:image', content: ogImage}] : []),
     {
       rel: 'canonical',
       href: `/products/${data?.product.handle}`,
@@ -102,7 +116,27 @@ export default function Product() {
   const isWifiProduct = product.handle === 'guest-wi-fi-hub';
   const isPetProduct = product.handle === 'smart-pet-collar-tag';
   const productImages = product.images?.nodes || [];
-  
+
+  const productJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: product.title,
+    description: product.seo?.description || product.description || undefined,
+    image: productImages.map((img: any) => img.url),
+    sku: selectedVariant?.sku || undefined,
+    offers: selectedVariant?.price
+      ? {
+          '@type': 'Offer',
+          url: `https://flashbind.com/products/${product.handle}`,
+          priceCurrency: selectedVariant.price.currencyCode,
+          price: selectedVariant.price.amount,
+          availability: selectedVariant.availableForSale
+            ? 'https://schema.org/InStock'
+            : 'https://schema.org/OutOfStock',
+        }
+      : undefined,
+  };
+
   // Local state for the main displayed image
   const defaultImage = selectedVariant?.image || productImages[0];
   const [activeImage, setActiveImage] = useState(defaultImage);
@@ -118,6 +152,10 @@ export default function Product() {
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{__html: JSON.stringify(productJsonLd)}}
+      />
       <div className="bg-slate-50 min-h-screen pt-8 pb-8">
         <div className="container mx-auto px-6 max-w-7xl">
           <div className="bg-white rounded-[3rem] p-8 md:p-12 shadow-[0_8px_40px_rgb(0,0,0,0.04)] border border-slate-100 flex flex-col md:flex-row gap-12 lg:gap-20 items-start">

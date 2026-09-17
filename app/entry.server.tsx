@@ -25,6 +25,7 @@ export default async function handleRequest(
     objectSrc: ["'none'"],
     baseUri: ["'self'"],
     frameAncestors: ["'none'"],
+    formAction: ["'self'"],
   });
 
   const body = await renderToReadableStream(

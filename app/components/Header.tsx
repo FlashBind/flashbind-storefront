@@ -11,7 +11,7 @@ import {useAside} from '~/components/Aside';
 interface HeaderProps {
   header: HeaderQuery;
   cart: Promise<CartApiQueryFragment | null>;
-  isLoggedIn: Promise<boolean>;
+  isLoggedIn: boolean;
   publicStoreDomain: string;
 }
 
@@ -120,41 +120,35 @@ export function Header({
             </button>
           </div>
 
-          <Suspense fallback={<div className="text-center text-slate-500 py-8">Loading...</div>}>
-            <Await resolve={isLoggedIn}>
-              {(isLoggedIn) => (
-                isLoggedIn ? (
-                  <div className="flex flex-col gap-4">
-                    <div className="flex flex-col">
-                      <NavLink to="/dashboard" onClick={() => setIsAccountOpen(false)} className="py-3 text-lg text-slate-700 hover:text-black transition-colors block">My Account</NavLink>
-                      <NavLink to="/account/orders" onClick={() => setIsAccountOpen(false)} className="py-3 text-lg text-slate-700 hover:text-black transition-colors block">Order History</NavLink>
-                    </div>
-                    <Form method="post" action="/logout" className="mt-4">
-                      <button type="submit" onClick={() => setIsAccountOpen(false)} className="border border-slate-300 text-slate-900 rounded-full py-3 text-center w-full font-semibold hover:bg-slate-50 transition-colors">
-                        Log Out
-                      </button>
-                    </Form>
-                  </div>
-                ) : (
-                  <div className="flex flex-col gap-8">
-                    <div className="flex flex-col gap-3">
-                      <a href="/login" className="bg-slate-900 text-white rounded-full py-3 text-center w-full block font-semibold hover:bg-[#1E3A8A] transition-colors">
-                        Log In
-                      </a>
-                      <a href="/register" className="border border-slate-300 text-slate-900 rounded-full py-3 text-center w-full block font-semibold hover:bg-slate-50 transition-colors">
-                        Create an Account
-                      </a>
-                    </div>
-                    
-                    <div className="flex flex-col">
-                      <NavLink to="/dashboard" onClick={() => setIsAccountOpen(false)} className="py-3 text-lg text-slate-700 hover:text-black transition-colors block">My Account</NavLink>
-                      <NavLink to="/account/orders" onClick={() => setIsAccountOpen(false)} className="py-3 text-lg text-slate-700 hover:text-black transition-colors block">Order History</NavLink>
-                    </div>
-                  </div>
-                )
-              )}
-            </Await>
-          </Suspense>
+          {isLoggedIn ? (
+            <div className="flex flex-col gap-4">
+              <div className="flex flex-col">
+                <NavLink to="/dashboard" onClick={() => setIsAccountOpen(false)} className="py-3 text-lg text-slate-700 hover:text-black transition-colors block">My Account</NavLink>
+                <NavLink to="/account/orders" onClick={() => setIsAccountOpen(false)} className="py-3 text-lg text-slate-700 hover:text-black transition-colors block">Order History</NavLink>
+              </div>
+              <Form method="post" action="/logout" className="mt-4">
+                <button type="submit" onClick={() => setIsAccountOpen(false)} className="border border-slate-300 text-slate-900 rounded-full py-3 text-center w-full font-semibold hover:bg-slate-50 transition-colors">
+                  Log Out
+                </button>
+              </Form>
+            </div>
+          ) : (
+            <div className="flex flex-col gap-8">
+              <div className="flex flex-col gap-3">
+                <a href="/login" className="bg-slate-900 text-white rounded-full py-3 text-center w-full block font-semibold hover:bg-[#1E3A8A] transition-colors">
+                  Log In
+                </a>
+                <a href="/register" className="border border-slate-300 text-slate-900 rounded-full py-3 text-center w-full block font-semibold hover:bg-slate-50 transition-colors">
+                  Create an Account
+                </a>
+              </div>
+
+              <div className="flex flex-col">
+                <NavLink to="/dashboard" onClick={() => setIsAccountOpen(false)} className="py-3 text-lg text-slate-700 hover:text-black transition-colors block">My Account</NavLink>
+                <NavLink to="/account/orders" onClick={() => setIsAccountOpen(false)} className="py-3 text-lg text-slate-700 hover:text-black transition-colors block">Order History</NavLink>
+              </div>
+            </div>
+          )}
 
           <div className="mt-auto pb-6">
             <p className="text-sm text-gray-400 text-center">Guest checkout is always available.</p>
@@ -203,32 +197,26 @@ export function Header({
 
           {/* Account & Login Links */}
           <div className="mt-8 pt-6 border-t border-slate-100 flex flex-col gap-4">
-            <Suspense fallback={<div className="h-20" />}>
-              <Await resolve={isLoggedIn}>
-                {(isLoggedIn) => (
-                  isLoggedIn ? (
-                    <>
-                      <NavLink to="/dashboard" onClick={close} className="text-base font-medium text-slate-600 hover:text-[#1E3A8A] py-1">My Account</NavLink>
-                      <NavLink to="/account/orders" onClick={close} className="text-base font-medium text-slate-600 hover:text-[#1E3A8A] py-1">Order History</NavLink>
-                      <Form method="post" action="/logout" className="mt-2">
-                        <button type="submit" onClick={close} className="w-full bg-slate-50 text-slate-600 rounded-xl py-3 text-center font-medium hover:bg-slate-100 transition-colors">
-                          Log Out
-                        </button>
-                      </Form>
-                    </>
-                  ) : (
-                    <>
-                      <NavLink to="/login" onClick={close} className="w-full bg-[#1E3A8A] text-white rounded-xl py-3 text-center font-bold hover:bg-[#172A66] transition-colors shadow-md">
-                        Log In
-                      </NavLink>
-                      <NavLink to="/register" onClick={close} className="w-full border border-slate-300 text-slate-800 rounded-xl py-3 text-center font-bold hover:bg-slate-50 transition-colors">
-                        Create an Account
-                      </NavLink>
-                    </>
-                  )
-                )}
-              </Await>
-            </Suspense>
+            {isLoggedIn ? (
+              <>
+                <NavLink to="/dashboard" onClick={close} className="text-base font-medium text-slate-600 hover:text-[#1E3A8A] py-1">My Account</NavLink>
+                <NavLink to="/account/orders" onClick={close} className="text-base font-medium text-slate-600 hover:text-[#1E3A8A] py-1">Order History</NavLink>
+                <Form method="post" action="/logout" className="mt-2">
+                  <button type="submit" onClick={close} className="w-full bg-slate-50 text-slate-600 rounded-xl py-3 text-center font-medium hover:bg-slate-100 transition-colors">
+                    Log Out
+                  </button>
+                </Form>
+              </>
+            ) : (
+              <>
+                <NavLink to="/login" onClick={close} className="w-full bg-[#1E3A8A] text-white rounded-xl py-3 text-center font-bold hover:bg-[#172A66] transition-colors shadow-md">
+                  Log In
+                </NavLink>
+                <NavLink to="/register" onClick={close} className="w-full border border-slate-300 text-slate-800 rounded-xl py-3 text-center font-bold hover:bg-slate-50 transition-colors">
+                  Create an Account
+                </NavLink>
+              </>
+            )}
           </div>
         </div>
       </div>
@@ -401,11 +389,7 @@ function HeaderCtas({
         className="hidden md:flex items-center text-slate-600 hover:text-[#1E3A8A] transition-colors py-2" 
         title="Account"
       >
-        <Suspense fallback={<UserIcon />}>
-          <Await resolve={isLoggedIn} errorElement={<UserIcon />}>
-            {(isLoggedIn) => <UserIcon />}
-          </Await>
-        </Suspense>
+        <UserIcon />
       </button>
 
       <CartToggle cart={cart} />
@@ -530,15 +514,6 @@ const FALLBACK_HEADER_MENU = {
       title: 'Blog',
       type: 'HTTP',
       url: '/blogs/journal',
-      items: [],
-    },
-    {
-      id: 'gid://shopify/MenuItem/461609566264',
-      resourceId: null,
-      tags: [],
-      title: 'Policies',
-      type: 'HTTP',
-      url: '/policies',
       items: [],
     },
     {
