@@ -6,8 +6,17 @@ import {redirectIfHandleIsLocalized} from '~/lib/redirect';
 import {ProductItem} from '~/components/ProductItem';
 import type {ProductItemFragment} from 'storefrontapi.generated';
 
-export const meta: Route.MetaFunction = ({data}) => {
-  return [{title: `FlashBind | ${data?.collection.title ?? ''} Collection`}];
+export const meta: Route.MetaFunction = ({data, matches}) => {
+  const parentMeta = matches.flatMap((match) => match?.meta ?? []);
+  const description = data?.collection.description || undefined;
+
+  return [
+    ...parentMeta.filter(
+      (m) => !('name' in m && m.name === 'description') && !('title' in m),
+    ),
+    {title: `FlashBind | ${data?.collection.title ?? ''} Collection`},
+    ...(description ? [{name: 'description', content: description}] : []),
+  ];
 };
 
 export async function loader(args: Route.LoaderArgs) {

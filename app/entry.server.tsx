@@ -67,6 +67,11 @@ export default async function handleRequest(
     customHeader = customHeader.replace('font-src', "font-src https://fonts.gstatic.com ");
   }
 
+  // Restrict form submissions to same-origin (missing from Hydrogen's CSP defaults)
+  if (!customHeader.includes('form-action')) {
+    customHeader += `; form-action 'self';`;
+  }
+
   responseHeaders.set('Content-Security-Policy', customHeader);
 
   return new Response(body, {

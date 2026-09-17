@@ -148,7 +148,7 @@ function loadDeferredData({context}: Route.LoaderArgs) {
     });
   return {
     cart: cart.get(),
-    isLoggedIn: Promise.resolve(Boolean(context.session.get('userEmail'))),
+    isLoggedIn: Boolean(context.session.get('userEmail')),
     footer,
   };
 }

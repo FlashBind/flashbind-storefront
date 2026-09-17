@@ -1,5 +1,6 @@
 import {
   Link,
+  redirect,
   useLoaderData,
   useSearchParams,
 } from 'react-router';
@@ -57,7 +58,9 @@ export async function loader({request, context}: Route.LoaderArgs) {
   const userEmail = context.session.get('userEmail');
 
   if (!userEmail) {
-    throw new Error('Please log in again to view your orders.');
+    return redirect(
+      `/login?redirectTo=${encodeURIComponent(new URL(request.url).pathname)}`,
+    );
   }
 
   // Query Shopify Admin API for customers matching this email

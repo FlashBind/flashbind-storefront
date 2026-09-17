@@ -19,7 +19,7 @@ interface PageLayoutProps {
   cart: Promise<CartApiQueryFragment | null>;
   footer: Promise<FooterQuery | null>;
   header: HeaderQuery;
-  isLoggedIn: Promise<boolean>;
+  isLoggedIn: boolean;
   publicStoreDomain: string;
   children?: React.ReactNode;
 }

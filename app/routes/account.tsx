@@ -3,6 +3,7 @@ import {
   Form,
   NavLink,
   Outlet,
+  redirect,
   useLoaderData,
 } from 'react-router';
 import type {Route} from './+types/account';
@@ -11,11 +12,13 @@ export function shouldRevalidate() {
   return true;
 }
 
-export async function loader({context}: Route.LoaderArgs) {
+export async function loader({context, request}: Route.LoaderArgs) {
   const email = context.session.get('userEmail');
-  
+
   if (!email) {
-    throw new Error('Please log in to view your account.');
+    return redirect(
+      `/login?redirectTo=${encodeURIComponent(new URL(request.url).pathname)}`,
+    );
   }
 
   // We no longer fetch from customerAccount API. 
