@@ -18,14 +18,6 @@ export function ProductItem({
 }) {
   const variantUrl = useVariantUrl(product.handle);
   const image = product.featuredImage;
-  
-  const idStr = product?.id || product?.handle || 'default';
-  let hash = 0;
-  for (let i = 0; i < idStr.length; i++) {
-    hash = idStr.charCodeAt(i) + ((hash << 5) - hash);
-    hash |= 0;
-  }
-  const reviewCount = Math.abs(hash % 420) + 80;
 
   const price = product?.priceRange?.minVariantPrice;
   const compareAtPrice = product?.compareAtPriceRange?.minVariantPrice;
@@ -83,12 +75,7 @@ export function ProductItem({
       </div>
       
       <h3 className="text-[1.35rem] font-bold text-slate-900 mb-1 leading-tight">{product.title}</h3>
-      
-      <div className="flex items-center gap-1.5 mb-4">
-        <div className="flex text-yellow-400 text-sm tracking-tight">★★★★★</div>
-        <span className="text-[11px] text-slate-400 font-medium">({reviewCount})</span>
-      </div>
-      
+
       <p className="text-sm text-slate-500 leading-relaxed mb-8 flex-grow">
         Perfect for your business. Let customers connect instantly with a single tap.
       </p>

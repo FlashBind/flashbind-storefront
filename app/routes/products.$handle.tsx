@@ -139,14 +139,6 @@ export default function Product() {
   const defaultImage = selectedVariant?.image || productImages[0];
   const [activeImage, setActiveImage] = useState(defaultImage);
 
-  // Generate a deterministic random review count based on product ID
-  const idStr = product?.id || product?.handle || 'default';
-  let hash = 0;
-  for (let i = 0; i < idStr.length; i++) {
-    hash = idStr.charCodeAt(i) + ((hash << 5) - hash);
-    hash |= 0; 
-  }
-  const reviewCount = Math.abs(hash % 420) + 80;
   const [activeFeature, setActiveFeature] = useState(0);
 
   // Update active image if the variant changes
@@ -214,16 +206,7 @@ export default function Product() {
                   </span>
                 )}
               </div>
-              
-              <div className="flex items-center gap-3 mb-6">
-                <div className="flex text-yellow-400 text-sm">
-                  &#9733;&#9733;&#9733;&#9733;&#9733;
-                </div>
-                <span className="text-sm font-bold text-slate-500 underline decoration-slate-300 underline-offset-4 cursor-pointer hover:text-slate-900 transition-colors">
-                  {reviewCount} Reviews
-                </span>
-              </div>
-              
+
               <div className="text-3xl font-extrabold text-slate-900 mb-8">
                 <ProductPrice
                   price={selectedVariant?.price}
