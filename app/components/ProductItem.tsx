@@ -23,6 +23,7 @@ export function ProductItem({
   const compareAtPrice = product?.compareAtPriceRange?.minVariantPrice;
   const isSale = compareAtPrice && price && parseFloat(compareAtPrice.amount) > parseFloat(price.amount);
   const isSoldOut = product?.availableForSale === false;
+  const isComingSoon = isSoldOut && ['guest-wi-fi-hub', 'nfc-restaurant-menu-stand'].includes(product?.handle || '');
   const isSellingFast = product?.tags?.includes('selling-fast') || product?.handle?.includes('pet');
 
 
@@ -37,7 +38,7 @@ export function ProductItem({
       <div className="absolute top-8 left-8 z-10 flex flex-col gap-2 items-start">
         {isSoldOut ? (
           <div className="bg-slate-800/90 backdrop-blur-sm border border-slate-700/50 text-white text-[11px] font-extrabold uppercase tracking-widest py-1.5 px-3 rounded-full shadow-sm">
-            Sold Out
+            {isComingSoon ? 'Coming Soon' : 'Sold Out'}
           </div>
         ) : isSellingFast ? (
           <div className="bg-orange-500 text-white text-[11px] font-extrabold uppercase tracking-widest py-1.5 px-3 rounded-full shadow-sm flex items-center gap-1.5">

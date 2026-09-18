@@ -57,6 +57,7 @@ function TrendingProductCard({ product }: { product: any }) {
   const comparePrice = compareAmount ? `$${parseFloat(compareAmount).toFixed(2)}` : null;
   const isSale = compareAmount && priceAmount && parseFloat(compareAmount) > parseFloat(priceAmount);
   const isSoldOut = product.availableForSale === false;
+  const isComingSoon = isSoldOut && ['guest-wi-fi-hub', 'nfc-restaurant-menu-stand'].includes(product.handle || '');
   const isSellingFast = product.tags?.includes('selling-fast') || product.handle?.includes('pet');
 
   return (
@@ -66,7 +67,7 @@ function TrendingProductCard({ product }: { product: any }) {
           <div className="relative z-10 flex flex-col items-start gap-2 absolute top-4 left-4 z-20">
             {isSoldOut ? (
               <div className="bg-slate-800/90 backdrop-blur-sm border border-slate-700/50 text-white text-[11px] font-extrabold uppercase tracking-widest py-1.5 px-3 rounded-full shadow-sm">
-                Sold Out
+                {isComingSoon ? 'Coming Soon' : 'Sold Out'}
               </div>
             ) : isSellingFast ? (
               <div className="bg-orange-500 text-white text-[11px] font-extrabold uppercase tracking-widest py-1.5 px-3 rounded-full shadow-sm flex items-center gap-1.5">
