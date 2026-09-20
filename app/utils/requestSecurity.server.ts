@@ -98,3 +98,49 @@ export async function hashRateLimitIdentifier(value: string): Promise<string> {
     .map((byte) => byte.toString(16).padStart(2, '0'))
     .join('');
 }
+
+const IPV4_PATTERN =
+  /^(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}$/;
+
+const IPV6_PATTERN =
+  /^(([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|::(ffff(:0{1,4})?:)?((25[0-5]|(2[0-4]|1?[0-9])?[0-9])\.){3}(25[0-5]|(2[0-4]|1?[0-9])?[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1?[0-9])?[0-9])\.){3}(25[0-5]|(2[0-4]|1?[0-9])?[0-9]))$/;
+
+/**
+ * Normalizes and strictly validates a client IP taken from a header this
+ * server explicitly trusts (i.e. `cf-connecting-ip`, set by the Cloudflare
+ * edge — never a client-settable header like `x-forwarded-for`). Rejects
+ * anything that isn't exactly one well-formed IPv4/IPv6 address: malformed
+ * values, comma-separated lists, and embedded whitespace/newlines all
+ * return null rather than being partially accepted.
+ */
+export function normalizeTrustedClientIp(value: string | null | undefined): string | null {
+  if (typeof value !== 'string') return null;
+
+  const trimmed = value.trim();
+  if (!trimmed || trimmed.length > 45) return null;
+
+  // A single trusted header must contain exactly one address — reject any
+  // embedded whitespace (including newlines) or comma-separated lists.
+  if (/[,\s]/.test(trimmed)) return null;
+
+  if (IPV4_PATTERN.test(trimmed) || IPV6_PATTERN.test(trimmed)) {
+    return trimmed;
+  }
+
+  return null;
+}
+
+/**
+ * Builds the identifier set used for activation-attempt rate limiting. The
+ * hashed account identifier is always included and can never be dropped or
+ * replaced by request headers. `cf-connecting-ip` may add one optional,
+ * strictly-validated secondary identifier; no other client-controlled
+ * header (e.g. `x-forwarded-for`) is ever consulted.
+ */
+export function buildActivationRateLimitIdentifiers(
+  headers: Pick<Headers, 'get'>,
+  hashedAccountIdentifier: string,
+): string[] {
+  const trustedIp = normalizeTrustedClientIp(headers.get('cf-connecting-ip'));
+  return [hashedAccountIdentifier, ...(trustedIp ? [trustedIp] : [])];
+}

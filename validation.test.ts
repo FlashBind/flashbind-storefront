@@ -1,5 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
 import { generateBatch, getSupplierCSV, getInternalCSV, claimTagAtomically, removePinFromSettings } from './app/utils/tagAdmin.server';
+import { normalizeTrustedClientIp, buildActivationRateLimitIdentifiers } from './app/utils/requestSecurity.server';
 import crypto from 'node:crypto';
 
 // Fluent Mock Supabase Client Factory
@@ -369,5 +370,84 @@ describe('Concurrency Unit Simulations', () => {
     const result = await promise;
     expect(result.error).toContain('Timeout waiting for concurrent batch');
     vi.useRealTimers();
+  });
+});
+
+describe('Rate-Limit IP Identifier Validation', () => {
+  const ACCOUNT_BUCKET = 'u:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa';
+
+  it('accepts a valid IPv4 cf-connecting-ip value', () => {
+    expect(normalizeTrustedClientIp('203.0.113.42')).toBe('203.0.113.42');
+  });
+
+  it('accepts a valid IPv6 cf-connecting-ip value', () => {
+    expect(normalizeTrustedClientIp('2001:db8::1')).toBe('2001:db8::1');
+  });
+
+  it('rejects a malformed IP value', () => {
+    expect(normalizeTrustedClientIp('not-an-ip')).toBeNull();
+    expect(normalizeTrustedClientIp('999.999.999.999')).toBeNull();
+  });
+
+  it('rejects a comma-separated list of IPs', () => {
+    expect(normalizeTrustedClientIp('203.0.113.42, 198.51.100.7')).toBeNull();
+  });
+
+  it('rejects a multiline/embedded-whitespace value', () => {
+    expect(normalizeTrustedClientIp('203.0.113.42\n198.51.100.7')).toBeNull();
+    expect(normalizeTrustedClientIp('203.0.113.42 198.51.100.7')).toBeNull();
+  });
+
+  it('rejects null, undefined, and empty values', () => {
+    expect(normalizeTrustedClientIp(null)).toBeNull();
+    expect(normalizeTrustedClientIp(undefined)).toBeNull();
+    expect(normalizeTrustedClientIp('')).toBeNull();
+    expect(normalizeTrustedClientIp('   ')).toBeNull();
+  });
+
+  it('a valid cf-connecting-ip adds the secondary bucket', () => {
+    const headers = new Headers({ 'cf-connecting-ip': '203.0.113.42' });
+    const identifiers = buildActivationRateLimitIdentifiers(headers, ACCOUNT_BUCKET);
+    expect(identifiers).toEqual([ACCOUNT_BUCKET, '203.0.113.42']);
+  });
+
+  it('x-forwarded-for is ignored entirely, even when cf-connecting-ip is absent', () => {
+    const headers = new Headers({ 'x-forwarded-for': '203.0.113.42, 198.51.100.7' });
+    const identifiers = buildActivationRateLimitIdentifiers(headers, ACCOUNT_BUCKET);
+    expect(identifiers).toEqual([ACCOUNT_BUCKET]);
+  });
+
+  it('x-forwarded-for is ignored even when it is a validly-formatted single IP', () => {
+    const headers = new Headers({ 'x-forwarded-for': '203.0.113.42' });
+    const identifiers = buildActivationRateLimitIdentifiers(headers, ACCOUNT_BUCKET);
+    expect(identifiers).toEqual([ACCOUNT_BUCKET]);
+  });
+
+  it('a malformed cf-connecting-ip is ignored, keeping only the account bucket', () => {
+    const headers = new Headers({ 'cf-connecting-ip': '203.0.113.42, 198.51.100.7' });
+    const identifiers = buildActivationRateLimitIdentifiers(headers, ACCOUNT_BUCKET);
+    expect(identifiers).toEqual([ACCOUNT_BUCKET]);
+  });
+
+  it('absence of any IP header still retains the hashed account bucket', () => {
+    const headers = new Headers();
+    const identifiers = buildActivationRateLimitIdentifiers(headers, ACCOUNT_BUCKET);
+    expect(identifiers).toEqual([ACCOUNT_BUCKET]);
+  });
+
+  it('spoofed/changing forwarding headers cannot remove or replace the account bucket', () => {
+    const attempts = [
+      new Headers({ 'x-forwarded-for': '10.0.0.1' }),
+      new Headers({ 'x-forwarded-for': '10.0.0.2, 10.0.0.3' }),
+      new Headers({ 'cf-connecting-ip': 'garbage' }),
+      new Headers({ 'cf-connecting-ip': '10.0.0.1', 'x-forwarded-for': '203.0.113.42' }),
+      new Headers(),
+    ];
+
+    for (const headers of attempts) {
+      const identifiers = buildActivationRateLimitIdentifiers(headers, ACCOUNT_BUCKET);
+      expect(identifiers[0]).toBe(ACCOUNT_BUCKET);
+      expect(identifiers).toContain(ACCOUNT_BUCKET);
+    }
   });
 });

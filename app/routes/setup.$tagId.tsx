@@ -2,6 +2,7 @@ import { Form, redirect, useActionData, useNavigation, useLoaderData, useNavigat
 import { useEffect } from 'react';
 import type { LoaderFunctionArgs, ActionFunctionArgs } from 'react-router';
 import {
+  buildActivationRateLimitIdentifiers,
   getFormText,
   hashRateLimitIdentifier,
   normalizeHttpUrl,
@@ -85,13 +86,10 @@ export async function action({ request, params, context }: ActionFunctionArgs) {
 
   if (isOrphan) {
     // Rate Limiting Check
-    const forwardedIp =
-      request.headers.get('cf-connecting-ip')?.trim() ||
-      request.headers.get('x-forwarded-for')?.split(',')[0]?.trim();
-    const clientIdentifiers = [
+    const clientIdentifiers = buildActivationRateLimitIdentifiers(
+      request.headers,
       `u:${(await hashRateLimitIdentifier(userEmail)).slice(0, 40)}`,
-      ...(forwardedIp && forwardedIp.length <= 45 ? [forwardedIp] : []),
-    ];
+    );
     const { data: limitRows } = await adminSupabase
       .from('rate_limits')
       .select('*')
