@@ -227,7 +227,7 @@ export default [
     files: ['**/*.test.*'],
   })),
   {
-    files: ['**/*.test.*'],
+    files: ['**/*.test.*', 'real-integration.ts'],
     plugins: {
       jest,
     },
@@ -236,6 +236,10 @@ export default [
         ...globals.node,
         ...globals.jest,
       },
+    },
+    rules: {
+      'jest/no-deprecated-functions': 'off',
+      'no-console': 'off',
     },
   },
   {

@@ -1,6 +1,11 @@
 import { Form, redirect, useActionData, useNavigation, useLoaderData, useNavigate } from 'react-router';
 import { useEffect } from 'react';
 import type { LoaderFunctionArgs, ActionFunctionArgs } from 'react-router';
+import {
+  getFormText,
+  normalizeHttpUrl,
+} from '~/utils/requestSecurity.server';
+import {sanitizeTagSettings} from '~/utils/tagSanitizer.server';
 
 
 export const handle = {
@@ -45,7 +50,7 @@ export async function loader({ params, context }: LoaderFunctionArgs) {
   }
 
   const type = rawPet.type || 'pet_tag';
-  const settings = rawPet.settings || {};
+  const settings = sanitizeTagSettings(type, rawPet.settings);
 
   return { tagId, pet, userEmail, type, settings };
 }
@@ -76,19 +81,30 @@ export async function action({ request, params, context }: ActionFunctionArgs) {
   let updatePayload: any = {};
 
   if (type === 'pet_tag') {
-    const imageBase64 = formData.get('imageBase64') as string;
+    const imageValue = formData.get('imageBase64');
+    const imageBase64 = typeof imageValue === 'string' ? imageValue : '';
     let imageUrl = rawPet.image_url;
     if (imageBase64 && imageBase64.startsWith('data:image')) {
+      if (!imageBase64.startsWith('data:image/jpeg;base64,') && !imageBase64.startsWith('data:image/png;base64,')) {
+        return { error: 'Image must be a JPEG or PNG.' };
+      }
+      if (imageBase64.length * 0.75 > 2 * 1024 * 1024) {
+        return { error: 'Image file size must be under 2 MB.' };
+      }
       imageUrl = imageBase64;
     }
 
-    const dogName = formData.get('dogName') as string;
-    const ownerName = formData.get('ownerName') as string;
-    const ownerPhone = formData.get('ownerPhone') as string;
-    const medicalNotes = formData.get('medicalNotes') as string;
+    const dogName = getFormText(formData, 'dogName', 100);
+    const ownerName = getFormText(formData, 'ownerName', 100);
+    const ownerPhone = getFormText(formData, 'ownerPhone', 40);
+    const medicalValue = formData.get('medicalNotes');
+    const medicalNotes = typeof medicalValue === 'string' ? medicalValue.trim() : '';
 
     if (!dogName || !ownerName || !ownerPhone) {
-      return { error: 'Please fill in all required fields' };
+      return { error: 'Please check the required fields and their lengths.' };
+    }
+    if (medicalNotes.length > 2000) {
+      return { error: 'Medical notes must be 2,000 characters or fewer.' };
     }
 
     updatePayload = {
@@ -99,27 +115,16 @@ export async function action({ request, params, context }: ActionFunctionArgs) {
       image_url: imageUrl,
     };
   } else if (type === 'google_review' || type === 'menu') {
-    let destinationUrl = formData.get('destinationUrl') as string;
+    const destinationUrl = normalizeHttpUrl(formData.get('destinationUrl'));
     if (!destinationUrl) {
-      return { error: 'Destination URL is required' };
-    }
-
-    // Automatically prepend https:// if the user forgets it
-    if (!destinationUrl.startsWith('http://') && !destinationUrl.startsWith('https://')) {
-      destinationUrl = 'https://' + destinationUrl;
-    }
-
-    try {
-      new URL(destinationUrl);
-    } catch {
-      return { error: 'Please enter a valid URL' };
+      return { error: 'Enter a valid HTTP or HTTPS destination URL.' };
     }
     updatePayload = {
       settings: { ...rawPet.settings, destination_url: destinationUrl }
     };
   } else if (type === 'wifi') {
-    const networkName = formData.get('networkName') as string;
-    const networkPassword = formData.get('networkPassword') as string;
+    const networkName = getFormText(formData, 'networkName', 64);
+    const networkPassword = getFormText(formData, 'networkPassword', 128);
     if (!networkName || !networkPassword) {
       return { error: 'Network Name and Password are required' };
     }
@@ -150,7 +155,7 @@ export default function EditTagPage() {
 
   useEffect(() => {
     if (actionData?.success && actionData?.redirectUrl) {
-      navigate(actionData.redirectUrl);
+      void navigate(actionData.redirectUrl);
     }
   }, [actionData, navigate]);
 
@@ -212,6 +217,7 @@ export default function EditTagPage() {
                       type="text" 
                       id="dogName" 
                       name="dogName" 
+                      maxLength={100}
                       required
                       defaultValue={pet.dogName}
                       placeholder="e.g. Buddy"
@@ -228,6 +234,7 @@ export default function EditTagPage() {
                       type="text" 
                       id="ownerName" 
                       name="ownerName" 
+                      maxLength={100}
                       required
                       defaultValue={pet.ownerName}
                       placeholder="e.g. Alice Smith"
@@ -244,6 +251,7 @@ export default function EditTagPage() {
                       type="tel" 
                       id="ownerPhone" 
                       name="ownerPhone" 
+                      maxLength={40}
                       required
                       defaultValue={pet.ownerPhone}
                       placeholder="e.g. (555) 123-4567"
@@ -275,6 +283,7 @@ export default function EditTagPage() {
                     <textarea 
                       id="medicalNotes" 
                       name="medicalNotes" 
+                      maxLength={2000}
                       rows={3}
                       defaultValue={pet.medicalNotes}
                       placeholder="Allergies, medications, or special needs..."
@@ -325,6 +334,7 @@ export default function EditTagPage() {
                     type="url" 
                     id="destinationUrl" 
                     name="destinationUrl" 
+                    maxLength={2048}
                     required
                     defaultValue={settings.destination_url}
                     placeholder="https://..."
@@ -346,6 +356,7 @@ export default function EditTagPage() {
                       type="text" 
                       id="networkName" 
                       name="networkName" 
+                      maxLength={64}
                       required
                       defaultValue={settings.network_name}
                       placeholder="e.g. Guest_Network_5G"
@@ -360,6 +371,7 @@ export default function EditTagPage() {
                       type="text" 
                       id="networkPassword" 
                       name="networkPassword" 
+                      maxLength={128}
                       required
                       defaultValue={settings.network_password}
                       placeholder="Enter the Wi-Fi password"
