@@ -6,6 +6,7 @@ import PhoneMockupCooper from '../components/PhoneMockupCooper';
 import PhoneMockupReviews from '../components/PhoneMockupReviews';
 import PhoneMockupMenu from '../components/PhoneMockupMenu';
 import PhoneMockupWifi from '../components/PhoneMockupWifi';
+import AmbientGlow from '../components/AmbientGlow';
 import type {
   FeaturedCollectionFragment,
   RecommendedProductsQuery,
@@ -122,10 +123,7 @@ export default function Homepage() {
       {/* Premium Hero Section */}
       <section className="relative overflow-hidden bg-[#FDFCF8] flex flex-col lg:flex-row">
         {/* Abstract/Minimal Background Elements */}
-        <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0">
-          <div className="absolute top-[10%] -right-[10%] w-[800px] h-[800px] bg-[#F5F4EE] rounded-full blur-[120px] opacity-80"></div>
-          <div className="absolute -bottom-[20%] -left-[10%] w-[600px] h-[600px] bg-[#F3F0E6] rounded-full blur-[100px] opacity-60"></div>
-        </div>
+        <AmbientGlow />
         
         {/* Left Half: Text Column */}
         <div className="w-full lg:w-1/2 relative z-10 flex justify-center lg:justify-end">
@@ -138,11 +136,13 @@ export default function Homepage() {
             </div>
             
             <h1 className="text-5xl md:text-7xl lg:text-[5.5rem] font-medium mb-6 tracking-tighter text-[#1A1A1A] leading-tight lg:leading-[1.05]">
-              Upgrade your physical presence in milliseconds
+              One Tap<br />
+              Everything<br />
+              <span className="text-[#1E3A8A] italic font-serif">Connects</span>
             </h1>
             
             <p className="text-[#4A4A4A] text-lg md:text-xl max-w-2xl mb-10 font-light leading-relaxed tracking-tight">
-              with premium NFC technology.
+              Branded NFC stands and cards that connect customers to what matters most — the moment they arrive.
             </p>
             
             <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start w-full gap-4">

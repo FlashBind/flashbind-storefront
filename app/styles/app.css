@@ -85,3 +85,49 @@
     to { opacity: 1; transform: translateY(0); }
   }
 }
+
+/* Hero ambient glow — animated blue/cyan wash + tap-connect ripple.
+   Disabled entirely under prefers-reduced-motion (falls back to the static
+   base-wash gradients already rendered above, which never animate). */
+.ambient-glow__breathe {
+  animation: ambient-breathe 7s ease-in-out infinite;
+  will-change: opacity, transform;
+}
+
+.ambient-glow__ripple {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 140px;
+  height: 140px;
+  margin-left: -70px;
+  margin-top: -70px;
+  border-radius: 9999px;
+  border: 1.5px solid rgba(34, 211, 238, 0.55);
+  opacity: 0;
+  animation: ambient-ripple 5s ease-out infinite;
+  will-change: opacity, transform;
+}
+
+.ambient-glow__ripple--b {
+  animation-delay: 2.5s;
+}
+
+@keyframes ambient-breathe {
+  0%, 100% { opacity: 0.5; transform: scale(1); }
+  50% { opacity: 0.85; transform: scale(1.08); }
+}
+
+@keyframes ambient-ripple {
+  0% { opacity: 0; transform: scale(0.35); }
+  12% { opacity: 0.85; }
+  45% { opacity: 0.4; }
+  100% { opacity: 0; transform: scale(2.6); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ambient-glow__breathe,
+  .ambient-glow__ripple {
+    animation: none !important;
+  }
+}
