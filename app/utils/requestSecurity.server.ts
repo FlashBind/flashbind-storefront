@@ -66,6 +66,47 @@ export function safeRedirectPath(
   }
 }
 
+/**
+ * CSRF check for form posts that React Router's own Origin check doesn't
+ * cover (resource routes such as logout) and for high-value admin actions.
+ *
+ * Accepts a request when its Origin header names this site. When Origin is
+ * missing, falls back to the browser's Sec-Fetch-Site header (same-origin,
+ * or none for a typed URL/bookmark). An opaque "null" origin is rejected.
+ * Requests with neither header come from non-browser clients, which can't
+ * carry a visitor's cookies across sites, and are allowed.
+ */
+export function isSameOriginRequest(request: Request): boolean {
+  const headers = request.headers;
+  const origin = headers.get('origin');
+
+  if (origin === 'null') return false;
+  if (origin) {
+    let originHost: string;
+    try {
+      originHost = new URL(origin).host;
+    } catch {
+      return false;
+    }
+    // Same host resolution as React Router's built-in check.
+    const forwardedHost = headers.get('x-forwarded-host')?.split(',')[0]?.trim();
+    const host = forwardedHost || headers.get('host') || new URL(request.url).host;
+    return originHost === host;
+  }
+
+  const fetchSite = headers.get('sec-fetch-site');
+  if (fetchSite) return fetchSite === 'same-origin' || fetchSite === 'none';
+
+  return true;
+}
+
+/** Throws a 403 response unless {@link isSameOriginRequest} accepts the request. */
+export function assertSameOrigin(request: Request): void {
+  if (!isSameOriginRequest(request)) {
+    throw new Response('Forbidden', {status: 403});
+  }
+}
+
 export function normalizeHttpUrl(
   value: unknown,
   maxLength = 2048,

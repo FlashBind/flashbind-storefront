@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
 import { generateBatch, getSupplierCSV, getInternalCSV, claimTagAtomically, removePinFromSettings } from './app/utils/tagAdmin.server';
-import { normalizeTrustedClientIp, buildActivationRateLimitIdentifiers } from './app/utils/requestSecurity.server';
+import { normalizeTrustedClientIp, buildActivationRateLimitIdentifiers, isSameOriginRequest, assertSameOrigin } from './app/utils/requestSecurity.server';
 import crypto from 'node:crypto';
 
 // Fluent Mock Supabase Client Factory
@@ -449,5 +449,53 @@ describe('Rate-Limit IP Identifier Validation', () => {
       expect(identifiers[0]).toBe(ACCOUNT_BUCKET);
       expect(identifiers).toContain(ACCOUNT_BUCKET);
     }
+  });
+});
+
+describe('Same-origin check (CSRF)', () => {
+  const post = (headers: Record<string, string>) =>
+    new Request('https://flashbind.com/logout', {method: 'POST', headers});
+
+  it('accepts a post whose Origin is this site', () => {
+    expect(isSameOriginRequest(post({origin: 'https://flashbind.com', host: 'flashbind.com'}))).toBe(true);
+  });
+
+  it('rejects a post from another site', () => {
+    expect(isSameOriginRequest(post({origin: 'https://evil.example', host: 'flashbind.com'}))).toBe(false);
+  });
+
+  it('rejects a look-alike host', () => {
+    expect(isSameOriginRequest(post({origin: 'https://flashbind.com.evil.example', host: 'flashbind.com'}))).toBe(false);
+  });
+
+  it('rejects the opaque "null" origin and malformed origins', () => {
+    expect(isSameOriginRequest(post({origin: 'null', host: 'flashbind.com'}))).toBe(false);
+    expect(isSameOriginRequest(post({origin: 'not a url', host: 'flashbind.com'}))).toBe(false);
+  });
+
+  it('uses X-Forwarded-Host when present, like the framework check', () => {
+    expect(isSameOriginRequest(post({origin: 'https://flashbind.com', host: 'internal:8080', 'x-forwarded-host': 'flashbind.com'}))).toBe(true);
+  });
+
+  it('falls back to Sec-Fetch-Site when Origin is missing', () => {
+    expect(isSameOriginRequest(post({'sec-fetch-site': 'same-origin'}))).toBe(true);
+    expect(isSameOriginRequest(post({'sec-fetch-site': 'none'}))).toBe(true);
+    expect(isSameOriginRequest(post({'sec-fetch-site': 'cross-site'}))).toBe(false);
+    expect(isSameOriginRequest(post({'sec-fetch-site': 'same-site'}))).toBe(false);
+  });
+
+  it('allows non-browser clients that send neither header', () => {
+    expect(isSameOriginRequest(post({}))).toBe(true);
+  });
+
+  it('assertSameOrigin throws a 403 response for a cross-site post', () => {
+    try {
+      assertSameOrigin(post({origin: 'https://evil.example', host: 'flashbind.com'}));
+      expect.unreachable('should have thrown');
+    } catch (e) {
+      expect(e).toBeInstanceOf(Response);
+      expect((e as Response).status).toBe(403);
+    }
+    expect(() => assertSameOrigin(post({origin: 'https://flashbind.com', host: 'flashbind.com'}))).not.toThrow();
   });
 });

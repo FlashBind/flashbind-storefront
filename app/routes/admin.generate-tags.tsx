@@ -3,6 +3,7 @@ import type { LoaderFunctionArgs, ActionFunctionArgs } from 'react-router';
 import { getSupabaseAdmin } from '~/utils/supabase.server';
 
 import { generateBatch } from '~/utils/tagAdmin.server';
+import { assertSameOrigin } from '~/utils/requestSecurity.server';
 
 export const handle = {
   hideLayout: true,
@@ -23,6 +24,9 @@ export async function loader({ context, request }: LoaderFunctionArgs) {
 }
 
 export async function action({ request, context }: ActionFunctionArgs) {
+  // Explicit CSRF check on top of the framework's, for this high-value action.
+  assertSameOrigin(request);
+
   const userEmail = context.session.get('userEmail');
   if (!userEmail) {
     return redirect('/login?redirectTo=/admin/generate-tags');

@@ -1,7 +1,11 @@
 import type { ActionFunctionArgs } from 'react-router';
 import { redirect } from 'react-router';
+import { assertSameOrigin } from '~/utils/requestSecurity.server';
 
-export async function action({ context }: ActionFunctionArgs) {
+export async function action({ request, context }: ActionFunctionArgs) {
+  // Resource route: not covered by React Router's own Origin check.
+  assertSameOrigin(request);
+
   // Clear the user's session data
   context.session.unset('userEmail');
   context.session.unset('access_token');
