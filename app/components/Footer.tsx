@@ -40,9 +40,10 @@ export function Footer({
                   <h4 className="text-white font-bold mb-6 tracking-widest uppercase text-sm">Shop</h4>
                   <ul className="space-y-4">
                     <li><NavLink to="/products" className="hover:text-white transition-colors">All Products</NavLink></li>
-                    <li><NavLink to="/category/business-cards" className="hover:text-white transition-colors">Business Cards</NavLink></li>
-                    <li><NavLink to="/category/review-stands" className="hover:text-white transition-colors">Review Stands</NavLink></li>
-                    <li><NavLink to="/category/pet-tags" className="hover:text-white transition-colors">Pet Tags</NavLink></li>
+                    <li><NavLink to="/products/google-review-stand" className="hover:text-white transition-colors">Review Stands</NavLink></li>
+                    <li><NavLink to="/products/nfc-restaurant-menu-stand" className="hover:text-white transition-colors">Menu Stands</NavLink></li>
+                    <li><NavLink to="/products/guest-wi-fi-hub" className="hover:text-white transition-colors">Wi-Fi Stands</NavLink></li>
+                    <li><NavLink to="/products/smart-pet-collar-tag" className="hover:text-white transition-colors">Pet Tags</NavLink></li>
                   </ul>
                 </div>
 

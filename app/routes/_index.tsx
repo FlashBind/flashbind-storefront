@@ -107,24 +107,6 @@ const ORGANIZATION_JSON_LD = {
 export default function Homepage() {
   const data = useLoaderData<typeof loader>();
   const [heroImageIndex, setHeroImageIndex] = useState(0);
-  const [activeReviewIndex, setActiveReviewIndex] = useState(0);
-  const reviewsCarouselRef = useRef<HTMLDivElement>(null);
-
-  const handleReviewScroll = () => {
-    if (reviewsCarouselRef.current) {
-      const scrollLeft = reviewsCarouselRef.current.scrollLeft;
-      const width = reviewsCarouselRef.current.offsetWidth;
-      setActiveReviewIndex(Math.round(scrollLeft / width));
-    }
-  };
-
-  const scrollToReview = (index: number) => {
-    if (reviewsCarouselRef.current) {
-      const width = reviewsCarouselRef.current.offsetWidth;
-      reviewsCarouselRef.current.scrollTo({ left: width * index, behavior: 'smooth' });
-    }
-  };
-
   useEffect(() => {
     const timer = setInterval(() => {
       setHeroImageIndex((prev) => (prev + 1) % HERO_IMAGES.length);
@@ -271,7 +253,7 @@ export default function Homepage() {
             <div className="bg-white rounded-[2.5rem] p-8 md:p-12 shadow-[0_8px_30px_rgb(0,0,0,0.08)] border border-slate-200 hover:border-[#1E3A8A]/30 hover:shadow-[0_8px_40px_rgb(0,0,0,0.12)] flex flex-col sm:flex-row items-center gap-8 group hover:-translate-y-2 transition-all duration-300">
               <div className="flex-1 text-center sm:text-left">
                 <h3 className="text-2xl font-bold text-slate-900 mb-4">Guest Wi-Fi</h3>
-                <p className="text-slate-600 leading-relaxed mb-8 text-sm md:text-base">No more spelling out complex passwords. Customers can instantly connect to your guest Wi-Fi with a single tap.</p>
+                <p className="text-slate-600 leading-relaxed mb-8 text-sm md:text-base">No more spelling out complex passwords. Guests tap or scan to see your network name and password.</p>
                 <Link to={PRODUCT_ROUTES.wifi} className="text-slate-900 font-bold text-sm inline-flex items-center gap-2 hover:text-[#1E3A8A] transition-colors">
                   Learn more <span className="transform group-hover:translate-x-1 transition-transform">&rarr;</span>
                 </Link>
@@ -378,8 +360,8 @@ export default function Homepage() {
               </h2>
               <div className="text-gray-600 text-lg leading-relaxed mb-6 space-y-3">
                 <p><strong>1. Zero Friction:</strong> Visitors tap the Wi-Fi stand at the counter or table.</p>
-                <p><strong>2. Secure Authentication:</strong> Their device automatically authenticates to your secure network.</p>
-                <p><strong>3. Instant Connection:</strong> Guests are online instantly, completely eliminating the need to type out complex passwords.</p>
+                <p><strong>2. Name and Password:</strong> Guests tap or scan to see your network name and password.</p>
+                <p><strong>3. No Spelling Out:</strong> Staff no longer need to read out or write up long passwords.</p>
               </div>
               <Link to={PRODUCT_ROUTES.wifi} className="inline-flex items-center text-[#1E3A8A] font-semibold text-lg hover:text-[#172A66] transition-colors group">
                 Guest Wi-Fi
@@ -451,7 +433,7 @@ export default function Homepage() {
                 </svg>
               </div>
               <h3 className="text-2xl font-bold text-slate-900 mb-3">Order Your Tech</h3>
-              <p className="text-slate-500 leading-relaxed max-w-xs">Choose from our premium metal cards, PVC cards, or countertop stands.</p>
+              <p className="text-slate-500 leading-relaxed max-w-xs">Choose a Google review, menu or Wi-Fi stand, or a pet tag.</p>
             </div>
 
             {/* Step 2 */}
@@ -492,7 +474,7 @@ export default function Homepage() {
         <div className="container mx-auto px-6 max-w-6xl">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight mb-4">Flawless Technology</h2>
-            <p className="text-slate-500 text-lg max-w-2xl mx-auto">Enterprise-grade hardware packed into a beautifully simple interface.</p>
+            <p className="text-slate-500 text-lg max-w-2xl mx-auto">Simple NFC hardware you set up and update from your phone.</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -556,7 +538,7 @@ export default function Homepage() {
                 </svg>
               </div>
               <h3 className="text-xl font-bold text-slate-900 mb-3">High Quality NFC</h3>
-              <p className="text-slate-600 leading-relaxed text-sm">Built with the highest level NTAG chips to ensure instant, reliable scans from up to 2 inches away.</p>
+              <p className="text-slate-600 leading-relaxed text-sm">Each product has an NFC chip. Hold the top of the phone close to it and the page opens, no app needed.</p>
             </div>
 
             {/* Zero Subscriptions Card (Spans 2 columns) */}
@@ -569,149 +551,12 @@ export default function Homepage() {
                     <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                   </svg>
                 </div>
-                <h3 className="text-2xl font-bold text-white mb-3">Zero Subscriptions. Ever.</h3>
-                <p className="text-slate-300 leading-relaxed max-w-md">Our products are a strict one-time payment. Enjoy unlimited taps, unlimited QR scans, and full dashboard access forever with absolutely no hidden monthly fees.</p>
+                <h3 className="text-2xl font-bold text-white mb-3">No Subscription Needed</h3>
+                <p className="text-slate-300 leading-relaxed max-w-md">Pay once for the product. Taps, QR scans and your dashboard are included, with no monthly fee.</p>
               </div>
             </div>
 
           </div>
-        </div>
-      </section>
-
-      {/* Testimonials Section */}
-      <section className="py-24 bg-slate-50 border-t border-slate-200">
-        <div className="container mx-auto px-6 max-w-7xl">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight mb-4">Trusted by Innovators</h2>
-            <p className="text-slate-500 text-lg">See why thousands of businesses are switching to FlashBind.</p>
-          </div>
-          
-          {/* Desktop Reviews Grid */}
-          <div className="hidden md:grid grid-cols-3 gap-8">
-            {/* Review 1 */}
-            <div className="bg-white rounded-[2rem] p-8 shadow-xl shadow-slate-200/50 border border-slate-100 flex flex-col h-full hover:-translate-y-2 transition-transform duration-300 relative group">
-              <div className="absolute inset-0 border-2 border-[#1E3A8A]/0 rounded-[2rem] group-hover:border-[#1E3A8A]/10 transition-colors duration-300 pointer-events-none"></div>
-              <div className="flex text-yellow-400 mb-4 text-xl">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-              <p className="text-slate-700 leading-relaxed mb-8 flex-grow font-medium">
-                "FlashBind completely transformed our checkout process. We placed the countertop stand next to our register, and our Google Reviews literally tripled in the first month. No apps, no friction."
-              </p>
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-[#1E3A8A]/10 rounded-full flex items-center justify-center text-[#1E3A8A] font-bold text-lg shadow-inner">J</div>
-                <div>
-                  <h4 className="font-bold text-slate-900">James S.</h4>
-                  <p className="text-[10px] text-slate-400 uppercase tracking-widest font-bold">Coffee Shop Owner</p>
-                </div>
-              </div>
-            </div>
-
-            {/* Review 2 */}
-            <div className="bg-white rounded-[2rem] p-8 shadow-xl shadow-slate-200/50 border border-slate-100 flex flex-col h-full hover:-translate-y-2 transition-transform duration-300 relative group transform md:-translate-y-6">
-              <div className="absolute inset-0 border-2 border-[#1E3A8A]/0 rounded-[2rem] group-hover:border-[#1E3A8A]/10 transition-colors duration-300 pointer-events-none"></div>
-              <div className="flex text-yellow-400 mb-4 text-xl">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-              <p className="text-slate-700 leading-relaxed mb-8 flex-grow font-medium">
-                "I ordered the matte metal business card and it feels incredibly premium. Every time I tap it on a client's phone at a networking event, their jaw drops. Best investment I've made for my agency."
-              </p>
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-cyan-100 rounded-full flex items-center justify-center text-cyan-600 font-bold text-lg shadow-inner">E</div>
-                <div>
-                  <h4 className="font-bold text-slate-900">Elena R.</h4>
-                  <p className="text-[10px] text-slate-400 uppercase tracking-widest font-bold">Creative Director</p>
-                </div>
-              </div>
-            </div>
-
-            {/* Review 3 */}
-            <div className="bg-white rounded-[2rem] p-8 shadow-xl shadow-slate-200/50 border border-slate-100 flex flex-col h-full hover:-translate-y-2 transition-transform duration-300 relative group">
-              <div className="absolute inset-0 border-2 border-[#1E3A8A]/0 rounded-[2rem] group-hover:border-[#1E3A8A]/10 transition-colors duration-300 pointer-events-none"></div>
-              <div className="flex text-yellow-400 mb-4 text-xl">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-              <p className="text-slate-700 leading-relaxed mb-8 flex-grow font-medium">
-                "We bought the smart pet collar tags for both our dogs. Knowing that anyone who finds them can instantly tap the tag and call me gives me so much peace of mind. The setup was instant."
-              </p>
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-600 font-bold text-lg shadow-inner">D</div>
-                <div>
-                  <h4 className="font-bold text-slate-900">David & Emma</h4>
-                  <p className="text-[10px] text-slate-400 uppercase tracking-widest font-bold">Pet Parents</p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Mobile Reviews Carousel (Native Swipe) */}
-          <div className="md:hidden relative mt-4">
-            <style>{`.hide-scrollbar::-webkit-scrollbar { display: none; }`}</style>
-            
-            <div 
-              ref={reviewsCarouselRef}
-              onScroll={handleReviewScroll}
-              className="flex overflow-x-auto snap-x snap-mandatory scroll-smooth hide-scrollbar px-2 pb-4" 
-              style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-            >
-              {/* Review 1 */}
-              <div className="w-full flex-shrink-0 snap-center px-2">
-                <div className="bg-white rounded-[2rem] p-8 shadow-xl shadow-slate-200/50 border border-slate-100 flex flex-col h-full">
-                  <div className="flex text-yellow-400 mb-4 text-xl">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-                  <p className="text-slate-700 leading-relaxed mb-8 flex-grow font-medium min-h-[150px]">
-                    "FlashBind completely transformed our checkout process. We placed the countertop stand next to our register, and our Google Reviews literally tripled in the first month. No apps, no friction."
-                  </p>
-                  <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 bg-[#1E3A8A]/10 rounded-full flex items-center justify-center text-[#1E3A8A] font-bold text-lg shadow-inner">J</div>
-                    <div>
-                      <h4 className="font-bold text-slate-900">James S.</h4>
-                      <p className="text-[10px] text-slate-400 uppercase tracking-widest font-bold">Coffee Shop Owner</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Review 2 */}
-              <div className="w-full flex-shrink-0 snap-center px-2">
-                <div className="bg-white rounded-[2rem] p-8 shadow-xl shadow-slate-200/50 border border-slate-100 flex flex-col h-full">
-                  <div className="flex text-yellow-400 mb-4 text-xl">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-                  <p className="text-slate-700 leading-relaxed mb-8 flex-grow font-medium min-h-[150px]">
-                    "I ordered the matte metal business card and it feels incredibly premium. Every time I tap it on a client's phone at a networking event, their jaw drops. Best investment I've made for my agency."
-                  </p>
-                  <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 bg-cyan-100 rounded-full flex items-center justify-center text-cyan-600 font-bold text-lg shadow-inner">E</div>
-                    <div>
-                      <h4 className="font-bold text-slate-900">Elena R.</h4>
-                      <p className="text-[10px] text-slate-400 uppercase tracking-widest font-bold">Creative Director</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Review 3 */}
-              <div className="w-full flex-shrink-0 snap-center px-2">
-                <div className="bg-white rounded-[2rem] p-8 shadow-xl shadow-slate-200/50 border border-slate-100 flex flex-col h-full">
-                  <div className="flex text-yellow-400 mb-4 text-xl">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-                  <p className="text-slate-700 leading-relaxed mb-8 flex-grow font-medium min-h-[150px]">
-                    "We bought the smart pet collar tags for both our dogs. Knowing that anyone who finds them can instantly tap the tag and call me gives me so much peace of mind. The setup was instant."
-                  </p>
-                  <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-600 font-bold text-lg shadow-inner">D</div>
-                    <div>
-                      <h4 className="font-bold text-slate-900">David & Emma</h4>
-                      <p className="text-[10px] text-slate-400 uppercase tracking-widest font-bold">Pet Owners</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Carousel Indicators */}
-          <div className="md:hidden flex justify-center gap-2 mt-4">
-            {[0, 1, 2].map((idx) => (
-              <button 
-                key={idx} 
-                onClick={() => scrollToReview(idx)}
-                className={`w-2 h-2 rounded-full transition-all duration-300 ${activeReviewIndex === idx ? 'bg-[#1E3A8A] w-6' : 'bg-slate-300'}`}
-                aria-label={`Go to review ${idx + 1}`}
-              />
-            ))}
-          </div>
-
         </div>
       </section>
 
@@ -746,7 +591,7 @@ export default function Homepage() {
                 </span>
               </summary>
               <p className="text-slate-600 px-6 pb-6 leading-relaxed">
-                Absolutely not! FlashBind uses native NFC technology that is already built into 99% of modern smartphones. Simply tap the card to the back of their phone, and your link will instantly appear on their screen.
+                No. Most modern smartphones read NFC without an app: hold the top of the phone near the product and the page opens. Menu and Wi-Fi stands also have a QR code for phones without NFC.
               </p>
             </details>
 
@@ -759,7 +604,7 @@ export default function Homepage() {
                 </span>
               </summary>
               <p className="text-slate-600 px-6 pb-6 leading-relaxed">
-                No! All FlashBind products are a strict one-time purchase. You buy the physical card or stand once, and you get unlimited taps and scans for life with absolutely zero hidden fees or monthly subscriptions.
+                No subscription is needed. You pay once for the product, and taps, QR scans and your dashboard are included with no monthly fee.
               </p>
             </details>
 
@@ -785,7 +630,7 @@ export default function Homepage() {
                 </span>
               </summary>
               <p className="text-slate-600 px-6 pb-6 leading-relaxed">
-                100% secure. The card is "read-only", meaning it can only transmit the specific link URL you programmed into it. It cannot access any personal data on the phone that taps it, and it cannot extract any information from your customers.
+                The tag only holds a web link. Tapping it opens that link in the phone's browser, and the tag cannot read anything from the phone that taps it.
               </p>
             </details>
           </div>

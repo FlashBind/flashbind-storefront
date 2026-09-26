@@ -204,15 +204,15 @@ export default function Article() {
               
               <h2 className="text-2xl md:text-3xl font-bold text-gray-900 pt-6">Bridging the Gap with NFC Technology</h2>
               <p>
-                This is where physical NFC (Near Field Communication) endpoints completely change the game. By placing a Smart Google Review Stand at your point of sale, host stand, or reception desk, you eliminate 100% of the digital friction.
+                This is where physical NFC (Near Field Communication) endpoints completely change the game. By placing a Smart Google Review Stand at your point of sale, host stand, or reception desk, you remove most of those steps.
               </p>
               <p>
                 When staff finish a positive interaction, they simply ask, <em>"We're so glad you had a great experience! Would you mind giving us a quick tap?"</em> The customer taps their phone to the acrylic stand, and their screen instantly opens directly to your Google Review submission form. 
               </p>
               
               <ul className="list-disc pl-8 space-y-3">
-                <li><strong>Skyrocketing Review Velocity:</strong> Google monitors how fast you get reviews. A steady stream of daily tap-and-go reviews signals to the algorithm that your business is highly active and relevant.</li>
-                <li><strong>Higher Conversion Rates:</strong> By asking for the review while the customer is physically in the store and highly engaged, conversion rates jump from a dismal 2% (via email follow-ups) to over 30%.</li>
+                <li><strong>More Recent Reviews:</strong> Asking every day at the counter makes a steady flow of new reviews more likely.</li>
+                <li><strong>The Right Moment:</strong> You ask while the customer is still with you, instead of in a follow-up email they may never open.</li>
                 <li><strong>Capturing the Silent Majority:</strong> When the process takes two seconds, the everyday happy customer is suddenly willing to leave you that crucial 5-star rating.</li>
               </ul>
 
@@ -240,17 +240,13 @@ export default function Article() {
               </p>
               
               <ul className="list-disc pl-8 space-y-3">
-                <li><strong>Multiple Contacts:</strong> Include secondary phone numbers for spouses, neighbors, or your local vet.</li>
+                <li><strong>Easy Updates:</strong> Change your phone number any time without buying a new tag.</li>
                 <li><strong>Medical Needs:</strong> Instantly alert the finder if your pet needs daily medication or has severe allergies.</li>
                 <li><strong>Behavioral Notes:</strong> Let people know if your dog is friendly but skittish, or if they should avoid sudden movements.</li>
               </ul>
 
-              <h2 className="text-2xl md:text-3xl font-bold text-gray-900 pt-6">The Magic of Passive GPS Tracking</h2>
               <p>
-                While bulky GPS collars require constant charging and monthly subscriptions, Smart Pet Tags work seamlessly without batteries. Many advanced tags automatically capture the GPS location of the finder's phone the moment the tag is scanned, sending you an instant notification with a map pin of exactly where your pet was found.
-              </p>
-              <p>
-                It's time to ditch the clunky, noisy metal tags that wear out over time. Upgrade to a modern, durable, and infinitely updatable Smart Pet Tag and give yourself the ultimate peace of mind.
+                It's time to ditch the clunky, noisy metal tags that wear out over time. Upgrade to a Smart Pet Tag you can update any time and give yourself the ultimate peace of mind.
               </p>
             </div>
           ) : (

@@ -24,7 +24,7 @@ export function ProductItem({
   const isSale = compareAtPrice && price && parseFloat(compareAtPrice.amount) > parseFloat(price.amount);
   const isSoldOut = product?.availableForSale === false;
   const isComingSoon = isSoldOut && ['guest-wi-fi-hub', 'nfc-restaurant-menu-stand'].includes(product?.handle || '');
-  const isSellingFast = product?.tags?.includes('selling-fast') || product?.handle?.includes('pet');
+  const isSellingFast = product?.tags?.includes('selling-fast');
 
 
   return (

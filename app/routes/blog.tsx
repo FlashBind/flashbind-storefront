@@ -71,7 +71,7 @@ export default function BlogPage() {
               How to Boost Your Local SEO with Google Review Stands
             </h3>
             <p className="text-slate-500 leading-relaxed mb-8 flex-grow">
-              Discover the exact strategy local businesses are using to triple their Google Reviews in under 30 days using physical NFC endpoints.
+              How an NFC review stand at your counter makes it easier for happy customers to leave a Google review.
             </p>
             <div className="flex items-center text-[#1E3A8A] font-bold text-sm">
               Read article <span className="ml-2 transform group-hover:translate-x-1 transition-transform">→</span>

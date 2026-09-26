@@ -91,7 +91,7 @@ function TrendingProductCard({ product }: { product: any }) {
   const isSale = compareAmount && priceAmount && parseFloat(compareAmount) > parseFloat(priceAmount);
   const isSoldOut = product.availableForSale === false;
   const isComingSoon = isSoldOut && ['guest-wi-fi-hub', 'nfc-restaurant-menu-stand'].includes(product.handle || '');
-  const isSellingFast = product.tags?.includes('selling-fast') || product.handle?.includes('pet');
+  const isSellingFast = product.tags?.includes('selling-fast');
 
   return (
     <Link to={`/products/${product.handle}`} className="block">

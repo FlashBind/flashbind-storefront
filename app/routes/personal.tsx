@@ -96,9 +96,6 @@ export default function PersonalPage() {
                       </div>
                     )}
                   </div>
-                  <div className="absolute top-4 left-4 bg-slate-900 text-white backdrop-blur-md px-4 py-1.5 rounded-full text-xs uppercase tracking-widest font-bold shadow-md z-10">
-                    Bestseller
-                  </div>
                 </div>
               </Link>
               
@@ -148,14 +145,14 @@ export default function PersonalPage() {
                 <svg xmlns="http://www.w3.org/2000/svg" className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M20.618 5.984A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016zM12 9v2m0 4h.01" /></svg>
               </div>
               <h3 className="text-xl font-bold text-slate-900 mb-3">Built for Life</h3>
-              <p className="text-slate-500 text-sm leading-relaxed">Crafted from premium, durable materials. Fully waterproof and designed to withstand your pet's wildest adventures.</p>
+              <p className="text-slate-500 text-sm leading-relaxed">Light enough for everyday wear on your pet's collar.</p>
             </div>
             <div className="bg-white/50 backdrop-blur-sm border border-slate-200 rounded-[2rem] p-8 text-center flex flex-col items-center transition-all duration-300 hover:shadow-lg hover:bg-white">
               <div className="w-16 h-16 bg-blue-50 text-blue-500 rounded-2xl flex items-center justify-center mb-6">
                 <svg xmlns="http://www.w3.org/2000/svg" className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.141 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0" /></svg>
               </div>
               <h3 className="text-xl font-bold text-slate-900 mb-3">Tech-Forward</h3>
-              <p className="text-slate-500 text-sm leading-relaxed">No app required for the finder. Powered by NFC technology, it works instantly with any modern smartphone.</p>
+              <p className="text-slate-500 text-sm leading-relaxed">No app required for the finder. Powered by NFC technology, most modern smartphones read it without an app.</p>
             </div>
           </div>
         </div>

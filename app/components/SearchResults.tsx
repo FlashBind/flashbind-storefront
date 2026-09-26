@@ -123,7 +123,7 @@ function SearchResultsProducts({
             const isSale = compareAtPrice && price && parseFloat(compareAtPrice.amount) > parseFloat(price.amount);
             const isSoldOut = (product as any)?.availableForSale === false;
             const isComingSoon = isSoldOut && ['guest-wi-fi-hub', 'nfc-restaurant-menu-stand'].includes(product?.handle || '');
-            const isSellingFast = (product as any)?.tags?.includes('selling-fast') || product?.handle?.includes('pet');
+            const isSellingFast = (product as any)?.tags?.includes('selling-fast');
             const image = product?.selectedOrFirstAvailableVariant?.image;
 
             return (

@@ -23,7 +23,7 @@ const TUTORIAL_DATA: Record<string, any> = {
     dashboardDesc: 'Update your review link anytime, anywhere. Our intuitive dashboard makes it easy to keep information up to date.',
     dashboardPoints: [
       { title: 'Update instantly', desc: 'Change the destination URL on the fly.' },
-      { title: 'Secure cloud storage', desc: 'Your links are safely stored in the cloud.' },
+      { title: 'Private settings', desc: 'Only you can change them, from your FlashBind account.' },
       { title: 'Track performance', desc: 'Monitor how many taps your stand receives.' }
     ]
   },
@@ -48,32 +48,32 @@ const TUTORIAL_DATA: Record<string, any> = {
     dashboardDesc: 'Manage your digital menus anytime, anywhere. Update specials or prices instantly without re-printing.',
     dashboardPoints: [
       { title: 'Update instantly', desc: 'Change the menu link or PDF on the fly.' },
-      { title: 'Secure cloud storage', desc: 'Your menus are safely stored in the cloud.' },
+      { title: 'Private settings', desc: 'Only you can change them, from your FlashBind account.' },
       { title: 'Track performance', desc: 'Monitor how many times your menu is viewed.' }
     ]
   },
   'guest-wi-fi-hub': {
     title: 'How FlashBind Works',
-    description: 'Get your Wi-Fi Hub set up in seconds. Stop spelling out long passwords and get guests connected instantly.',
+    description: 'Get your Wi-Fi Hub set up in minutes. Stop spelling out long passwords.',
     steps: [
       {
         title: 'Tap',
-        description: 'Guests tap the hub with their smartphone to instantly prompt a connection to your secure Wi-Fi network.',
+        description: 'Guests tap or scan to see your network name and password.',
       },
       {
         title: 'Configure',
-        description: 'You securely input your network credentials into the dashboard once. The hub encrypts and stores the data.',
+        description: 'You enter your network name and password in your FlashBind account once.',
       },
       {
         title: 'Connect',
-        description: 'Guests join your network instantly without typing a password, improving their experience at your venue.',
+        description: 'Guests copy the password with one tap instead of asking staff to spell it out.',
       }
     ],
     dashboardTitle: 'Network Settings',
     dashboardDesc: 'Manage your Wi-Fi settings securely. Update your password anytime without needing to replace the hub.',
     dashboardPoints: [
       { title: 'Update instantly', desc: 'Change your Wi-Fi password on the fly.' },
-      { title: 'Encrypted storage', desc: 'Your credentials are encrypted and secure.' },
+      { title: 'Private settings', desc: 'Only you can change them, from your FlashBind account.' },
       { title: 'No more signs', desc: 'Never write a password on a chalkboard again.' }
     ]
   },
@@ -83,11 +83,11 @@ const TUTORIAL_DATA: Record<string, any> = {
     steps: [
       {
         title: 'Tap',
-        description: 'Simply tap your smartphone to the FlashBind tag. Our built-in NFC chip instantly communicates with any modern smartphone.',
+        description: 'Simply tap your smartphone to the FlashBind tag. Most modern smartphones read it without an app.',
       },
       {
         title: 'Setup',
-        description: 'Create your account in seconds and fill out your pet\'s profile. Add photos, medical info, and emergency contacts securely.',
+        description: 'Create your account in seconds and fill out your pet\'s profile. Add a photo, your phone number and any medical notes.',
       },
       {
         title: 'Protect',
@@ -98,8 +98,8 @@ const TUTORIAL_DATA: Record<string, any> = {
     dashboardDesc: 'Manage your pet\'s profile anytime, anywhere. Our intuitive dashboard makes it easy to keep information up to date.',
     dashboardPoints: [
       { title: 'Update info instantly', desc: 'Change phone numbers or medical info on the fly.' },
-      { title: 'Secure cloud storage', desc: 'Your data is encrypted and safely stored in the cloud.' },
-      { title: 'Emergency contact alerts', desc: 'Ensure multiple trusted contacts can be reached.' }
+      { title: 'Private account', desc: 'Only you can change the profile, from your FlashBind account.' },
+      { title: 'No app for finders', desc: 'Whoever finds your pet just taps the tag with their phone.' }
     ]
   },
   'default': {
@@ -108,7 +108,7 @@ const TUTORIAL_DATA: Record<string, any> = {
     steps: [
       {
         title: 'Tap',
-        description: 'Tap the product with any modern smartphone. Our built-in NFC chip instantly communicates—no app required.',
+        description: 'Tap the product with a smartphone. Most modern phones read it without an app.',
       },
       {
         title: 'Setup',
@@ -123,8 +123,8 @@ const TUTORIAL_DATA: Record<string, any> = {
     dashboardDesc: 'Manage your product settings anytime, anywhere. Our intuitive dashboard makes it easy to keep information up to date.',
     dashboardPoints: [
       { title: 'Update instantly', desc: 'Change your destination link on the fly.' },
-      { title: 'Secure cloud storage', desc: 'Your settings are encrypted and safely stored.' },
-      { title: 'Track performance', desc: 'Monitor how many times your product is tapped.' }
+      { title: 'Private settings', desc: 'Only you can change them, from your FlashBind account.' },
+      { title: 'No reprinting', desc: 'Change where the product points without buying a new one.' }
     ]
   }
 };

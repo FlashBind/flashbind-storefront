@@ -21,7 +21,7 @@ export function BusinessBenefits({ isProductPage = false }: { isProductPage?: bo
             <p className="text-slate-500 text-[15px] leading-relaxed">
               {isProductPage 
                 ? 'Update your destination URL instantly from our free dashboard anytime, anywhere.' 
-                : 'Zero manual setup. We pre-program your entire order with custom payloads before shipping.'}
+                : 'For larger orders, ask us to set up each product\'s link or Wi-Fi details before it ships.'}
             </p>
           </div>
           
@@ -36,11 +36,11 @@ export function BusinessBenefits({ isProductPage = false }: { isProductPage?: bo
                 )}
               </svg>
             </div>
-            <h3 className="text-xl font-bold text-slate-900 mb-3">{isProductPage ? 'Commercial Grade' : '100% White-Labeled'}</h3>
+            <h3 className="text-xl font-bold text-slate-900 mb-3">{isProductPage ? 'Built for Counters' : 'Custom Branding on Request'}</h3>
             <p className="text-slate-500 text-[15px] leading-relaxed">
               {isProductPage 
-                ? 'Built to withstand high-traffic hospitality and retail environments. Premium UV-printed and water-resistant.' 
-                : 'Your brand is the star. Upload your own artwork, or let us handle the custom design layout for you at no extra cost. Premium UV printing ensures your logo looks perfect in any environment.'}
+                ? 'Acrylic stands made for everyday use on counters and tables.'
+                : 'Ask us about putting your own logo and colours on larger orders.'}
             </p>
           </div>
           
