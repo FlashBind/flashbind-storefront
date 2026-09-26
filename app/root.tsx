@@ -18,6 +18,7 @@ import appStyles from '~/styles/app.css?url';
 import {PageLayout} from './components/PageLayout';
 import {CookieBanner} from './components/CookieBanner';
 import {NotFoundPage, ServerErrorPage} from './components/ErrorPages';
+import {canTrackWithConsent} from './lib/cookieConsent';
 
 export type RootLoader = typeof loader;
 
@@ -191,6 +192,7 @@ export default function App() {
         cart={data.cart}
         shop={data.shop}
         consent={data.consent}
+        canTrack={canTrackWithConsent}
       >
         <Outlet />
         <CookieBanner />
@@ -203,6 +205,7 @@ export default function App() {
       cart={data.cart}
       shop={data.shop}
       consent={data.consent}
+      canTrack={canTrackWithConsent}
     >
       <PageLayout {...data}>
         <Outlet />
@@ -237,7 +240,7 @@ export function ErrorBoundary() {
   // inside the normal header and footer.
   if (!data) return content;
   return (
-    <Analytics.Provider cart={data.cart} shop={data.shop} consent={data.consent}>
+    <Analytics.Provider cart={data.cart} shop={data.shop} consent={data.consent} canTrack={canTrackWithConsent}>
       <PageLayout {...data}>{content}</PageLayout>
     </Analytics.Provider>
   );

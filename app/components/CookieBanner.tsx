@@ -1,24 +1,36 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router';
+import {
+  applyShopifyConsent,
+  readStoredConsent,
+  storeConsent,
+  syncStoredConsent,
+} from '~/lib/cookieConsent';
 
 export function CookieBanner() {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    const consent = localStorage.getItem('flashbind_cookie_consent');
+    const consent = readStoredConsent();
     if (!consent) {
       setIsVisible(true);
+    } else {
+      // Keep Shopify's consent record in line with the stored choice.
+      syncStoredConsent(consent);
     }
   }, []);
 
+  // The choice is passed to Shopify's Customer Privacy API, which controls
+  // Shopify's analytics and marketing cookies (COOKIE-001).
   const handleAccept = () => {
-    localStorage.setItem('flashbind_cookie_consent', 'all');
+    storeConsent('all');
+    applyShopifyConsent(true);
     setIsVisible(false);
-    // Here you would typically trigger tracking scripts to load
   };
 
   const handleReject = () => {
-    localStorage.setItem('flashbind_cookie_consent', 'essential_only');
+    storeConsent('essential_only');
+    applyShopifyConsent(false);
     setIsVisible(false);
   };
 

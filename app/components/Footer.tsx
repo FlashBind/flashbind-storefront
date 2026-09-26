@@ -2,6 +2,7 @@ import {Suspense} from 'react';
 import {Await, NavLink} from 'react-router';
 import type {FooterQuery, HeaderQuery} from 'storefrontapi.generated';
 import {SELLER} from '~/config/seller';
+import {CONSENT_STORAGE_KEY} from '~/lib/cookieConsent';
 
 interface FooterProps {
   footer: Promise<FooterQuery | null>;
@@ -59,7 +60,7 @@ export function Footer({
                     <li><NavLink to="/refund-policy" className="hover:text-white transition-colors">Returns and Refunds</NavLink></li>
                     <li><NavLink to="/warranty" className="hover:text-white transition-colors">Warranty</NavLink></li>
                     <li className="pt-2">
-                      <button onClick={() => { if(typeof window !== 'undefined') { localStorage.removeItem('flashbind_cookie_consent'); window.location.reload(); } }} className="text-[11px] text-slate-500 hover:text-slate-300 transition-colors uppercase tracking-wider underline">
+                      <button onClick={() => { if(typeof window !== 'undefined') { localStorage.removeItem(CONSENT_STORAGE_KEY); window.location.reload(); } }} className="text-[11px] text-slate-500 hover:text-slate-300 transition-colors uppercase tracking-wider underline">
                         Cookie settings
                       </button>
                     </li>
