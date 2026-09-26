@@ -193,6 +193,11 @@ export default function DashboardPage() {
             ))}
           </div>
         )}
+
+        {/* Account deletion (PRIV-002) */}
+        <p className="text-center text-sm text-slate-400 mt-12 mb-8">
+          <a href="/delete-account" className="underline hover:text-slate-600">Delete account</a>
+        </p>
       </div>
     </div>
   );

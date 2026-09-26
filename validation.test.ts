@@ -1,5 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
-import { generateBatch, getSupplierCSV, getInternalCSV, claimTagAtomically, removePinFromSettings } from './app/utils/tagAdmin.server';
+import { generateBatch, getSupplierCSV, getInternalCSV, claimTagAtomically, removePinFromSettings, buildReleasedTagUpdate } from './app/utils/tagAdmin.server';
+import { retentionCutoff, attachmentPathFromUrl, RATE_LIMIT_RETENTION_DAYS, CONTACT_MESSAGE_RETENTION_DAYS } from './app/utils/retention.server';
 import { normalizeTrustedClientIp, buildActivationRateLimitIdentifiers, isSameOriginRequest, assertSameOrigin } from './app/utils/requestSecurity.server';
 import crypto from 'node:crypto';
 
@@ -497,5 +498,43 @@ describe('Same-origin check (CSRF)', () => {
       expect((e as Response).status).toBe(403);
     }
     expect(() => assertSameOrigin(post({origin: 'https://flashbind.com', host: 'flashbind.com'}))).not.toThrow();
+  });
+});
+
+describe('Account deletion: tag reset (PRIV-002)', () => {
+  it('clears every personal field and unclaims the tag', () => {
+    const update = buildReleasedTagUpdate({batch_id: 'b1'});
+    expect(update).toMatchObject({
+      is_claimed: false, owner_email: null, owner_name: null, pet_name: null,
+      phone: null, medical_notes: null, image_url: null,
+    });
+  });
+
+  it('gives batch tags a fresh 6-digit PIN (satisfies tags_batch_pin_check) and nothing else', () => {
+    const update = buildReleasedTagUpdate({batch_id: 'b1'});
+    expect(Object.keys(update.settings)).toEqual(['activation_pin']);
+    expect((update.settings as {activation_pin: string}).activation_pin).toMatch(/^[0-9]{6}$/);
+  });
+
+  it('gives legacy (non-batch) tags empty settings', () => {
+    expect(buildReleasedTagUpdate({batch_id: null}).settings).toEqual({});
+  });
+});
+
+describe('Retention helpers (PRIV-002)', () => {
+  it('matches the periods in the Privacy Policy', () => {
+    expect(RATE_LIMIT_RETENTION_DAYS).toBe(30);
+    expect(CONTACT_MESSAGE_RETENTION_DAYS).toBe(730);
+  });
+
+  it('computes the cutoff date', () => {
+    expect(retentionCutoff(30, new Date('2026-09-26T00:00:00Z'))).toBe('2026-08-27T00:00:00.000Z');
+  });
+
+  it('extracts attachment file names only from the attachments bucket', () => {
+    expect(attachmentPathFromUrl('https://x.supabase.co/storage/v1/object/public/attachments/1727-abc.png')).toBe('1727-abc.png');
+    expect(attachmentPathFromUrl('https://x.supabase.co/storage/v1/object/public/attachments/a%2F..%2Fb.png')).toBeNull();
+    expect(attachmentPathFromUrl('https://x.supabase.co/storage/v1/object/public/other/1727-abc.png')).toBeNull();
+    expect(attachmentPathFromUrl(null)).toBeNull();
   });
 });

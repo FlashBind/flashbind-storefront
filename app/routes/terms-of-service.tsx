@@ -73,7 +73,7 @@ export default function TermsOfServicePage() {
 
       <PolicyHeading>8. Your FlashBind account and products</PolicyHeading>
       <p>
-        To set up a product, you create a free FlashBind account and activate the product with the activation code
+        To set up a product, you create a free FlashBind account (you must be at least 14 years old) and activate the product with the activation code
         that comes with it. You are responsible for keeping your login details safe and for everything done with your
         account. Tell us straight away at <a href={`mailto:${SELLER.email}`} className={link}>{SELLER.email}</a> if you
         think someone else has used it.

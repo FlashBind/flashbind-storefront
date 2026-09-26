@@ -165,7 +165,7 @@ export default function RegisterPage() {
                 className="mt-1 w-4 h-4 text-blue-600 border-slate-300 rounded focus:ring-blue-500"
               />
               <label htmlFor="legalAgreement" className="text-xs text-slate-600 leading-relaxed">
-                I confirm I am over 13 years of age and I agree to the <a href="/terms-of-service" target="_blank" rel="noreferrer" className="text-blue-600 hover:underline">Terms of Service</a> and <a href="/privacy-policy" target="_blank" rel="noreferrer" className="text-blue-600 hover:underline">Privacy Policy</a>.
+                I confirm I am at least 14 years old and I agree to the <a href="/terms-of-service" target="_blank" rel="noreferrer" className="text-blue-600 hover:underline">Terms of Service</a> and <a href="/privacy-policy" target="_blank" rel="noreferrer" className="text-blue-600 hover:underline">Privacy Policy</a>.
               </label>
             </div>
           </div>

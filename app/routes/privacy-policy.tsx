@@ -92,10 +92,10 @@ export default function PrivacyPolicyPage() {
 
       <PolicyHeading>4. How long we keep data</PolicyHeading>
       <ul className="list-disc pl-6 space-y-1">
-        <li><strong>Account and product settings:</strong> while your account exists. When you ask us to delete your account, we delete them within 30 days.</li>
+        <li><strong>Account and product settings:</strong> while your account exists. You can delete your account yourself at any time from your dashboard (&ldquo;Delete account&rdquo;); this erases them immediately.</li>
         <li><strong>Orders and invoices:</strong> as long as tax and accounting law requires.</li>
-        <li><strong>Contact and quote requests:</strong> up to 2 years after our last contact with you, unless they lead to an order.</li>
-        <li><strong>Security data:</strong> only as long as needed to prevent abuse.</li>
+        <li><strong>Contact and quote requests</strong> (including attachments): deleted automatically 2 years after they were sent.</li>
+        <li><strong>Security data:</strong> deleted automatically after 30 days.</li>
       </ul>
 
       <PolicyHeading>5. Your rights</PolicyHeading>
@@ -110,7 +110,7 @@ export default function PrivacyPolicyPage() {
         <li>withdraw consent at any time, without affecting earlier use.</li>
       </ul>
       <p>
-        You can change most product settings yourself in your FlashBind account. For anything else, email{' '}
+        You can change most product settings, and delete your account, yourself in your FlashBind account. For anything else, email{' '}
         <a href={`mailto:${SELLER.email}`} className={link}>{SELLER.email}</a>. We reply within one month.
       </p>
       <p>
@@ -119,20 +119,26 @@ export default function PrivacyPolicyPage() {
         {SELLER.confirmed ? `Our lead authority is ${SELLER.dataProtectionAuthority}.` : ''}
       </p>
 
-      <PolicyHeading>6. Security</PolicyHeading>
+      <PolicyHeading>6. Children</PolicyHeading>
+      <p>
+        You must be at least 14 years old to create a FlashBind account. We don&apos;t knowingly collect data from
+        younger children; if you think a child has created an account, contact us and we will delete it.
+      </p>
+
+      <PolicyHeading>7. Security</PolicyHeading>
       <p>
         Access to stored data is limited to our servers and the people who need it to run the service. Passwords are
         stored only in hashed form, and the site is served over HTTPS. No online service can be completely secure, so
         please use a strong password and don&apos;t reuse it elsewhere.
       </p>
 
-      <PolicyHeading>7. Changes to this policy</PolicyHeading>
+      <PolicyHeading>8. Changes to this policy</PolicyHeading>
       <p>
         We may update this policy when our service or the law changes. We show the date of the latest version at the
         top, and we tell account holders about important changes.
       </p>
 
-      <PolicyHeading>8. Contact</PolicyHeading>
+      <PolicyHeading>9. Contact</PolicyHeading>
       <p>
         {sellerName()}, <a href={`mailto:${SELLER.email}`} className={link}>{SELLER.email}</a>.
       </p>

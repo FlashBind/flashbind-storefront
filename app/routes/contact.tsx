@@ -2,6 +2,7 @@ import type {MetaFunction, ActionFunctionArgs} from 'react-router';
 import {useState, useEffect, useRef} from 'react';
 import {useSearchParams, useActionData, useNavigation, Form} from 'react-router';
 import {getSupabaseAdmin} from '~/utils/supabase.server';
+import {purgeExpiredContactMessages} from '~/utils/retention.server';
 import {sendEmailNotification} from '~/utils/email.server';
 
 export const meta: MetaFunction = () => {
@@ -30,6 +31,9 @@ export async function action({request, context}: ActionFunctionArgs) {
     console.error('Failed to save contact message:', error);
     return {error: 'Something went wrong. Please try again later.'};
   }
+
+  // Remove messages older than the retention period (PRIV-002).
+  await purgeExpiredContactMessages(supabase);
 
   // 2. Send Email Notification
   const adminEmail = (context.env as any).NOTIFICATION_EMAIL || (context.env as any).ADMIN_EMAIL || 'YOUR_GMAIL_ADDRESS_HERE';

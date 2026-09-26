@@ -1,5 +1,6 @@
 import { Form, redirect, useActionData, useNavigation, useLoaderData, useNavigate } from 'react-router';
 import { resizeImageToDataUrl } from '~/utils/resizeImage';
+import { purgeExpiredRateLimits } from '~/utils/retention.server';
 import { useEffect } from 'react';
 import type { LoaderFunctionArgs, ActionFunctionArgs } from 'react-router';
 import {
@@ -86,6 +87,9 @@ export async function action({ request, params, context }: ActionFunctionArgs) {
   const isOrphan = !tagData.owner_email;
 
   if (isOrphan) {
+    // Drop rate-limit rows older than the retention period (PRIV-002).
+    await purgeExpiredRateLimits(adminSupabase);
+
     // Rate Limiting Check
     const clientIdentifiers = buildActivationRateLimitIdentifiers(
       request.headers,

@@ -352,3 +352,24 @@ export function removePinFromSettings(settings: any) {
   const { activation_pin, ...rest } = settings;
   return Object.keys(rest).length > 0 ? rest : null;
 }
+
+/**
+ * Update that returns a tag to its factory state when its owner deletes
+ * their account (PRIV-002): every personal detail and setting is cleared.
+ * Batch tags must always carry a PIN while unclaimed (tags_batch_pin_check),
+ * so they get a fresh one; the owner can hand it to the next holder via the
+ * internal export.
+ */
+export function buildReleasedTagUpdate(tag: {batch_id: string | null}) {
+  return {
+    is_claimed: false,
+    owner_email: null,
+    owner_name: null,
+    pet_name: null,
+    phone: null,
+    medical_notes: null,
+    image_url: null,
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    settings: tag.batch_id ? {activation_pin: generateActivationPin()} : {},
+  };
+}
