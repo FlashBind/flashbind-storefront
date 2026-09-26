@@ -56,9 +56,9 @@ export default function PrivacyPolicyPage() {
               <td className="p-3 border-b align-top">Contract (Art. 6(1)(b)); legal obligation for accounting (Art. 6(1)(c))</td>
             </tr>
             <tr>
-              <td className="p-3 border-b align-top"><strong>Contact and quote requests:</strong> your email, message, and any file you attach.</td>
-              <td className="p-3 border-b align-top">To answer you and prepare quotes.</td>
-              <td className="p-3 border-b align-top">Steps before a contract (Art. 6(1)(b)); legitimate interest in answering enquiries (Art. 6(1)(f))</td>
+              <td className="p-3 border-b align-top"><strong>Contact, quote and founding-pricing requests:</strong> your email, message, business name and any file you attach.</td>
+              <td className="p-3 border-b align-top">To answer you and prepare quotes. For founding-pricing requests, to email you about pricing and the subscription launch, which you agree to on the form and can withdraw at any time.</td>
+              <td className="p-3 border-b align-top">Steps before a contract (Art. 6(1)(b)); legitimate interest in answering enquiries (Art. 6(1)(f)); consent for founding-pricing emails (Art. 6(1)(a))</td>
             </tr>
             <tr>
               <td className="p-3 border-b align-top"><strong>Security data:</strong> IP address and a scrambled account identifier when someone tries to activate a product.</td>

@@ -3,6 +3,7 @@ import { generateBatch, getSupplierCSV, getInternalCSV, claimTagAtomically, remo
 import { retentionCutoff, attachmentPathFromUrl, RATE_LIMIT_RETENTION_DAYS, CONTACT_MESSAGE_RETENTION_DAYS } from './app/utils/retention.server';
 import { normalizeTrustedClientIp, buildActivationRateLimitIdentifiers, isSameOriginRequest, assertSameOrigin } from './app/utils/requestSecurity.server';
 import crypto from 'node:crypto';
+import { escapeHtml } from './app/utils/email.server';
 
 // Fluent Mock Supabase Client Factory
 function createMockSupabase(responses: any = {}) {
@@ -536,5 +537,11 @@ describe('Retention helpers (PRIV-002)', () => {
     expect(attachmentPathFromUrl('https://x.supabase.co/storage/v1/object/public/attachments/a%2F..%2Fb.png')).toBeNull();
     expect(attachmentPathFromUrl('https://x.supabase.co/storage/v1/object/public/other/1727-abc.png')).toBeNull();
     expect(attachmentPathFromUrl(null)).toBeNull();
+  });
+});
+
+describe('Notification email escaping', () => {
+  it('escapes HTML typed by visitors', () => {
+    expect(escapeHtml(`<img src=x onerror="alert(1)"> & 'hi'`)).toBe('&lt;img src=x onerror=&quot;alert(1)&quot;&gt; &amp; &#39;hi&#39;');
   });
 });

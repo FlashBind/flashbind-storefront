@@ -173,6 +173,9 @@ export function Header({
             <NavLink to="/services" onClick={close} className="text-lg font-semibold text-slate-900 hover:text-[#1E3A8A] py-3 border-b border-slate-50">
               Custom Solutions
             </NavLink>
+            <NavLink to="/software" onClick={close} className="text-lg font-semibold text-slate-900 hover:text-[#1E3A8A] py-3 border-b border-slate-50">
+              Business Subscription
+            </NavLink>
             <NavLink to="/blog" onClick={close} className="text-lg font-semibold text-slate-900 hover:text-[#1E3A8A] py-3">
               Blog
             </NavLink>
@@ -239,6 +242,7 @@ export function HeaderMenu({
         subItems: [
           { id: 'sub-1', title: 'All Products', url: '/business' },
           { id: 'sub-2', title: 'Custom Solutions', url: '/services' },
+          { id: 'sub-3', title: 'Business Subscription', url: '/software' },
         ]
       },
       { id: 'nav-b2c', title: 'For Individuals', url: '/personal' },
