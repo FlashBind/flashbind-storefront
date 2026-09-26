@@ -17,6 +17,7 @@ import resetStyles from '~/styles/reset.css?url';
 import appStyles from '~/styles/app.css?url';
 import {PageLayout} from './components/PageLayout';
 import {CookieBanner} from './components/CookieBanner';
+import {NotFoundPage, ServerErrorPage} from './components/ErrorPages';
 
 export type RootLoader = typeof loader;
 
@@ -213,6 +214,7 @@ export default function App() {
 
 export function ErrorBoundary() {
   const error = useRouteError();
+  const data = useRouteLoaderData<RootLoader>('root');
   let errorMessage = 'Unknown error';
   let errorStatus = 500;
 
@@ -223,15 +225,20 @@ export function ErrorBoundary() {
     errorMessage = error.message;
   }
 
+  const content =
+    errorStatus === 404 ? (
+      <NotFoundPage />
+    ) : (
+      // Error details only in development; visitors never see internals.
+      <ServerErrorPage status={errorStatus} detail={import.meta.env.DEV ? String(errorMessage) : undefined} />
+    );
+
+  // If the site's own data loaded (the usual case for a 404), show the page
+  // inside the normal header and footer.
+  if (!data) return content;
   return (
-    <div className="route-error">
-      <h1>Oops</h1>
-      <h2>{errorStatus}</h2>
-      {errorMessage && (
-        <fieldset>
-          <pre>{errorMessage}</pre>
-        </fieldset>
-      )}
-    </div>
+    <Analytics.Provider cart={data.cart} shop={data.shop} consent={data.consent}>
+      <PageLayout {...data}>{content}</PageLayout>
+    </Analytics.Provider>
   );
 }
