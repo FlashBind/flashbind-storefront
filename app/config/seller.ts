@@ -1,23 +1,21 @@
 /**
  * Seller identity shown on the legal pages and in the footer (LEGAL-001).
  *
- * DRAFT: the seller entity is not decided yet. While `confirmed` is false,
- * none of the placeholder fields below are rendered anywhere; the pages
- * fall back to the brand name and the contact email instead. Fill in every
- * field, have the policies reviewed, then set `confirmed: true`.
+ * This is the only place the seller's details live: to change the seller
+ * (e.g. to the owner's own company later), edit this object. If
+ * `confirmed` is set to false, none of these fields are shown and the pages
+ * fall back to the brand name and the contact email.
  */
 export const SELLER = {
-  confirmed: false as boolean,
-  legalName: '[SELLER LEGAL NAME]',
-  companyCode: '[COMPANY CODE]',
-  vatCode: '[VAT CODE]',
-  address: '[REGISTERED ADDRESS]',
-  country: '[COUNTRY]',
-  // Consumer disputes and data protection bodies of the seller's country,
-  // e.g. for Lithuania: the State Consumer Rights Protection Authority
-  // (vvtat.lt) and the State Data Protection Inspectorate (vdai.lrv.lt).
-  consumerDisputeBody: '[CONSUMER DISPUTE BODY AND WEBSITE]',
-  dataProtectionAuthority: '[DATA PROTECTION AUTHORITY AND WEBSITE]',
+  confirmed: true as boolean,
+  legalName: 'Cortexa, MB',
+  companyCode: '308009417',
+  vatCode: 'LT100020373511',
+  address: 'Malūnininkų g. 7, LT-92262 Klaipėda, Lithuania',
+  country: 'Lithuania',
+  // Consumer disputes and data protection bodies of the seller's country.
+  consumerDisputeBody: 'the State Consumer Rights Protection Authority (vvtat.lt)',
+  dataProtectionAuthority: 'the State Data Protection Inspectorate (vdai.lrv.lt)',
   email: 'info@flashbind.com',
 } as const;
 

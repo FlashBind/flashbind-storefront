@@ -58,7 +58,8 @@ export default function TermsOfServicePage() {
 
       <PolicyHeading>6. Right of withdrawal (consumers only)</PolicyHeading>
       <p>
-        Consumers can withdraw from a purchase within 14 days of receiving it, without giving a reason. Custom-branded
+        Consumers can withdraw from a purchase within 14 days of receiving it, without giving a reason, and we extend
+        this to 30 days as a returns promise. Custom-branded
         products made with your own logo or design are excluded. Full details and the model withdrawal form are in
         our <Link to="/refund-policy#right-of-withdrawal" className={link}>Returns and Refunds policy</Link>. Business
         customers don&apos;t have this right.

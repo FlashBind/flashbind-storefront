@@ -5,7 +5,7 @@ import {SELLER} from '~/config/seller';
 
 // DRAFT for legal review (LEGAL-001). Consumer part follows the EU legal
 // guarantee (Directive (EU) 2019/771). The 12-month business-customer
-// warranty is a proposed commercial promise for the owner to confirm.
+// warranty was confirmed by the owner on 2026-09-26.
 
 export const meta: MetaFunction = () => {
   return [{title: 'FlashBind | Warranty'}];
