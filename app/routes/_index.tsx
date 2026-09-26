@@ -485,7 +485,7 @@ export default function Homepage() {
               
               <div className="relative z-10 mb-12">
                 <h3 className="text-3xl font-extrabold text-slate-900 mb-3">Universal Compatibility</h3>
-                <p className="text-slate-600 max-w-sm leading-relaxed">No app required. Instantly shares your links to 99% of modern smartphones with a single tap using native OS capabilities.</p>
+                <p className="text-slate-600 max-w-sm leading-relaxed">No app required. Most modern smartphones open your link with a single tap.</p>
               </div>
 
               {/* Visual Apple/Android Graphic */}
