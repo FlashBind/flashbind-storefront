@@ -219,7 +219,7 @@ export default function Homepage() {
             <div className="bg-white rounded-[2.5rem] p-8 md:p-12 shadow-[0_8px_30px_rgb(0,0,0,0.08)] border border-slate-200 hover:border-[#1E3A8A]/30 hover:shadow-[0_8px_40px_rgb(0,0,0,0.12)] flex flex-col sm:flex-row items-center gap-8 group hover:-translate-y-2 transition-all duration-300">
               <div className="flex-1 text-center sm:text-left">
                 <h3 className="text-2xl font-bold text-slate-900 mb-4">Smart Pet Tags</h3>
-                <p className="text-slate-600 leading-relaxed mb-8 text-sm md:text-base">Keep your best friend safe. A quick tap by any smartphone reveals the owner's contact info and pet details instantly.</p>
+                <p className="text-slate-600 leading-relaxed mb-8 text-sm md:text-base">Keep your best friend safe. A quick tap with a phone shows the owner's contact details. Works with nearly all modern smartphones.</p>
                 <Link to={PRODUCT_ROUTES.petTag} className="text-slate-900 font-bold text-sm inline-flex items-center gap-2 hover:text-[#1E3A8A] transition-colors">
                   Learn more <span className="transform group-hover:translate-x-1 transition-transform">&rarr;</span>
                 </Link>
@@ -295,7 +295,7 @@ export default function Homepage() {
                 Google Reviews
               </h2>
               <div className="text-gray-600 text-lg leading-relaxed mb-6 space-y-3">
-                <p><strong>1. Instant Tap:</strong> Customers tap the stand or card with their iPhone or Android.</p>
+                <p><strong>1. Instant Tap:</strong> Customers tap the stand with their phone, or scan its QR code.</p>
                 <p><strong>2. Zero Friction:</strong> Your exact Google Review page opens instantly without any app downloads or typing.</p>
                 <p><strong>3. Effortless Rating:</strong> The customer leaves a review in seconds, before they even leave your business.</p>
               </div>
@@ -485,7 +485,7 @@ export default function Homepage() {
               
               <div className="relative z-10 mb-12">
                 <h3 className="text-3xl font-extrabold text-slate-900 mb-3">Universal Compatibility</h3>
-                <p className="text-slate-600 max-w-sm leading-relaxed">No app required. Most modern smartphones open your link with a single tap.</p>
+                <p className="text-slate-600 max-w-sm leading-relaxed">No app required. Works with nearly all modern smartphones, and every plaque has a QR code as backup.</p>
               </div>
 
               {/* Visual Apple/Android Graphic */}
@@ -591,7 +591,7 @@ export default function Homepage() {
                 </span>
               </summary>
               <p className="text-slate-600 px-6 pb-6 leading-relaxed">
-                No. Most modern smartphones read NFC without an app: hold the top of the phone near the product and the page opens. Menu and Wi-Fi stands also have a QR code for phones without NFC.
+                No. Works with nearly all modern smartphones, and every plaque has a QR code as backup. Hold the top of the phone near the product and the page opens. Pet tags are NFC-only and have no QR code.
               </p>
             </details>
 

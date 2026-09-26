@@ -41,7 +41,7 @@ export default function WarrantyPage() {
       <ul className="list-disc pl-6 space-y-1">
         <li>normal wear, scratches and fading from everyday use;</li>
         <li>damage caused by accidents, misuse, or changes to the product;</li>
-        <li>phones that don&apos;t support NFC (products with a QR code can still be scanned with the camera).</li>
+        <li>phones that don&apos;t support NFC (every plaque also has a QR code that can be scanned with the camera; pet tags are NFC-only).</li>
       </ul>
       <p>These exclusions don&apos;t reduce your legal rights as a consumer.</p>
 

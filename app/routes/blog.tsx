@@ -39,7 +39,7 @@ export default function BlogPage() {
                 Why NFC is Replacing QR Codes in Hospitality
               </h2>
               <p className="text-slate-500 text-lg leading-relaxed mb-8">
-                Learn why top restaurants and hotels are ditching clunky QR codes in favor of seamless tap-to-view NFC technology to elevate the guest experience.
+                Why a tap-to-view NFC stand, with a QR code as backup, is a smoother way to show guests your menu.
               </p>
               <div className="flex items-center gap-3 mt-auto">
                 <div className="w-10 h-10 rounded-full border border-slate-200 shadow-sm bg-white overflow-hidden flex items-center justify-center">

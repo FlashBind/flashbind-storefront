@@ -320,7 +320,7 @@ export default function Product() {
                   </span>
                 </summary>
                 <div className="px-6 pb-6 text-slate-600 leading-relaxed text-base">
-                  <p>Absolutely not! The NFC chip communicates directly with the native operating system on almost all modern smartphones. Just tap and go.</p>
+                  <p>No app is needed. {product.handle === 'smart-pet-collar-tag' ? 'Works with nearly all modern smartphones.' : 'Works with nearly all modern smartphones, and every plaque has a QR code as backup.'}</p>
                 </div>
               </details>
               

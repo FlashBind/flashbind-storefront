@@ -29,7 +29,7 @@ const TUTORIAL_DATA: Record<string, any> = {
   },
   'nfc-restaurant-menu-stand': {
     title: 'How FlashBind Works',
-    description: 'Get your digital menu set up in seconds. No apps to download, no QR codes to squint at. Just tap and view.',
+    description: 'Get your digital menu set up in minutes. Guests tap or scan the stand to open your menu, no app needed.',
     steps: [
       {
         title: 'Tap',
@@ -83,7 +83,7 @@ const TUTORIAL_DATA: Record<string, any> = {
     steps: [
       {
         title: 'Tap',
-        description: 'Simply tap your smartphone to the FlashBind tag. Most modern smartphones read it without an app.',
+        description: 'Simply tap your smartphone to the FlashBind tag, no app needed. Works with nearly all modern smartphones.',
       },
       {
         title: 'Setup',
@@ -108,7 +108,7 @@ const TUTORIAL_DATA: Record<string, any> = {
     steps: [
       {
         title: 'Tap',
-        description: 'Tap the product with a smartphone. Most modern phones read it without an app.',
+        description: 'Tap the product with a smartphone, no app needed. Works with nearly all modern smartphones, and every plaque has a QR code as backup.',
       },
       {
         title: 'Setup',
