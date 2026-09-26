@@ -1,6 +1,7 @@
 import {Suspense} from 'react';
 import {Await, NavLink} from 'react-router';
 import type {FooterQuery, HeaderQuery} from 'storefrontapi.generated';
+import {SELLER} from '~/config/seller';
 
 interface FooterProps {
   footer: Promise<FooterQuery | null>;
@@ -55,10 +56,11 @@ export function Footer({
                     <li><NavLink to="/cookie-policy" className="hover:text-white transition-colors">Cookie Policy</NavLink></li>
                     <li><NavLink to="/terms-of-service" className="hover:text-white transition-colors">Terms of Service</NavLink></li>
                     <li><NavLink to="/shipping-policy" className="hover:text-white transition-colors">Shipping Policy</NavLink></li>
-                    <li><NavLink to="/refund-policy" className="hover:text-white transition-colors">Refund/Returns Policy</NavLink></li>
+                    <li><NavLink to="/refund-policy" className="hover:text-white transition-colors">Returns and Refunds</NavLink></li>
+                    <li><NavLink to="/warranty" className="hover:text-white transition-colors">Warranty</NavLink></li>
                     <li className="pt-2">
                       <button onClick={() => { if(typeof window !== 'undefined') { localStorage.removeItem('flashbind_cookie_consent'); window.location.reload(); } }} className="text-[11px] text-slate-500 hover:text-slate-300 transition-colors uppercase tracking-wider underline">
-                        Do Not Sell My Personal Information
+                        Cookie settings
                       </button>
                     </li>
                   </ul>
@@ -67,7 +69,15 @@ export function Footer({
 
               {/* Bottom Bar */}
               <div className="pt-8 border-t border-slate-900 flex flex-col md:flex-row justify-between items-center gap-6">
-                <p className="text-slate-500 text-sm">© {new Date().getFullYear()} FlashBind. All rights reserved.</p>
+                <div className="text-slate-500 text-sm space-y-2">
+                  <p>© {new Date().getFullYear()} FlashBind. All rights reserved.</p>
+                  {/* Company details: shown once the seller is confirmed (LEGAL-001). */}
+                  {SELLER.confirmed && (
+                    <p className="text-xs">
+                      {SELLER.legalName} · Company code {SELLER.companyCode} · VAT {SELLER.vatCode} · {SELLER.address}
+                    </p>
+                  )}
+                </div>
                 
                 {/* Social Icons */}
                 <div className="flex items-center gap-4">

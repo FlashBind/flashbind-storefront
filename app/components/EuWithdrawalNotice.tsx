@@ -1,18 +1,23 @@
-import {SELLER} from '~/config/seller';
+import {SELLER, sellerContactLine} from '~/config/seller';
+import {PolicyHeading, PolicySubheading} from '~/components/PolicyLayout';
 
 /**
- * EU 14-day right of withdrawal (Directive 2011/83/EU, Annex I A and B).
- * DRAFT for LEGAL-001 -- needs legal review. Renders nothing until the
- * seller entity in ~/config/seller is confirmed.
+ * EU 14-day right of withdrawal for consumers (Directive 2011/83/EU,
+ * Annex I A and B). DRAFT for LEGAL-001 -- needs legal review.
+ *
+ * The seller's legal name, company code and address appear only once the
+ * seller is confirmed in ~/config/seller; until then the brand name and
+ * contact email are used.
  */
 export function EuWithdrawalNotice() {
-  if (!SELLER.confirmed) return null;
-
-  const seller = `${SELLER.legalName}, company code ${SELLER.companyCode}, ${SELLER.address}, ${SELLER.email}`;
+  const seller = sellerContactLine();
+  const returnAddress = SELLER.confirmed
+    ? SELLER.address
+    : 'the return address we send you when you tell us you are withdrawing';
 
   return (
-    <section id="right-of-withdrawal">
-      <h2 className="text-2xl font-bold text-slate-900 mt-8 mb-4">Right of withdrawal (EU consumers)</h2>
+    <section>
+      <PolicyHeading id="right-of-withdrawal">Right of withdrawal (consumers)</PolicyHeading>
       <p>
         If you are a consumer, you have the right to withdraw from this contract within 14 days without giving any reason.
         The withdrawal period will expire after 14 days from the day on which you, or a third party other than the carrier
@@ -26,7 +31,7 @@ export function EuWithdrawalNotice() {
         has expired.
       </p>
 
-      <h3 className="text-xl font-bold text-slate-900 mt-6 mb-3">Effects of withdrawal</h3>
+      <PolicySubheading>Effects of withdrawal</PolicySubheading>
       <p>
         If you withdraw from this contract, we shall reimburse to you all payments received from you, including the costs
         of standard delivery, without undue delay and in any event not later than 14 days from the day on which we are
@@ -36,20 +41,19 @@ export function EuWithdrawalNotice() {
         them back, whichever is earliest.
       </p>
       <p>
-        You shall send back the goods to {SELLER.address} without undue delay and in any event not later than 14 days
+        You shall send back the goods to {returnAddress} without undue delay and in any event not later than 14 days
         from the day on which you communicate your withdrawal to us. You will have to bear the direct cost of returning
         the goods. You are only liable for any diminished value of the goods resulting from handling other than what is
         necessary to establish their nature, characteristics and functioning.
       </p>
 
-      <h3 className="text-xl font-bold text-slate-900 mt-6 mb-3">Exception</h3>
+      <PolicySubheading>Exception: custom-branded products</PolicySubheading>
       <p>
         The right of withdrawal does not apply to goods made to your specifications or clearly personalised, such as
-        products printed with your own logo or branding. Our standard products are not personalised and can be withdrawn
-        from as described above.
+        products printed with your own logo or design. All our standard products can be withdrawn from as described above.
       </p>
 
-      <h3 className="text-xl font-bold text-slate-900 mt-6 mb-3">Model withdrawal form</h3>
+      <PolicySubheading>Model withdrawal form</PolicySubheading>
       <p className="text-sm">(Complete and return this form only if you wish to withdraw from the contract.)</p>
       <div className="bg-slate-50 border border-slate-200 rounded-2xl p-6 text-sm space-y-2">
         <p>To: {seller}</p>

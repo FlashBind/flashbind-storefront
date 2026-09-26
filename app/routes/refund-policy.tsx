@@ -1,44 +1,60 @@
 import type {MetaFunction} from 'react-router';
+import {Link} from 'react-router';
 import {EuWithdrawalNotice} from '~/components/EuWithdrawalNotice';
+import {PolicyLayout, PolicyHeading} from '~/components/PolicyLayout';
+import {SELLER} from '~/config/seller';
+
+// DRAFT for legal review (LEGAL-001).
 
 export const meta: MetaFunction = () => {
-  return [{title: 'FlashBind | Refund Policy'}];
+  return [{title: 'FlashBind | Returns and Refunds'}];
 };
 
 export default function RefundPolicyPage() {
   return (
-    <div className="min-h-screen bg-gray-50 py-24 relative overflow-hidden">
-      <div className="container mx-auto px-6 max-w-4xl relative z-10">
-        <div className="bg-white rounded-[2rem] p-10 md:p-16 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100">
-          <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight mb-8">Refund Policy</h1>
-          
-          <div className="prose prose-slate max-w-none text-slate-600 leading-relaxed space-y-6">
-            <p className="font-semibold text-slate-900">Last updated: October 24, 2026</p>
-            
-            <p>We want you to be completely satisfied with your FlashBind NFC products. If you are not entirely satisfied with your purchase, we're here to help.</p>
+    <PolicyLayout title="Returns and Refunds">
+      <p>
+        This policy explains how to return a product and get your money back. Your rights depend on whether you buy as
+        a consumer (for yourself, outside your trade or business) or as a business customer (for example a café,
+        restaurant or hotel).
+      </p>
 
-            <h2 className="text-2xl font-bold text-slate-900 mt-8 mb-4">1. Returns</h2>
-            <p>You have 30 calendar days to return an item from the date you received it.</p>
-            <p>To be eligible for a return, your item must be unused and in the same condition that you received it. Your item must be in the original packaging. Your item needs to have the receipt or proof of purchase.</p>
-            <p><strong>Exceptions:</strong> Custom-printed or bulk-encoded orders (e.g., custom business cards with your logo) are final sale and cannot be returned unless there is a manufacturing defect or the NFC chip is non-functional upon arrival.</p>
+      <PolicyHeading>1. Summary</PolicyHeading>
+      <ul className="list-disc pl-6 space-y-1">
+        <li><strong>Consumers</strong> can withdraw from a purchase within 14 days of receiving it, without giving a reason.</li>
+        <li>We refund you within 14 days of hearing from you, including the standard delivery cost.</li>
+        <li>You pay the cost of sending the product back, unless it is faulty or we sent the wrong item.</li>
+        <li>Custom-branded products made with your own logo or design can&apos;t be returned unless they are faulty.</li>
+        <li>Faulty products are covered by our <Link to="/warranty" className="text-[#1E3A8A] underline">Warranty</Link>, whether you are a consumer or a business.</li>
+      </ul>
 
-            <EuWithdrawalNotice />
+      <EuWithdrawalNotice />
 
-            <h2 className="text-2xl font-bold text-slate-900 mt-8 mb-4">2. Refunds</h2>
-            <p>Once we receive your item, we will inspect it and notify you that we have received your returned item. We will immediately notify you on the status of your refund after inspecting the item.</p>
-            <p>If your return is approved, we will initiate a refund to your credit card (or original method of payment). You will receive the credit within a certain amount of days, depending on your card issuer's policies.</p>
+      <PolicyHeading>2. How to return a product</PolicyHeading>
+      <ol className="list-decimal pl-6 space-y-1">
+        <li>Email us at <a href={`mailto:${SELLER.email}`} className="text-[#1E3A8A] underline">{SELLER.email}</a> with your order number (or use the model form above).</li>
+        <li>We reply with the return address.</li>
+        <li>Send the product back within 14 days of telling us, well packed. We recommend a tracked service.</li>
+        <li>We refund you within 14 days of your message. We may wait until the product is back with us or you show proof you have sent it.</li>
+      </ol>
 
-            <h2 className="text-2xl font-bold text-slate-900 mt-8 mb-4">3. Software Subscriptions</h2>
-            <p>If you are subscribed to the FlashBind "Pro" software tier, you may cancel at any time via your dashboard. We do not offer prorated refunds for canceled subscriptions; however, you will retain access to Pro features until the end of your current billing cycle.</p>
+      <PolicyHeading>3. Who pays for return shipping</PolicyHeading>
+      <p>
+        If you withdraw from a purchase, you pay the direct cost of returning the product. If the product is faulty,
+        damaged on arrival, or not what you ordered, we pay the return cost or send you a prepaid label.
+      </p>
 
-            <h2 className="text-2xl font-bold text-slate-900 mt-8 mb-4">4. Shipping for Returns</h2>
-            <p>You will be responsible for paying for your own shipping costs for returning your item. Shipping costs are non-refundable. If you receive a refund, the cost of return shipping will be deducted from your refund (if a prepaid label was provided).</p>
+      <PolicyHeading>4. Business customers</PolicyHeading>
+      <p>
+        The 14-day right of withdrawal applies to consumers only. If you buy for your business, you can&apos;t withdraw
+        from the purchase, but faulty products are still covered by our <Link to="/warranty" className="text-[#1E3A8A] underline">Warranty</Link>.
+        If you ordered the wrong product, contact us; we&apos;ll help where we can.
+      </p>
 
-            <h2 className="text-2xl font-bold text-slate-900 mt-8 mb-4">5. Contact Us</h2>
-            <p>If you have any questions on how to return your item to us, contact us at info@flashbind.com.</p>
-          </div>
-        </div>
-      </div>
-    </div>
+      <PolicyHeading>5. Contact</PolicyHeading>
+      <p>
+        Questions about returns: <a href={`mailto:${SELLER.email}`} className="text-[#1E3A8A] underline">{SELLER.email}</a>.
+      </p>
+    </PolicyLayout>
   );
 }
