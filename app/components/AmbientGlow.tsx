@@ -7,10 +7,9 @@ const vsSource = `
   }
 `;
 
-// Domain-warped fbm noise field: a slow, continuously-evolving atmosphere of
-// light rather than any discrete shape. No circles, rings, or blobs are drawn
-// -- every pixel's color/brightness comes from the same noise function, so
-// there is nothing to identify as an "object" on screen.
+// Flowing wave field: large, soft bands of light that all drift in the same
+// direction and blend into each other, like slow waves. Every pixel comes
+// from the same field, so there are no separate spots on screen.
 const fsSource = `
   precision highp float;
   uniform vec2 u_resolution;
@@ -41,15 +40,27 @@ const fsSource = `
 
     float t = u_time * 0.16;
 
-    // Slow diagonal drift of the whole field, independent of the internal warp.
-    vec2 drift = vec2(t * 0.05, -t * 0.035);
-    vec2 pd = p * 1.7 + drift;
+    // One shared direction for the whole field, so every shape drifts the
+    // same way, like slow waves or drifting light.
+    vec2 flowDir = vec2(0.94, -0.34);
+    vec2 pd = p * 0.8 - flowDir * t * 0.35;
 
-    // Two-stage domain warp (fbm-style) -- large, soft, organic masses.
-    vec2 q = vec2(noise(pd * 1.0 + t * 0.6), noise(pd * 1.0 + vec2(5.2, 1.3) - t * 0.6));
-    vec2 r = vec2(noise(pd * 1.4 + 2.2 * q + vec2(1.7, 9.2) + t * 0.5),
-                  noise(pd * 1.4 + 2.2 * q + vec2(8.3, 2.8) - t * 0.5));
-    float fieldValue = noise(pd * 1.1 + 2.4 * r);
+    // Slow, large warp: bends the wave bands into soft, flowing shapes
+    // instead of straight stripes.
+    vec2 q = vec2(noise(pd * 0.7 + vec2(t * 0.15, 0.0)),
+                  noise(pd * 0.7 + vec2(5.2, 1.3 - t * 0.15)));
+
+    // Three travelling waves along the flow direction, plus a little soft
+    // noise. Low frequencies keep the shapes large; because they are all
+    // part of the same wave field they overlap and blend into each other.
+    // The third wave is out of step with the others, which keeps the glowing
+    // area steady (about 56-71% of the hero) instead of pulsing.
+    float phase = dot(pd, flowDir) * 1.6 + (q.x - 0.5) * 3.0 + t * 0.6;
+    float wave = sin(phase) * 0.5 + 0.5;
+    float wave2 = sin(phase * 0.53 + (q.y - 0.5) * 2.4 + 1.7) * 0.5 + 0.5;
+    float wave3 = sin(phase * 1.37 + (q.y - 0.5) * 1.8 + 4.1) * 0.5 + 0.5;
+    float soft = noise(pd * 1.1 + 1.6 * q);
+    float fieldValue = wave * 0.4 + wave2 * 0.25 + wave3 * 0.15 + soft * 0.2;
 
     // FlashBind palette -- anchored on the site's one real brand token (#1E3A8A),
     // extended with the electric/cyan pairing already used by both prior drafts.
@@ -57,30 +68,21 @@ const fsSource = `
     vec3 colCyan     = vec3(0.133, 0.827, 0.933); // #22D3EE
     vec3 colNavy     = vec3(0.118, 0.227, 0.541); // #1E3A8A
 
-    vec3 col = mix(colCyan, colElectric, fieldValue * 0.5 + 0.5);
-    float navyPocket = smoothstep(0.62, 0.92, r.x);
+    vec3 col = mix(colCyan, colElectric, smoothstep(0.2, 0.8, wave2 * 0.6 + soft * 0.4));
+    float navyPocket = smoothstep(0.7, 0.95, wave * q.y);
     col = mix(col, colNavy, navyPocket * 0.45);
 
-    // Soft luminous masses -- narrow smoothstep bands so only the strongest
-    // parts of the field glow, leaving wide cream gaps between them.
-    float massA = smoothstep(0.58, 0.84, fieldValue);
-    float massB = smoothstep(0.62, 0.88, r.y);
-    float aura = max(massA, massB * 0.75);
+    // Wide, soft transition: about two thirds of the hero glows, with the
+    // rest left cream between the wave crests.
+    float aura = smoothstep(0.34, 0.60, fieldValue);
 
-    // Keep the glow toward the edges and corners: zero in the middle of the
-    // hero, rising toward the corners.
-    vec2 fromCenter = abs(uv - 0.5) * 2.0;
-    float edge = smoothstep(0.55, 1.2, length(fromCenter));
-
-    // Gentle taper near the headline/paragraph column so text stays calm,
-    // without cutting the field to zero (it should still read as one
-    // continuous atmosphere, not a hole).
+    // Taper behind the headline/paragraph column so the text stays easy to
+    // read, without cutting a hard hole in the field.
     float dist = length(p - u_textMaskCenter);
-    float mask = mix(1.0, smoothstep(0.3, 2.0, dist), u_textMaskStrength);
+    float mask = mix(1.0, smoothstep(0.6, 2.0, dist), u_textMaskStrength);
 
-    // No constant tint: pixels outside the glow shapes stay fully cream.
-    // Peak opacity matches the previous version (0.45).
-    float alpha = aura * 0.45 * edge * mask;
+    // Peak opacity unchanged from the previous version (0.45).
+    float alpha = aura * 0.45 * mask;
     alpha = min(alpha, 0.46);
 
     // Static, screen-space dither -- breaks gradient banding and reads as a
@@ -107,10 +109,10 @@ function compileShader(gl: WebGLRenderingContext, type: number, source: string) 
   return shader;
 }
 
-// Shown before WebGL starts, and if it is unavailable or lost: two soft
-// corner glows on cream, matching the animated version's layout.
+// Shown before WebGL starts, and if it is unavailable or lost: a soft
+// diagonal band of light on cream, echoing the animated waves.
 const FALLBACK_BACKGROUND =
-  'radial-gradient(35% 45% at 100% 0%, rgba(37,99,235,0.10) 0%, rgba(253,252,248,0) 100%), radial-gradient(30% 40% at 0% 100%, rgba(34,211,238,0.08) 0%, rgba(253,252,248,0) 100%)';
+  'linear-gradient(110deg, rgba(253,252,248,0) 20%, rgba(37,99,235,0.10) 45%, rgba(34,211,238,0.08) 65%, rgba(253,252,248,0) 90%)';
 
 export default function AmbientGlow() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -188,10 +190,10 @@ export default function AmbientGlow() {
         // Mobile (flex-col): headline stacks near the top-center.
         const isDesktop = width > height;
         if (isDesktop) {
-          gl.uniform1f(maskStrengthLoc, 0.55);
+          gl.uniform1f(maskStrengthLoc, 0.85);
           gl.uniform2f(maskCenterLoc, -0.55 * (width / height), -0.1);
         } else {
-          gl.uniform1f(maskStrengthLoc, 0.45);
+          gl.uniform1f(maskStrengthLoc, 0.75);
           gl.uniform2f(maskCenterLoc, 0.0, 0.35);
         }
       };
