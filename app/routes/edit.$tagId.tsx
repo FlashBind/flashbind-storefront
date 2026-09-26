@@ -1,4 +1,5 @@
 import { Form, redirect, useActionData, useNavigation, useLoaderData, useNavigate } from 'react-router';
+import { resizeImageToDataUrl } from '~/utils/resizeImage';
 import { useEffect } from 'react';
 import type { LoaderFunctionArgs, ActionFunctionArgs } from 'react-router';
 import {
@@ -262,7 +263,7 @@ export default function EditTagPage() {
                   {/* Email (Read-Only) */}
                   <div>
                     <label htmlFor="ownerEmail" className="block text-sm font-semibold text-slate-700 mb-1">
-                      Email
+                      Account email <span className="font-normal text-slate-500">(private, not shown on the tag)</span>
                     </label>
                     <input 
                       type="email" 
@@ -294,8 +295,13 @@ export default function EditTagPage() {
                   {/* File Input (Pet Photo) */}
                   <div>
                     <label htmlFor="photo" className="block text-sm font-semibold text-slate-700 mb-1">
-                      Update Photo (Optional)
+                      {pet.imageUrl ? 'Update Photo (Optional)' : 'Add a Photo'}
                     </label>
+                    {!pet.imageUrl && (
+                      <p className="text-xs text-slate-500 mb-2">
+                        Your tag page shows &ldquo;No photo added&rdquo; right now. A clear photo helps whoever finds your pet recognise them.
+                      </p>
+                    )}
                     <input 
                       type="hidden" 
                       name="imageBase64" 
@@ -309,14 +315,10 @@ export default function EditTagPage() {
                       onChange={(e) => {
                         const file = e.target.files?.[0];
                         if (file) {
-                          const reader = new FileReader();
-                          reader.onload = (event) => {
+                          void resizeImageToDataUrl(file).then((dataUrl) => {
                             const hiddenInput = document.getElementById('imageBase64') as HTMLInputElement;
-                            if (hiddenInput && event.target?.result) {
-                              hiddenInput.value = event.target.result.toString();
-                            }
-                          };
-                          reader.readAsDataURL(file);
+                            if (hiddenInput) hiddenInput.value = dataUrl ?? '';
+                          });
                         }
                       }}
                       className="w-full text-sm text-slate-500 file:mr-4 file:py-3 file:px-6 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 transition-all cursor-pointer"

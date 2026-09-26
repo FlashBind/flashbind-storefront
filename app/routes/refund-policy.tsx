@@ -1,4 +1,5 @@
 import type {MetaFunction} from 'react-router';
+import {EuWithdrawalNotice} from '~/components/EuWithdrawalNotice';
 
 export const meta: MetaFunction = () => {
   return [{title: 'FlashBind | Refund Policy'}];
@@ -20,6 +21,8 @@ export default function RefundPolicyPage() {
             <p>You have 30 calendar days to return an item from the date you received it.</p>
             <p>To be eligible for a return, your item must be unused and in the same condition that you received it. Your item must be in the original packaging. Your item needs to have the receipt or proof of purchase.</p>
             <p><strong>Exceptions:</strong> Custom-printed or bulk-encoded orders (e.g., custom business cards with your logo) are final sale and cannot be returned unless there is a manufacturing defect or the NFC chip is non-functional upon arrival.</p>
+
+            <EuWithdrawalNotice />
 
             <h2 className="text-2xl font-bold text-slate-900 mt-8 mb-4">2. Refunds</h2>
             <p>Once we receive your item, we will inspect it and notify you that we have received your returned item. We will immediately notify you on the status of your refund after inspecting the item.</p>

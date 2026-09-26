@@ -1,4 +1,5 @@
 import { Form, redirect, useActionData, useNavigation, useLoaderData, useNavigate } from 'react-router';
+import { resizeImageToDataUrl } from '~/utils/resizeImage';
 import { useEffect } from 'react';
 import type { LoaderFunctionArgs, ActionFunctionArgs } from 'react-router';
 import {
@@ -150,7 +151,8 @@ export async function action({ request, params, context }: ActionFunctionArgs) {
   if (type === 'pet_tag') {
     const imageValue = formData.get('imageBase64');
     const imageBase64 = typeof imageValue === 'string' ? imageValue : '';
-    let imageUrl = 'https://images.unsplash.com/photo-1543466835-00a7907e9de1?q=80&w=800&auto=format&fit=crop';
+    // No stock photo: without an upload the public page shows a neutral placeholder.
+    let imageUrl: string | null = null;
     if (imageBase64 && imageBase64.startsWith('data:image')) {
       if (!imageBase64.startsWith('data:image/jpeg;base64,') && !imageBase64.startsWith('data:image/png;base64,')) {
         return { error: 'Image must be a JPEG or PNG.' };
@@ -343,7 +345,7 @@ export default function SetupTagPage() {
                   {/* Email (Read-Only) */}
                   <div>
                     <label htmlFor="ownerEmail" className="block text-sm font-semibold text-slate-700 mb-1">
-                      Email
+                      Account email <span className="font-normal text-slate-500">(private, not shown on the tag)</span>
                     </label>
                     <input 
                       type="email" 
@@ -374,8 +376,11 @@ export default function SetupTagPage() {
                   {/* File Input (Pet Photo) */}
                   <div>
                     <label htmlFor="photo" className="block text-sm font-semibold text-slate-700 mb-1">
-                      Pet Photo
+                      Pet Photo <span className="font-normal text-slate-500">(recommended)</span>
                     </label>
+                    <p className="text-xs text-slate-500 mb-2">
+                      A clear photo helps whoever finds your pet recognise them. You can skip this and add one later.
+                    </p>
                     <input 
                       type="hidden" 
                       name="imageBase64" 
@@ -389,14 +394,10 @@ export default function SetupTagPage() {
                       onChange={(e) => {
                         const file = e.target.files?.[0];
                         if (file) {
-                          const reader = new FileReader();
-                          reader.onload = (event) => {
+                          void resizeImageToDataUrl(file).then((dataUrl) => {
                             const hiddenInput = document.getElementById('imageBase64') as HTMLInputElement;
-                            if (hiddenInput && event.target?.result) {
-                              hiddenInput.value = event.target.result.toString();
-                            }
-                          };
-                          reader.readAsDataURL(file);
+                            if (hiddenInput) hiddenInput.value = dataUrl ?? '';
+                          });
                         }
                       }}
                       className="w-full text-sm text-slate-500 file:mr-4 file:py-3 file:px-6 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 transition-all cursor-pointer"

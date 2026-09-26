@@ -85,3 +85,12 @@
     to { opacity: 1; transform: translateY(0); }
   }
 }
+
+/* Scrolling text (header marquee) stays still for visitors who ask their OS
+   for reduced motion. */
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track,
+  .marquee-content {
+    animation: none !important;
+  }
+}

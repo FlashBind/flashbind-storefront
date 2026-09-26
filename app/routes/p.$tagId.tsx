@@ -57,7 +57,6 @@ export async function loader({ params, context }: LoaderFunctionArgs) {
     dogName: isPetTag ? rawPet.pet_name : null,
     ownerName: isPetTag ? rawPet.owner_name : null,
     ownerPhone: isPetTag ? rawPet.phone : null,
-    ownerEmail: isPetTag ? rawPet.owner_email : null,
     medicalNotes: isPetTag ? rawPet.medical_notes : null,
     imageUrl: isPetTag ? rawPet.image_url : null,
   };
@@ -73,7 +72,9 @@ export async function loader({ params, context }: LoaderFunctionArgs) {
   }
 
   const userEmail = context.session.get('userEmail');
-  const isOwner = Boolean(userEmail && userEmail === pet.ownerEmail);
+  // The owner's account email is used only for this check. It is never sent
+  // to the page, because anyone who scans the tag can read the loader data.
+  const isOwner = Boolean(userEmail && userEmail === rawPet.owner_email);
 
   return { pet, isOwner, tagId };
 }
@@ -132,11 +133,24 @@ export default function PetTagLandingPage() {
       <div className="w-full bg-white min-h-screen md:min-h-0 md:max-w-[400px] md:mx-auto md:border-[12px] md:border-gray-900 md:rounded-[2.5rem] md:shadow-2xl md:my-12 overflow-hidden">
           {/* Pet Image */}
           <div className="h-72 w-full bg-slate-200">
-            <img
-              src={pet.imageUrl}
-              alt={pet.dogName || 'Pet'}
-              className="w-full h-full object-cover"
-            />
+            {pet.imageUrl ? (
+              <img
+                src={pet.imageUrl}
+                alt={pet.dogName || 'Pet'}
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <div className="w-full h-full flex flex-col items-center justify-center gap-2 text-slate-400">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-20 h-20" aria-hidden="true">
+                  <circle cx="5.5" cy="10" r="2.2" />
+                  <circle cx="9.5" cy="5.5" r="2.2" />
+                  <circle cx="14.5" cy="5.5" r="2.2" />
+                  <circle cx="18.5" cy="10" r="2.2" />
+                  <path d="M12 11c-3 0-6 3.6-6 6.3 0 1.7 1.3 2.7 3 2.7 1.2 0 2-.6 3-.6s1.8.6 3 .6c1.7 0 3-1 3-2.7C18 14.6 15 11 12 11z" />
+                </svg>
+                <span className="text-sm font-medium">No photo added</span>
+              </div>
+            )}
           </div>
           
           {/* Pet Info Content */}
@@ -180,16 +194,6 @@ export default function PetTagLandingPage() {
                       </svg>
                     </div>
                     <span className="text-sm font-medium text-slate-900">{pet.ownerPhone}</span>
-                  </div>
-                )}
-                {pet.ownerEmail && (
-                  <div className="bg-slate-50 p-3 rounded-2xl border border-slate-100 flex items-center gap-3">
-                    <div className="bg-blue-100 text-blue-600 p-2 rounded-full">
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
-                      </svg>
-                    </div>
-                    <span className="text-sm font-medium text-slate-900">{pet.ownerEmail}</span>
                   </div>
                 )}
               </div>

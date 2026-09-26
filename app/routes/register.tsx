@@ -2,6 +2,7 @@ import { Form, useActionData, useNavigation, useSearchParams } from 'react-route
 import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
 import { redirect } from 'react-router';
 import { getSupabase } from '~/utils/supabase.server';
+import { safeRedirectPath } from '~/utils/requestSecurity.server';
 
 export const handle = {
   hideLayout: true,
@@ -11,7 +12,7 @@ export async function loader({ context, request }: LoaderFunctionArgs) {
   const email = context.session.get('userEmail');
   if (email) {
     const url = new URL(request.url);
-    const redirectTo = url.searchParams.get('redirectTo') || '/';
+    const redirectTo = safeRedirectPath(url.searchParams.get('redirectTo'), '/');
     return redirect(redirectTo);
   }
   return null;
@@ -23,7 +24,7 @@ export async function action({ request, context }: ActionFunctionArgs) {
   const password = formData.get('password') as string;
   const confirmPassword = formData.get('confirmPassword') as string;
   const url = new URL(request.url);
-  const redirectTo = url.searchParams.get('redirectTo') || '/dashboard';
+  const redirectTo = safeRedirectPath(url.searchParams.get('redirectTo'), '/dashboard');
 
   if (!email || !password || !confirmPassword) {
     return { error: 'Please fill in all fields.' };

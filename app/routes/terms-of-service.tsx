@@ -1,4 +1,5 @@
 import type {MetaFunction} from 'react-router';
+import {SELLER} from '~/config/seller';
 
 export const meta: MetaFunction = () => {
   return [{title: 'FlashBind | Terms of Service'}];
@@ -24,6 +25,9 @@ export default function TermsOfServicePage() {
 
             <h2 className="text-2xl font-bold text-slate-900 mt-8 mb-4">3. Purchases and Payment</h2>
             <p>We accept standard payment methods for all hardware and subscription purchases. You agree to provide current, complete, and accurate purchase and account information for all purchases made via the store. All prices are subject to change without prior notice.</p>
+            {SELLER.confirmed && (
+              <p>If you are a consumer in the EU, you have a 14-day right of withdrawal. See <a href="/refund-policy#right-of-withdrawal" className="text-[#1E3A8A] underline">Right of withdrawal</a> for how to use it and the model withdrawal form.</p>
+            )}
 
             <h2 className="text-2xl font-bold text-slate-900 mt-8 mb-4">4. Software Subscriptions</h2>
             <p>While FlashBind hardware functions without a monthly fee, advanced features (such as CRM export and advanced analytics) are available via the "Pro" tier. Subscriptions are billed monthly and can be canceled at any time from your account dashboard.</p>

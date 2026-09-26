@@ -7,6 +7,7 @@ import {
 } from '@shopify/hydrogen';
 import type {HeaderQuery, CartApiQueryFragment} from 'storefrontapi.generated';
 import {useAside} from '~/components/Aside';
+import {ACTIVE_MARQUEE_ITEMS} from '~/config/marquee';
 
 interface HeaderProps {
   header: HeaderQuery;
@@ -42,27 +43,23 @@ export function Header({
   return (
     <>
       <header className={`sticky top-0 z-50 flex flex-col w-full transition-all duration-500 border-b ${isScrolled ? 'bg-white/95 backdrop-blur-2xl shadow-[0_4px_20px_rgba(0,0,0,0.05)] border-slate-200/60' : 'bg-white shadow-none border-transparent'}`}>
-        {/* Trust Signal Bar (Premium Marquee) */}
-        <div className="w-full bg-gradient-to-r from-[#172A66] via-[#1E3A8A] to-[#172A66] py-2.5 overflow-hidden flex whitespace-nowrap pointer-events-none border-b border-white/10 shadow-inner">
-          <div className="flex w-max" style={{ animation: 'marquee 80s linear infinite' }}>
-            {[...Array(8)].map((_, i) => (
-              <div key={i} className="flex items-center">
-                {[
-                  "500+ businesses powered",
-                  "Trusted across the EU",
-                  "Custom branding on every order",
-                  "Same-day dispatch",
-                  "Enterprise-grade NFC chips"
-                ].map((statement, j) => (
-                  <div key={j} className="flex items-center">
-                    <span className="text-[11px] font-bold text-white tracking-widest uppercase drop-shadow-md">{statement}</span>
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#60A5FA] mx-6 shadow-[0_0_8px_rgba(96,165,250,0.8)]"></span>
-                  </div>
-                ))}
-              </div>
-            ))}
+        {/* Trust Signal Bar (Premium Marquee) -- text lives in ~/config/marquee */}
+        {ACTIVE_MARQUEE_ITEMS.length > 0 && (
+          <div className="w-full bg-gradient-to-r from-[#172A66] via-[#1E3A8A] to-[#172A66] py-2.5 overflow-hidden flex whitespace-nowrap pointer-events-none border-b border-white/10 shadow-inner">
+            <div className="marquee-track flex w-max" style={{ animation: 'marquee 80s linear infinite' }}>
+              {[...Array(8)].map((_, i) => (
+                <div key={i} className="flex items-center">
+                  {ACTIVE_MARQUEE_ITEMS.map((statement, j) => (
+                    <div key={j} className="flex items-center">
+                      <span className="text-[11px] font-bold text-white tracking-widest uppercase drop-shadow-md">{statement}</span>
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#60A5FA] mx-6 shadow-[0_0_8px_rgba(96,165,250,0.8)]"></span>
+                    </div>
+                  ))}
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
+        )}
 
         <div className="px-6 py-3 md:py-4 flex items-center justify-between w-full relative">
           <NavLink prefetch="intent" to="/" className="flex items-center gap-3 relative z-10" onClick={close}>

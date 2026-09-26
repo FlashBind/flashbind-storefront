@@ -23,7 +23,7 @@ export const PRODUCT_ROUTES = {
 };
 
 export const meta: Route.MetaFunction = ({data, matches}) => {
-  const parentMeta = matches.flatMap((match) => match.meta ?? []);
+  const parentMeta = matches.flatMap((match) => match?.meta ?? []);
   return [
     ...parentMeta.filter(
       (m) => !('name' in m && m.name === 'description') && !('title' in m)
@@ -88,6 +88,22 @@ const HERO_IMAGES = [
   '/hero_new_4.jpg'
 ];
 
+// Organization structured data for search engines. Only facts that are true
+// today: brand name, site, logo and official social profiles. Add legalName,
+// address and contact details once the seller entity is decided (LEGAL-001).
+const ORGANIZATION_JSON_LD = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  '@id': 'https://flashbind.com/#organization',
+  name: 'FlashBind',
+  url: 'https://flashbind.com/',
+  logo: 'https://flashbind.com/logo-transparent.png',
+  sameAs: [
+    'https://www.instagram.com/flashbind_nfc/',
+    'https://www.tiktok.com/@flashbind',
+  ],
+};
+
 export default function Homepage() {
   const data = useLoaderData<typeof loader>();
   const [heroImageIndex, setHeroImageIndex] = useState(0);
@@ -118,6 +134,10 @@ export default function Homepage() {
 
   return (
     <div className="home min-h-screen">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{__html: JSON.stringify(ORGANIZATION_JSON_LD)}}
+      />
 
       {/* Premium Hero Section */}
       <section className="relative overflow-hidden bg-[#FDFCF8] flex flex-col lg:flex-row">

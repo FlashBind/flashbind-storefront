@@ -15,22 +15,31 @@ import {ProductPrice} from '~/components/ProductPrice';
 import {ProductImage} from '~/components/ProductImage';
 import {ProductForm} from '~/components/ProductForm';
 import {redirectIfHandleIsLocalized} from '~/lib/redirect';
+import {PRODUCT_SEO} from '~/config/seo';
 
 export const meta: Route.MetaFunction = ({data, matches}) => {
   const parentMeta = matches.flatMap((match) => match?.meta ?? []);
+  const draftSeo = data ? PRODUCT_SEO[data.product.handle] : undefined;
+  const title =
+    data?.product.seo?.title ||
+    draftSeo?.title ||
+    `FlashBind | ${data?.product.title ?? ''}`;
   const description =
-    data?.product.seo?.description || data?.product.description || undefined;
+    data?.product.seo?.description ||
+    draftSeo?.description ||
+    data?.product.description ||
+    undefined;
   const ogImage = data?.product.images?.nodes?.[0]?.url;
 
   return [
     ...parentMeta.filter(
       (m) => !('name' in m && m.name === 'description') && !('title' in m),
     ),
-    {title: `FlashBind | ${data?.product.title ?? ''}`},
+    {title},
     ...(description ? [{name: 'description', content: description}] : []),
     {
       property: 'og:title',
-      content: data?.product.seo?.title || data?.product.title || 'FlashBind',
+      content: title,
     },
     ...(ogImage ? [{property: 'og:image', content: ogImage}] : []),
     {
