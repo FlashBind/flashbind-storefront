@@ -66,6 +66,21 @@ export async function action({request, context}: ActionFunctionArgs) {
   const accountBucket = `u:${(await hashRateLimitIdentifier(userEmail)).slice(0, 40)}`;
   await admin.from('rate_limits').delete().eq('ip_address', accountBucket);
 
+  // 2b. Business subscription data: private feedback, stand counts, and the
+  // subscription row with the business name and logo.
+  const ownedIds = (ownedTags ?? []).map((tag) => tag.id);
+  const cleanups = [
+    admin.from('private_feedback').delete().eq('owner_email', userEmail),
+    admin.from('business_entitlements').delete().eq('owner_email', userEmail),
+    ...(ownedIds.length ? [admin.from('review_stand_stats').delete().in('tag_id', ownedIds)] : []),
+  ];
+  for (const result of await Promise.all(cleanups)) {
+    if (result.error) {
+      console.error('[DELETE ACCOUNT] could not delete business data', result.error.code || 'unknown');
+      return {error: 'Your products were reset, but some data could not be deleted. Please contact us so we can finish.'};
+    }
+  }
+
   // 3. Delete the login itself.
   const {error: deleteError} = await admin.auth.admin.deleteUser(userId);
   if (deleteError) {
@@ -94,6 +109,7 @@ export default function DeleteAccountPage() {
           <ul className="list-disc pl-6 text-slate-600 text-sm space-y-1 mb-6">
             <li>Your login is deleted.</li>
             <li>Every product in your account is reset: its link, Wi-Fi details or pet profile are erased, and it stops showing your information.</li>
+            <li>Private feedback received through your review stands, and your business profile, are deleted.</li>
             <li>To use a reset product again, contact us for a new activation code.</li>
             <li>Order records kept by our shop for accounting are not affected; <Link to="/privacy-policy" className="text-[#1E3A8A] underline">see the Privacy Policy</Link>.</li>
           </ul>

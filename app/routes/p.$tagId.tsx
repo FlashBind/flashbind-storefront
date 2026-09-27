@@ -1,15 +1,36 @@
 import {
   redirect,
   useLoaderData,
+  type ActionFunctionArgs,
   type HeadersFunction,
   type LoaderFunctionArgs,
+  type ShouldRevalidateFunction,
 } from 'react-router';
 import { sanitizeTagSettings } from '~/utils/tagSanitizer.server';
 import {normalizeHttpUrl} from '~/utils/requestSecurity.server';
+import {
+  checkFeedbackRateLimit,
+  feedbackIpBucket,
+  getDualChoiceView,
+  isHoneypotFilled,
+  parseFeedbackForm,
+  recordReviewStandEvent,
+  reviewStandSettings,
+  sendFeedbackAlert,
+  SITE_ORIGIN,
+} from '~/utils/feedback.server';
+import {purgeExpiredFeedback} from '~/utils/retention.server';
+import {DualChoicePage} from '~/components/DualChoicePage';
 
 export const handle = {
   hideLayout: true,
 };
+
+// A feedback post that fails validation stays on the same URL and shows the
+// error; reloading the loader would only count an extra page view. A
+// successful post redirects to ?sent=1, which must load.
+export const shouldRevalidate: ShouldRevalidateFunction = ({ formMethod, currentUrl, nextUrl, defaultShouldRevalidate }) =>
+  formMethod === 'POST' && currentUrl.href === nextUrl.href ? false : defaultShouldRevalidate;
 
 export const headers: HeadersFunction = () => {
   return new Headers({
@@ -19,7 +40,7 @@ export const headers: HeadersFunction = () => {
 };
 
 // Server-side Logic (Remix Loader)
-export async function loader({ params, context }: LoaderFunctionArgs) {
+export async function loader({ params, context, request }: LoaderFunctionArgs) {
   const tagId = params.tagId;
   
   if (!tagId) {
@@ -61,9 +82,22 @@ export async function loader({ params, context }: LoaderFunctionArgs) {
     imageUrl: isPetTag ? rawPet.image_url : null,
   };
 
-  // Immediate redirect for google_review and menu tags
+  // Immediate redirect for google_review and menu tags, except review stands
+  // with the subscription's Dual Choice page switched on.
   if (pet.type === 'google_review' || pet.type === 'menu') {
     const dest = normalizeHttpUrl(pet.settings.destination_url);
+    if (pet.type === 'google_review') {
+      const dualChoice = await getDualChoiceView(adminSupabase, rawPet, dest);
+      if (dualChoice) {
+        const params = new URL(request.url).searchParams;
+        const showForm = params.get('feedback') === '1';
+        const sent = params.get('sent') === '1';
+        // Count real page opens only: not the form view or the thank-you page.
+        if (!showForm && !sent) await recordReviewStandEvent(adminSupabase, tagId, 'view');
+        // The Google link goes through /p/{id}/google, so no settings are sent.
+        return { pet: { ...pet, settings: {} }, isOwner: false, tagId, dualChoice, showForm, sent };
+      }
+    }
     if (dest) {
       return redirect(dest, 302);
     }
@@ -76,12 +110,95 @@ export async function loader({ params, context }: LoaderFunctionArgs) {
   // to the page, because anyone who scans the tag can read the loader data.
   const isOwner = Boolean(userEmail && userEmail === rawPet.owner_email);
 
-  return { pet, isOwner, tagId };
+  return { pet, isOwner, tagId, dualChoice: null, showForm: false, sent: false };
+}
+
+// Private feedback from a review stand's Dual Choice page.
+export async function action({ params, context, request }: ActionFunctionArgs) {
+  const tagId = params.tagId;
+  if (!tagId) throw new Response('Not Found', { status: 404 });
+
+  const formData = await request.formData();
+  // Bots fill the hidden field; pretend it worked and store nothing.
+  if (isHoneypotFilled(formData)) return redirect(`/p/${tagId}?sent=1`);
+
+  const { getSupabaseAdmin } = await import('~/utils/supabase.server');
+  const admin = getSupabaseAdmin(context);
+  const { data: tag } = await admin
+    .from('tags')
+    .select('id, is_claimed, type, settings, owner_email')
+    .eq('id', tagId)
+    .maybeSingle();
+  if (!tag || !tag.is_claimed || tag.type !== 'google_review') {
+    throw new Response('Not Found', { status: 404 });
+  }
+  const dest = normalizeHttpUrl(sanitizeTagSettings(tag.type, tag.settings).destination_url);
+  const view = await getDualChoiceView(admin, tag, dest);
+  if (!view) throw new Response('Not Found', { status: 404 });
+
+  const parsed = parseFeedbackForm(formData);
+  if ('error' in parsed) return { error: parsed.error };
+
+  if (!(await checkFeedbackRateLimit(admin, tagId, await feedbackIpBucket(request.headers)))) {
+    return { error: 'Too many messages were sent just now. Please try again later.' };
+  }
+
+  const stand = reviewStandSettings(tag.settings);
+  const feedback = parsed.value;
+  const { data: saved, error } = await admin
+    .from('private_feedback')
+    .insert({
+      tag_id: tagId,
+      owner_email: tag.owner_email,
+      location_label: stand.locationLabel || null,
+      message: feedback.message,
+      contact_name: feedback.contactName,
+      contact_email: feedback.contactEmail,
+      contact_phone: feedback.contactPhone,
+      contact_consent: feedback.contactConsent,
+    })
+    .select('id')
+    .single();
+  if (error || !saved) {
+    console.error('[FEEDBACK] save failed', error?.code || 'unknown');
+    return { error: 'Something went wrong. Please try again.' };
+  }
+
+  await recordReviewStandEvent(admin, tagId, 'feedback');
+  await purgeExpiredFeedback(admin);
+  await sendFeedbackAlert({
+    admin,
+    env: context.env as Record<string, any>,
+    feedbackId: saved.id,
+    tagId,
+    to: stand.alertEmail || tag.owner_email,
+    locationLabel: stand.locationLabel,
+    businessName: view.businessName,
+    feedback,
+    origin: SITE_ORIGIN,
+  });
+
+  // Post/redirect/get: a refresh can't resend, and the thank-you page isn't
+  // counted as a page view.
+  return redirect(`/p/${tagId}?sent=1`);
 }
 
 // Frontend UI
 export default function PetTagLandingPage() {
-  const { pet, isOwner, tagId } = useLoaderData<typeof loader>();
+  const { pet, isOwner, tagId, dualChoice, showForm, sent } = useLoaderData<typeof loader>();
+
+  if (dualChoice) {
+    return (
+      <DualChoicePage
+        tagId={tagId}
+        businessName={dualChoice.businessName}
+        logo={dualChoice.logo}
+        locationLabel={dualChoice.locationLabel}
+        initiallyShowForm={showForm}
+        sent={sent}
+      />
+    );
+  }
 
   if (pet.type === 'wifi') {
     return (
