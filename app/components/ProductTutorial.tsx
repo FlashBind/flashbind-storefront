@@ -8,7 +8,7 @@ const TUTORIAL_DATA: Record<string, any> = {
     steps: [
       {
         title: 'Tap',
-        description: 'Customer taps the stand with their smartphone. Our built-in NFC chip instantly communicates—no app required.',
+        description: 'Customer taps the stand with their smartphone, no app required. Works with nearly all modern smartphones.',
       },
       {
         title: 'Connect',
@@ -33,7 +33,7 @@ const TUTORIAL_DATA: Record<string, any> = {
     steps: [
       {
         title: 'Tap',
-        description: 'Diners simply tap the table stand with their smartphone. The menu opens instantly on their device.',
+        description: 'Diners tap the table stand with their smartphone and the menu opens. Works with nearly all modern smartphones, with a QR code as backup.',
       },
       {
         title: 'Upload',
@@ -58,7 +58,7 @@ const TUTORIAL_DATA: Record<string, any> = {
     steps: [
       {
         title: 'Tap',
-        description: 'Guests tap or scan to see your network name and password.',
+        description: 'Guests tap or scan to see your network name and password. Works with nearly all modern smartphones, with a QR code as backup.',
       },
       {
         title: 'Configure',
@@ -108,7 +108,7 @@ const TUTORIAL_DATA: Record<string, any> = {
     steps: [
       {
         title: 'Tap',
-        description: 'Tap the product with a smartphone, no app needed. Works with nearly all modern smartphones, and every plaque has a QR code as backup.',
+        description: 'Tap the product with a smartphone, no app needed. Works with nearly all modern smartphones.',
       },
       {
         title: 'Setup',

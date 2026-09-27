@@ -295,7 +295,7 @@ export default function Homepage() {
                 Google Reviews
               </h2>
               <div className="text-gray-600 text-lg leading-relaxed mb-6 space-y-3">
-                <p><strong>1. Instant Tap:</strong> Customers tap the stand with their phone, or scan its QR code.</p>
+                <p><strong>1. Instant Tap:</strong> Customers tap the stand with their phone. Works with nearly all modern smartphones.</p>
                 <p><strong>2. Zero Friction:</strong> Your exact Google Review page opens instantly without any app downloads or typing.</p>
                 <p><strong>3. Effortless Rating:</strong> The customer leaves a review in seconds, before they even leave your business.</p>
               </div>
@@ -485,7 +485,7 @@ export default function Homepage() {
               
               <div className="relative z-10 mb-12">
                 <h3 className="text-3xl font-extrabold text-slate-900 mb-3">Universal Compatibility</h3>
-                <p className="text-slate-600 max-w-sm leading-relaxed">No app required. Works with nearly all modern smartphones, and every plaque has a QR code as backup.</p>
+                <p className="text-slate-600 max-w-sm leading-relaxed">No app required. Works with nearly all modern smartphones. Menu and Wi-Fi plaques also have a QR code as backup.</p>
               </div>
 
               {/* Visual Apple/Android Graphic */}
@@ -552,7 +552,7 @@ export default function Homepage() {
                   </svg>
                 </div>
                 <h3 className="text-2xl font-bold text-white mb-3">No Subscription Needed</h3>
-                <p className="text-slate-300 leading-relaxed max-w-md">Pay once for the product. Taps, QR scans and your dashboard are included, with no monthly fee.</p>
+                <p className="text-slate-300 leading-relaxed max-w-md">Pay once for the product. Taps, scans and your dashboard are included, with no monthly fee.</p>
               </div>
             </div>
 
@@ -591,7 +591,7 @@ export default function Homepage() {
                 </span>
               </summary>
               <p className="text-slate-600 px-6 pb-6 leading-relaxed">
-                No. Works with nearly all modern smartphones, and every plaque has a QR code as backup. Hold the top of the phone near the product and the page opens. Pet tags are NFC-only and have no QR code.
+                No. Works with nearly all modern smartphones. Hold the top of the phone near the product and the page opens. Menu and Wi-Fi plaques also have a QR code as backup; Google Review stands and pet tags have no QR code.
               </p>
             </details>
 
@@ -604,7 +604,7 @@ export default function Homepage() {
                 </span>
               </summary>
               <p className="text-slate-600 px-6 pb-6 leading-relaxed">
-                No subscription is needed. You pay once for the product, and taps, QR scans and your dashboard are included with no monthly fee.
+                No subscription is needed. You pay once for the product, and taps, scans and your dashboard are included with no monthly fee.
               </p>
             </details>
 

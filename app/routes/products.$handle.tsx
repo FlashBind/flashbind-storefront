@@ -320,7 +320,7 @@ export default function Product() {
                   </span>
                 </summary>
                 <div className="px-6 pb-6 text-slate-600 leading-relaxed text-base">
-                  <p>No app is needed. {product.handle === 'smart-pet-collar-tag' ? 'Works with nearly all modern smartphones.' : 'Works with nearly all modern smartphones, and every plaque has a QR code as backup.'}</p>
+                  <p>No app is needed. {product.handle === 'nfc-restaurant-menu-stand' || product.handle === 'guest-wi-fi-hub' ? 'Works with nearly all modern smartphones, with a QR code as backup.' : 'Works with nearly all modern smartphones.'}</p>
                 </div>
               </details>
               
