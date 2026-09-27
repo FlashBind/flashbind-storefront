@@ -123,35 +123,38 @@ export default function Homepage() {
       />
 
       {/* Premium Hero Section */}
-      <section className="relative overflow-hidden bg-[#FDFCF8] flex flex-col lg:flex-row">
+      {/* -mx-4 cancels main's 1rem side margin, so the hero (and its edge
+          glow) reaches the edges of the screen. Dark background = the header's
+          "Get Started" colour (slate-900). */}
+      <section className="relative -mx-4 hero-screen bg-[#0F172A] flex flex-col lg:flex-row">
         {/* Abstract/Minimal Background Elements */}
         <AmbientGlow />
         
         {/* Left Half: Text Column */}
         <div className="w-full lg:w-1/2 relative z-10 flex justify-center lg:justify-end">
-          <div className="w-full max-w-[45rem] px-6 lg:pl-12 lg:pr-16 pt-16 pb-12 lg:py-20 mx-auto lg:ml-auto lg:mr-0 flex flex-col justify-center items-center lg:items-start text-center lg:text-left">
-            <div className="inline-block mb-8 px-4 py-2 rounded-full border border-black/5 bg-white/40 backdrop-blur-md self-center lg:self-start">
-              <span className="text-[13px] font-medium text-[#4A4A4A] flex items-center gap-2.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#1E3A8A] opacity-80"></span>
+          <div className="w-full max-w-[45rem] px-9 lg:pl-20 lg:pr-16 pt-16 pb-12 lg:py-20 mx-auto lg:ml-auto lg:mr-0 flex flex-col justify-center items-center lg:items-start text-center lg:text-left">
+            <div className="inline-block mb-8 px-4 py-2 rounded-full border border-white/10 bg-white/5 backdrop-blur-md self-center lg:self-start">
+              <span className="text-[13px] font-medium text-slate-300 flex items-center gap-2.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#869BD9] opacity-80"></span>
                 The future of interaction
               </span>
             </div>
             
-            <h1 className="text-5xl md:text-7xl lg:text-[5.5rem] font-medium mb-6 tracking-tighter text-[#1A1A1A] leading-tight lg:leading-[1.05]">
+            <h1 className="text-5xl md:text-7xl lg:text-[5.5rem] font-medium mb-6 tracking-tighter text-white leading-tight lg:leading-[1.05]">
               One Tap<br />
               Everything<br />
-              <span className="text-[#1E3A8A] italic font-serif">Connects</span>
+              <span className="text-[#869BD9] italic font-serif">Connects</span>
             </h1>
             
-            <p className="text-[#4A4A4A] text-lg md:text-xl max-w-2xl mb-10 font-light leading-relaxed tracking-tight">
+            <p className="text-slate-300 text-lg md:text-xl max-w-2xl mb-10 font-light leading-relaxed tracking-tight">
               Branded NFC stands and cards that connect customers to what matters most — the moment they arrive.
             </p>
             
             <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start w-full gap-4">
-              <Link to="/catalog" className="w-full sm:w-auto px-8 py-4 bg-[#1E3A8A] text-white font-bold rounded-full hover:bg-[#172A66] hover:scale-105 shadow-[0_10px_40px_rgba(30,58,138,0.3)] transition-all duration-300 text-base text-center">
+              <Link to="/catalog" className="w-full sm:w-auto px-8 py-4 bg-white text-[#0F172A] hover:bg-slate-100 shadow-[0_10px_40px_rgba(134,155,217,0.25)] font-bold rounded-full hover:scale-105 transition-all duration-300 text-base text-center">
                 Explore Catalog
               </Link>
-              <a href="#solutions" className="w-full sm:w-auto px-8 py-4 bg-white/80 backdrop-blur-sm border border-slate-200 text-slate-700 font-bold rounded-full hover:bg-slate-50 hover:border-[#1E3A8A]/30 hover:text-[#1E3A8A] hover:scale-105 shadow-sm hover:shadow-md transition-all duration-300 text-base text-center">
+              <a href="#solutions" className="w-full sm:w-auto px-8 py-4 backdrop-blur-sm border bg-white/5 border-white/25 text-white hover:bg-white/10 hover:border-white/40 font-bold rounded-full hover:scale-105 transition-all duration-300 text-base text-center">
                 View Solutions
               </a>
             </div>
@@ -159,8 +162,8 @@ export default function Homepage() {
         </div>
 
         {/* Right Half: Image Column */}
-        <div className="w-full lg:w-1/2 relative min-h-[50vh] lg:min-h-0 lg:h-auto lg:py-16 lg:pr-16 lg:pl-8 p-6 flex flex-col justify-center">
-          <div className="relative w-full h-full flex-1 rounded-[2.5rem] overflow-hidden shadow-[0_20px_50px_rgba(30,58,138,0.15)] border-4 border-white/60">
+        <div className="w-full lg:w-1/2 relative min-h-[50vh] lg:min-h-0 lg:h-auto lg:py-16 lg:pr-20 lg:pl-8 p-9 pb-24 flex flex-col justify-center">
+          <div className="relative w-full h-full flex-1 rounded-[2.5rem] overflow-hidden border-4 shadow-[0_20px_50px_rgba(0,0,0,0.45)] border-white/10">
             {HERO_IMAGES.map((src, idx) => (
               <img
                 key={src}
