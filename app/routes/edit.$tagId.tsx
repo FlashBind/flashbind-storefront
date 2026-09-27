@@ -192,7 +192,7 @@ export default function EditTagPage() {
 
         <div className="w-full bg-white rounded-3xl shadow-md overflow-hidden p-6 sm:p-8">
           <div className="mb-8 text-center">
-            <h1 className="text-3xl font-extrabold text-slate-900 mb-2">{title}</h1>
+            <h1 className="text-3xl font-medium tracking-tighter text-slate-900 mb-2">{title}</h1>
             <p className="text-sm font-medium text-slate-500">
               {description}
             </p>
@@ -222,7 +222,7 @@ export default function EditTagPage() {
                       required
                       defaultValue={pet.dogName}
                       placeholder="e.g. Buddy"
-                      className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                      className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#1E3A8A] focus:border-transparent transition-all"
                     />
                   </div>
 
@@ -239,7 +239,7 @@ export default function EditTagPage() {
                       required
                       defaultValue={pet.ownerName}
                       placeholder="e.g. Alice Smith"
-                      className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                      className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#1E3A8A] focus:border-transparent transition-all"
                     />
                   </div>
 
@@ -256,7 +256,7 @@ export default function EditTagPage() {
                       required
                       defaultValue={pet.ownerPhone}
                       placeholder="e.g. (555) 123-4567"
-                      className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                      className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#1E3A8A] focus:border-transparent transition-all"
                     />
                   </div>
 
@@ -288,7 +288,7 @@ export default function EditTagPage() {
                       rows={3}
                       defaultValue={pet.medicalNotes}
                       placeholder="Allergies, medications, or special needs..."
-                      className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                      className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#1E3A8A] focus:border-transparent transition-all"
                     />
                   </div>
 
@@ -321,7 +321,7 @@ export default function EditTagPage() {
                           });
                         }
                       }}
-                      className="w-full text-sm text-slate-500 file:mr-4 file:py-3 file:px-6 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 transition-all cursor-pointer"
+                      className="w-full text-sm text-slate-500 file:mr-4 file:py-3 file:px-6 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-[#1E3A8A]/5 file:text-[#172A66] hover:file:bg-[#1E3A8A]/10 transition-all cursor-pointer"
                     />
                   </div>
                 </>
@@ -340,7 +340,7 @@ export default function EditTagPage() {
                     required
                     defaultValue={settings.destination_url}
                     placeholder="https://..."
-                    className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                    className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#1E3A8A] focus:border-transparent transition-all"
                   />
                   <p className="text-xs text-slate-500 mt-2 font-medium">
                     This is the link your customers will be sent to when they tap the tag.
@@ -362,7 +362,7 @@ export default function EditTagPage() {
                       required
                       defaultValue={settings.network_name}
                       placeholder="e.g. Guest_Network_5G"
-                      className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                      className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#1E3A8A] focus:border-transparent transition-all"
                     />
                   </div>
                   <div>
@@ -377,7 +377,7 @@ export default function EditTagPage() {
                       required
                       defaultValue={settings.network_password}
                       placeholder="Enter the Wi-Fi password"
-                      className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                      className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#1E3A8A] focus:border-transparent transition-all"
                     />
                   </div>
                 </>
@@ -388,7 +388,7 @@ export default function EditTagPage() {
               <button 
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-bold py-4 rounded-full transition-colors text-lg shadow-sm disabled:opacity-70 disabled:cursor-not-allowed"
+                className="w-full bg-[#1E3A8A] hover:bg-[#172A66] active:bg-[#0F172A] text-white font-bold py-4 rounded-full transition-colors text-lg shadow-sm disabled:opacity-70 disabled:cursor-not-allowed"
               >
                 {isSubmitting ? 'Saving...' : 'Save Changes'}
               </button>

@@ -87,7 +87,7 @@ export default function PetTagLandingPage() {
     return (
       <div className="min-h-screen bg-slate-50 w-full font-sans flex flex-col items-center md:justify-center p-4">
         <div className="w-full bg-white max-w-[400px] mx-auto border-[12px] border-slate-900 rounded-[2.5rem] shadow-2xl p-8 flex flex-col items-center text-center">
-          <div className="w-20 h-20 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center mb-6 shadow-sm border border-blue-100">
+          <div className="w-20 h-20 bg-[#1E3A8A]/5 text-[#1E3A8A] rounded-full flex items-center justify-center mb-6 shadow-sm border border-[#1E3A8A]/10">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-10 h-10">
               <path strokeLinecap="round" strokeLinejoin="round" d="M8.288 15.038a5.25 5.25 0 017.424 0M5.106 11.856c3.807-3.808 9.98-3.808 13.788 0M1.924 8.674c5.565-5.565 14.587-5.565 20.152 0M12.53 18.22l-.53.53-.53-.53a.75.75 0 011.06 0z" />
             </svg>
@@ -111,7 +111,7 @@ export default function PetTagLandingPage() {
                 alert('Password copied to clipboard!');
               }
             }}
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-full transition-colors text-lg shadow-sm"
+            className="w-full bg-[#1E3A8A] hover:bg-[#172A66] text-white font-bold py-4 rounded-full transition-colors text-lg shadow-sm"
           >
             Copy Password
           </button>
@@ -188,7 +188,7 @@ export default function PetTagLandingPage() {
               <div className="grid grid-cols-1 gap-3">
                 {pet.ownerPhone && (
                   <div className="bg-slate-50 p-3 rounded-2xl border border-slate-100 flex items-center gap-3">
-                    <div className="bg-blue-100 text-blue-600 p-2 rounded-full">
+                    <div className="bg-[#1E3A8A]/10 text-[#1E3A8A] p-2 rounded-full">
                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-2.896-1.596-5.48-4.18-7.076-7.076l1.293-.97c.362-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z" />
                       </svg>
@@ -214,7 +214,7 @@ export default function PetTagLandingPage() {
             
             {/* Action Button */}
             {pet.ownerPhone && (
-              <a href={`tel:${pet.ownerPhone}`} className="block w-full text-center bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-full transition-colors text-lg mt-6">
+              <a href={`tel:${pet.ownerPhone}`} className="block w-full text-center bg-[#1E3A8A] hover:bg-[#172A66] text-white font-bold py-4 rounded-full transition-colors text-lg mt-6">
                 Call Owner
               </a>
             )}

@@ -32,8 +32,8 @@ export function Footer({
                     Bridging the physical and digital world. Upgrade your business presence in milliseconds with premium NFC technology.
                   </p>
                   <form className="flex gap-2 max-w-sm" onSubmit={(e) => e.preventDefault()}>
-                    <input type="email" placeholder="Enter your email" className="bg-slate-900 border border-slate-800 rounded-full px-4 py-3 flex-grow text-white focus:outline-none focus:border-blue-500 transition-colors" />
-                    <button type="submit" className="bg-[#1E3A8A] text-white font-bold rounded-full px-6 py-3 hover:bg-blue-500 transition-colors">Subscribe</button>
+                    <input type="email" placeholder="Enter your email" className="bg-slate-900 border border-slate-800 rounded-full px-4 py-3 flex-grow text-white focus:outline-none focus:border-[#1E3A8A] transition-colors" />
+                    <button type="submit" className="bg-[#1E3A8A] text-white font-bold rounded-full px-6 py-3 hover:bg-[#1E3A8A] transition-colors">Subscribe</button>
                   </form>
                 </div>
 

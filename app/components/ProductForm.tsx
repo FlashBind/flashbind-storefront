@@ -145,7 +145,7 @@ export function ProductForm({
           }
           className={`w-full text-white font-extrabold uppercase tracking-widest h-14 rounded-xl shadow-lg transition-all duration-300 flex justify-center items-center gap-2 text-sm sm:text-base border-2 border-transparent ${
             selectedVariant?.availableForSale
-              ? 'bg-blue-600 hover:bg-blue-700 hover:shadow-xl hover:-translate-y-1'
+              ? 'bg-[#1E3A8A] hover:bg-[#172A66] hover:shadow-xl hover:-translate-y-1'
               : 'bg-slate-400 cursor-not-allowed opacity-80'
           }`}
         >

@@ -108,13 +108,13 @@ export default function QuotePage() {
       {/* Background glow */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none -z-10">
         <div className="absolute top-[10%] -left-[10%] w-[500px] h-[500px] bg-[#F5F4EE] rounded-full blur-[100px] opacity-80"></div>
-        <div className="absolute bottom-[10%] -right-[10%] w-[500px] h-[500px] bg-blue-50 rounded-full blur-[100px] opacity-60"></div>
+        <div className="absolute bottom-[10%] -right-[10%] w-[500px] h-[500px] bg-[#1E3A8A]/5 rounded-full blur-[100px] opacity-60"></div>
       </div>
 
       <div className="container mx-auto px-6 max-w-lg relative z-10">
         <div className="bg-white/60 backdrop-blur-3xl rounded-[2.5rem] border-2 border-white shadow-[0_8px_30px_rgb(0,0,0,0.04)] p-10">
           <div className="text-center mb-10">
-            <h1 className="text-4xl font-extrabold text-slate-900 tracking-tight mb-4">Request a Quote</h1>
+            <h1 className="text-4xl font-medium text-slate-900 tracking-tighter mb-4">Request a Quote</h1>
             <p className="text-slate-500 text-lg">
               Looking for custom NFC solutions, white-labeling, or bulk orders? Tell us about your project and we'll get back to you with a custom quote.
             </p>

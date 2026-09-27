@@ -76,7 +76,7 @@ export default function AdminGenerateTagsPage() {
                 </svg>
                 Export Order CSV
               </button>
-            <a href="/dashboard" className="text-blue-600 font-semibold hover:underline">
+            <a href="/dashboard" className="text-[#1E3A8A] font-semibold hover:underline">
               Back to Dashboard
             </a>
           </div>
@@ -104,7 +104,7 @@ export default function AdminGenerateTagsPage() {
                   placeholder="e.g. FACTORY-ORDER-100"
                   required
                   minLength={3}
-                  className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all font-medium text-slate-700"
+                  className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#1E3A8A] focus:border-transparent transition-all font-medium text-slate-700"
                 />
                 <p className="text-xs text-slate-500 mt-2">
                   This will generate exactly 100 tags: 25 Menu, 25 Wi-Fi, 25 Black Pet Tags, 25 White Pet Tags.

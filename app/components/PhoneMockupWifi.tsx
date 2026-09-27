@@ -7,9 +7,9 @@ export default function PhoneMockupWifi() {
         
         {/* Animated Wi-Fi Icon */}
         <div className="relative w-32 h-32 mb-10 flex items-center justify-center">
-          <div className="absolute inset-0 bg-blue-100 rounded-full animate-ping opacity-75"></div>
-          <div className="absolute inset-4 bg-blue-200 rounded-full animate-pulse"></div>
-          <div className="relative bg-blue-600 text-white p-5 rounded-full shadow-xl">
+          <div className="absolute inset-0 bg-[#1E3A8A]/10 rounded-full animate-ping opacity-75"></div>
+          <div className="absolute inset-4 bg-[#1E3A8A]/20 rounded-full animate-pulse"></div>
+          <div className="relative bg-[#1E3A8A] text-white p-5 rounded-full shadow-xl">
             <svg className="w-10 h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.141 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0" />
             </svg>
@@ -45,7 +45,7 @@ export default function PhoneMockupWifi() {
           <button className="w-full bg-white border-2 border-slate-200 text-slate-500 font-bold tracking-wide text-sm py-4 rounded-full shadow-sm">
             DISCONNECT
           </button>
-          <button className="w-full bg-blue-600 text-white font-bold tracking-wide text-sm py-4 rounded-full shadow-md">
+          <button className="w-full bg-[#1E3A8A] text-white font-bold tracking-wide text-sm py-4 rounded-full shadow-md">
             MANAGE CONNECTION
           </button>
         </div>

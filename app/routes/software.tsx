@@ -115,7 +115,7 @@ export default function SubscriptionPage() {
       <section className="pt-16 md:pt-24 pb-10 px-4 sm:px-6 text-center">
         <div className="max-w-3xl mx-auto">
           <div className="mb-5"><Badge tone="soon">Business subscription · coming soon</Badge></div>
-          <h1 className="text-3xl sm:text-4xl md:text-6xl font-extrabold text-slate-900 tracking-tight mb-5 leading-tight">
+          <h1 className="text-3xl sm:text-4xl md:text-6xl font-medium text-slate-900 tracking-tighter mb-5 leading-tight">
             Your stands work today. More is on the way.
           </h1>
           <p className="text-slate-500 text-base md:text-xl leading-relaxed">
@@ -168,7 +168,7 @@ export default function SubscriptionPage() {
       {/* Founding-customer pricing */}
       <section id="founding-pricing" className="px-4 sm:px-6 py-12 md:py-16">
         <div className="max-w-2xl mx-auto bg-slate-900 text-white rounded-[2rem] p-6 sm:p-10 shadow-2xl">
-          <h2 className="text-2xl md:text-3xl font-extrabold mb-3">Request founding-customer pricing</h2>
+          <h2 className="text-2xl md:text-3xl font-medium tracking-tighter mb-3">Request founding-customer pricing</h2>
           <p className="text-slate-300 mb-6">
             Leave your email and we&apos;ll send you founding-customer pricing before the subscription launches. No
             payment and no commitment.
@@ -183,18 +183,18 @@ export default function SubscriptionPage() {
               <div>
                 <label htmlFor="fp-email" className="block text-sm font-semibold mb-1">Email <span className="text-red-400">*</span></label>
                 <input id="fp-email" name="email" type="email" required autoComplete="email" maxLength={254}
-                  className="w-full px-4 py-3 rounded-2xl bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-400" />
+                  className="w-full px-4 py-3 rounded-2xl bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#869BD9]" />
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label htmlFor="fp-business" className="block text-sm font-semibold mb-1">Business name</label>
                   <input id="fp-business" name="business" type="text" maxLength={120} autoComplete="organization"
-                    className="w-full px-4 py-3 rounded-2xl bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-400" />
+                    className="w-full px-4 py-3 rounded-2xl bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#869BD9]" />
                 </div>
                 <div>
                   <label htmlFor="fp-locations" className="block text-sm font-semibold mb-1">Locations</label>
                   <select id="fp-locations" name="locations" defaultValue=""
-                    className="w-full px-4 py-3 rounded-2xl bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-400">
+                    className="w-full px-4 py-3 rounded-2xl bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#869BD9]">
                     <option value="">Choose…</option>
                     {LOCATIONS.map((l) => <option key={l} value={l}>{l}</option>)}
                   </select>
@@ -220,7 +220,7 @@ export default function SubscriptionPage() {
                 <p className="bg-red-500/15 border border-red-400/40 rounded-2xl p-3 text-sm" role="alert">{actionData.error}</p>
               )}
               <button type="submit" disabled={submitting}
-                className="w-full min-h-[48px] rounded-full bg-white text-slate-900 font-bold hover:bg-blue-50 disabled:opacity-60">
+                className="w-full min-h-[48px] rounded-full bg-white text-slate-900 font-bold hover:bg-[#1E3A8A]/5 disabled:opacity-60">
                 {submitting ? 'Sending…' : 'Request founding-customer pricing'}
               </button>
             </Form>
@@ -231,7 +231,7 @@ export default function SubscriptionPage() {
       {/* FAQ */}
       <section className="px-4 sm:px-6 py-10 md:py-16 border-t border-slate-200/60">
         <div className="max-w-3xl mx-auto space-y-3">
-          <h2 className="text-2xl md:text-3xl font-extrabold text-slate-900 mb-6">Questions</h2>
+          <h2 className="text-2xl md:text-3xl font-medium tracking-tighter text-slate-900 mb-6">Questions</h2>
           {[
             ['Do the stands need a subscription?', 'No. Every stand works on its own with the free features above.'],
             ['What happens to my stand if I stop a subscription later?', 'It keeps working and points to its last direct link.'],

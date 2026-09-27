@@ -121,7 +121,7 @@ export default function Article() {
           <div className="inline-block mb-6 px-4 py-1.5 rounded-full bg-slate-100 text-slate-500 text-sm font-bold tracking-widest uppercase">
             Article
           </div>
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-slate-900 tracking-tight mb-8 leading-tight text-center">
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-medium text-slate-900 tracking-tighter mb-8 leading-tight text-center">
             {title}
           </h1>
           <div className="flex items-center justify-center gap-4 text-slate-500 font-medium w-full text-center">

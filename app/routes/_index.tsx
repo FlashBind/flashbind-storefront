@@ -123,10 +123,8 @@ export default function Homepage() {
       />
 
       {/* Premium Hero Section */}
-      {/* -mx-4 cancels main's 1rem side margin, so the hero (and its edge
-          glow) reaches the edges of the screen. Dark background = the header's
-          "Get Started" colour (slate-900). */}
-      <section className="relative -mx-4 hero-screen bg-[#0F172A] flex flex-col lg:flex-row">
+      {/* Dark background = the header's "Get Started" colour (slate-900). */}
+      <section className="relative hero-screen bg-[#0F172A] flex flex-col lg:flex-row">
         {/* Abstract/Minimal Background Elements */}
         <AmbientGlow />
         
@@ -185,25 +183,25 @@ export default function Homepage() {
       </section>
 
       {/* Use Cases Grid Section */}
-      <section id="solutions" className="py-24 bg-gradient-to-b from-white to-blue-50/30 relative overflow-hidden">
+      <section id="solutions" className="py-24 bg-gradient-to-b from-white to-[#1E3A8A]/[0.015] relative overflow-hidden">
         {/* Background glow */}
         <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none -z-10">
-          <div className="absolute top-[10%] left-[5%] w-[30rem] h-[30rem] bg-purple-200/30 rounded-full blur-[100px]"></div>
+          <div className="absolute top-[10%] left-[5%] w-[30rem] h-[30rem] bg-[#1E3A8A]/[0.06] rounded-full blur-[100px]"></div>
           <div className="absolute bottom-[10%] right-[5%] w-[30rem] h-[30rem] bg-[#1E3A8A]/30 rounded-full blur-[100px]"></div>
         </div>
 
         <div className="container mx-auto px-6 max-w-7xl relative z-10">
           <div className="text-center mb-16">
-            <span className="text-purple-600 text-sm font-bold tracking-[0.2em] uppercase mb-4 block">Created for you</span>
-            <h2 className="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight mb-4">For professionals and businesses</h2>
-            <p className="text-slate-500 text-lg max-w-2xl mx-auto">Choose what your product opens, from Google reviews to digital business cards.</p>
+            <span className="text-[#1E3A8A] text-sm font-bold tracking-[0.2em] uppercase mb-4 block">Created for you</span>
+            <h2 className="text-4xl md:text-5xl font-medium text-slate-900 tracking-tighter mb-4">For professionals and <span className="text-[#1E3A8A] italic font-serif">businesses</span></h2>
+            <p className="text-slate-500 text-lg max-w-2xl mx-auto">Choose what your product opens, from Google reviews to Wi-Fi and digital menus.</p>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             
             {/* Card 1: Google Reviews */}
             <div className="bg-white rounded-[2.5rem] p-8 md:p-12 shadow-[0_8px_30px_rgb(0,0,0,0.08)] border border-slate-200 hover:border-[#1E3A8A]/30 hover:shadow-[0_8px_40px_rgb(0,0,0,0.12)] flex flex-col sm:flex-row items-center gap-8 group hover:-translate-y-2 transition-all duration-300">
-              <div className="flex-1 text-center sm:text-left">
+              <div className="flex-1 text-center sm:text-left sm:self-start">
                 <h3 className="text-2xl font-bold text-slate-900 mb-4">Google Reviews</h3>
                 <p className="text-slate-600 leading-relaxed mb-8 text-sm md:text-base">Direct customers instantly to your Google Review page with a single tap. Built for storefronts, cafes, and reception desks.</p>
                 <Link to={PRODUCT_ROUTES.googleReview} className="text-slate-900 font-bold text-sm inline-flex items-center gap-2 hover:text-[#1E3A8A] transition-colors">
@@ -220,7 +218,7 @@ export default function Homepage() {
 
             {/* Card 2: Smart Pet Tags */}
             <div className="bg-white rounded-[2.5rem] p-8 md:p-12 shadow-[0_8px_30px_rgb(0,0,0,0.08)] border border-slate-200 hover:border-[#1E3A8A]/30 hover:shadow-[0_8px_40px_rgb(0,0,0,0.12)] flex flex-col sm:flex-row items-center gap-8 group hover:-translate-y-2 transition-all duration-300">
-              <div className="flex-1 text-center sm:text-left">
+              <div className="flex-1 text-center sm:text-left sm:self-start">
                 <h3 className="text-2xl font-bold text-slate-900 mb-4">Smart Pet Tags</h3>
                 <p className="text-slate-600 leading-relaxed mb-8 text-sm md:text-base">Keep your best friend safe. A quick tap with a phone shows the owner's contact details. Works with nearly all modern smartphones.</p>
                 <Link to={PRODUCT_ROUTES.petTag} className="text-slate-900 font-bold text-sm inline-flex items-center gap-2 hover:text-[#1E3A8A] transition-colors">
@@ -237,7 +235,7 @@ export default function Homepage() {
 
             {/* Card 3: Tap-to-View Menus */}
             <div className="bg-white rounded-[2.5rem] p-8 md:p-12 shadow-[0_8px_30px_rgb(0,0,0,0.08)] border border-slate-200 hover:border-[#1E3A8A]/30 hover:shadow-[0_8px_40px_rgb(0,0,0,0.12)] flex flex-col sm:flex-row items-center gap-8 group hover:-translate-y-2 transition-all duration-300">
-              <div className="flex-1 text-center sm:text-left">
+              <div className="flex-1 text-center sm:text-left sm:self-start">
                 <h3 className="text-2xl font-bold text-slate-900 mb-4">Tap-to-View Menus</h3>
                 <p className="text-slate-600 leading-relaxed mb-8 text-sm md:text-base">Modernize your hospitality business. Let customers tap your tabletop stands to view your digital menu instantly.</p>
                 <Link to={PRODUCT_ROUTES.menu} className="text-slate-900 font-bold text-sm inline-flex items-center gap-2 hover:text-[#1E3A8A] transition-colors">
@@ -254,7 +252,7 @@ export default function Homepage() {
 
             {/* Card 4: Guest Wi-Fi */}
             <div className="bg-white rounded-[2.5rem] p-8 md:p-12 shadow-[0_8px_30px_rgb(0,0,0,0.08)] border border-slate-200 hover:border-[#1E3A8A]/30 hover:shadow-[0_8px_40px_rgb(0,0,0,0.12)] flex flex-col sm:flex-row items-center gap-8 group hover:-translate-y-2 transition-all duration-300">
-              <div className="flex-1 text-center sm:text-left">
+              <div className="flex-1 text-center sm:text-left sm:self-start">
                 <h3 className="text-2xl font-bold text-slate-900 mb-4">Guest Wi-Fi</h3>
                 <p className="text-slate-600 leading-relaxed mb-8 text-sm md:text-base">No more spelling out complex passwords. Guests tap or scan to see your network name and password.</p>
                 <Link to={PRODUCT_ROUTES.wifi} className="text-slate-900 font-bold text-sm inline-flex items-center gap-2 hover:text-[#1E3A8A] transition-colors">
@@ -294,7 +292,7 @@ export default function Homepage() {
 
             {/* Right Column (Content) */}
             <div className="flex flex-col text-left">
-              <h2 className="text-slate-900 text-3xl font-bold tracking-tight mb-4">
+              <h2 className="text-slate-900 text-3xl font-medium tracking-tighter mb-4">
                 Google Reviews
               </h2>
               <div className="text-gray-600 text-lg leading-relaxed mb-6 space-y-3">
@@ -319,7 +317,7 @@ export default function Homepage() {
             
             {/* Left Column (Content) */}
             <div className="flex flex-col text-left order-last md:order-first">
-              <h2 className="text-slate-900 text-3xl font-bold tracking-tight mb-4">
+              <h2 className="text-slate-900 text-3xl font-medium tracking-tighter mb-4">
                 Tap-to-View Menus
               </h2>
               <div className="text-gray-600 text-lg leading-relaxed mb-6 space-y-3">
@@ -358,7 +356,7 @@ export default function Homepage() {
 
             {/* Right Column (Content) */}
             <div className="flex flex-col text-left">
-              <h2 className="text-slate-900 text-3xl font-bold tracking-tight mb-4">
+              <h2 className="text-slate-900 text-3xl font-medium tracking-tighter mb-4">
                 Guest Wi-Fi
               </h2>
               <div className="text-gray-600 text-lg leading-relaxed mb-6 space-y-3">
@@ -383,7 +381,7 @@ export default function Homepage() {
             
             {/* Left Column (Content) */}
             <div className="flex flex-col text-left order-last md:order-first">
-              <h2 className="text-slate-900 text-3xl font-bold tracking-tight mb-4">
+              <h2 className="text-slate-900 text-3xl font-medium tracking-tighter mb-4">
                 Smart Pet Tags
               </h2>
               <div className="text-gray-600 text-lg leading-relaxed mb-6 space-y-3">
@@ -413,12 +411,12 @@ export default function Homepage() {
         {/* Subtle Background Glows */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-3xl h-full opacity-30 pointer-events-none">
            <div className="absolute top-10 left-10 w-72 h-72 bg-[#1E3A8A] rounded-full mix-blend-multiply filter blur-[100px] animate-pulse"></div>
-           <div className="absolute bottom-10 right-10 w-72 h-72 bg-cyan-300 rounded-full mix-blend-multiply filter blur-[100px] animate-pulse" style={{ animationDelay: '2s' }}></div>
+           <div className="absolute bottom-10 right-10 w-72 h-72 bg-[#1E3A8A]/30 rounded-full mix-blend-multiply filter blur-[100px] animate-pulse" style={{ animationDelay: '2s' }}></div>
         </div>
 
         <div className="container mx-auto px-6 max-w-7xl relative z-10">
           <div className="text-center mb-20">
-            <h2 className="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight mb-4">Ready in Seconds</h2>
+            <h2 className="text-4xl md:text-5xl font-medium text-slate-900 tracking-tighter mb-4">Ready in <span className="text-[#1E3A8A] italic font-serif">Seconds</span></h2>
             <p className="text-slate-500 text-lg">No apps to download. No complicated software. Just tap and grow.</p>
           </div>
 
@@ -429,7 +427,7 @@ export default function Homepage() {
             {/* Step 1 */}
             <div className="relative z-10 flex flex-col items-center text-center group">
               <div className="w-24 h-24 bg-white rounded-[2rem] shadow-xl shadow-slate-200/50 border border-slate-100 flex items-center justify-center mb-8 relative transform group-hover:-translate-y-2 transition-transform duration-300">
-                <div className="absolute -inset-2 bg-gradient-to-r from-blue-400 to-cyan-300 rounded-[2.5rem] opacity-0 group-hover:opacity-20 blur-lg transition-opacity duration-300"></div>
+                <div className="absolute -inset-2 bg-gradient-to-r from-[#1E3A8A] to-[#1E3A8A]/30 rounded-[2.5rem] opacity-0 group-hover:opacity-20 blur-lg transition-opacity duration-300"></div>
                 <span className="absolute -top-3 -left-3 w-8 h-8 bg-[#1E3A8A] text-white font-bold rounded-full flex items-center justify-center shadow-lg border-2 border-white z-10">1</span>
                 <svg className="w-10 h-10 text-[#1E3A8A]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
@@ -442,7 +440,7 @@ export default function Homepage() {
             {/* Step 2 */}
             <div className="relative z-10 flex flex-col items-center text-center group">
               <div className="w-24 h-24 bg-white rounded-[2rem] shadow-xl shadow-slate-200/50 border border-slate-100 flex items-center justify-center mb-8 relative transform group-hover:-translate-y-2 transition-transform duration-300">
-                <div className="absolute -inset-2 bg-gradient-to-r from-blue-400 to-cyan-300 rounded-[2.5rem] opacity-0 group-hover:opacity-20 blur-lg transition-opacity duration-300"></div>
+                <div className="absolute -inset-2 bg-gradient-to-r from-[#1E3A8A] to-[#1E3A8A]/30 rounded-[2.5rem] opacity-0 group-hover:opacity-20 blur-lg transition-opacity duration-300"></div>
                 <span className="absolute -top-3 -left-3 w-8 h-8 bg-[#1E3A8A] text-white font-bold rounded-full flex items-center justify-center shadow-lg border-2 border-white z-10">2</span>
                 <svg className="w-10 h-10 text-[#1E3A8A]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
@@ -455,7 +453,7 @@ export default function Homepage() {
             {/* Step 3 */}
             <div className="relative z-10 flex flex-col items-center text-center group">
               <div className="w-24 h-24 bg-white rounded-[2rem] shadow-xl shadow-slate-200/50 border border-slate-100 flex items-center justify-center mb-8 relative transform group-hover:-translate-y-2 transition-transform duration-300">
-                <div className="absolute -inset-2 bg-gradient-to-r from-blue-400 to-cyan-300 rounded-[2.5rem] opacity-0 group-hover:opacity-20 blur-lg transition-opacity duration-300"></div>
+                <div className="absolute -inset-2 bg-gradient-to-r from-[#1E3A8A] to-[#1E3A8A]/30 rounded-[2.5rem] opacity-0 group-hover:opacity-20 blur-lg transition-opacity duration-300"></div>
                 <span className="absolute -top-3 -left-3 w-8 h-8 bg-[#1E3A8A] text-white font-bold rounded-full flex items-center justify-center shadow-lg border-2 border-white z-10">3</span>
                 <svg className="w-10 h-10 text-[#1E3A8A]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
@@ -472,11 +470,11 @@ export default function Homepage() {
       <section className="py-24 bg-slate-50 relative overflow-hidden">
         {/* Subtle Background Gradients */}
         <div className="absolute top-1/4 left-0 w-96 h-96 bg-[#1E3A8A]/20 rounded-full blur-[100px] -z-10 mix-blend-multiply pointer-events-none"></div>
-        <div className="absolute bottom-0 right-0 w-[30rem] h-[30rem] bg-cyan-300/20 rounded-full blur-[120px] -z-10 mix-blend-multiply pointer-events-none"></div>
+        <div className="absolute bottom-0 right-0 w-[30rem] h-[30rem] bg-[#1E3A8A]/[0.06] rounded-full blur-[120px] -z-10 mix-blend-multiply pointer-events-none"></div>
 
         <div className="container mx-auto px-6 max-w-6xl">
           <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight mb-4">Flawless Technology</h2>
+            <h2 className="text-4xl md:text-5xl font-medium text-slate-900 tracking-tighter mb-4">Flawless Technology</h2>
             <p className="text-slate-500 text-lg max-w-2xl mx-auto">Simple NFC hardware you set up and update from your phone.</p>
           </div>
 
@@ -524,13 +522,13 @@ export default function Homepage() {
 
             {/* Dynamic Control Card */}
             <div className="bg-white border border-slate-200 shadow-xl rounded-[2rem] p-10 flex flex-col group hover:-translate-y-1 hover:border-[#1E3A8A]/30 transition-all duration-300">
-              <div className="w-14 h-14 bg-cyan-100 text-cyan-600 rounded-full flex items-center justify-center mb-8 shadow-inner">
+              <div className="w-14 h-14 bg-[#1E3A8A]/10 text-[#1E3A8A] rounded-full flex items-center justify-center mb-8 shadow-inner">
                 <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
                 </svg>
               </div>
               <h3 className="text-xl font-bold text-slate-900 mb-3">Dynamic Control</h3>
-              <p className="text-slate-600 leading-relaxed text-sm">Update your destination link anytime from our dashboard without needing a new physical card.</p>
+              <p className="text-slate-600 leading-relaxed text-sm">Update your destination link anytime from our dashboard without replacing the product.</p>
             </div>
 
             {/* Premium Chips Card */}
@@ -580,7 +578,7 @@ export default function Homepage() {
       <section className="py-24 bg-white relative">
         <div className="container mx-auto px-6 max-w-3xl">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-extrabold text-slate-900 tracking-tight mb-4">Frequently Asked Questions</h2>
+            <h2 className="text-4xl font-medium text-slate-900 tracking-tighter mb-4">Frequently Asked Questions</h2>
             <p className="text-slate-500 text-lg">Everything you need to know about the technology and billing.</p>
           </div>
           
@@ -620,7 +618,7 @@ export default function Homepage() {
                 </span>
               </summary>
               <p className="text-slate-600 px-6 pb-6 leading-relaxed">
-                Yes! Your card uses dynamic linking technology. If you change your business name, get a new Google Review link, or want to link to your Instagram instead, you can easily update the destination URL from your account dashboard instantly.
+                Yes! Your product uses dynamic linking technology. If you change your business name, get a new Google Review link, or want to link to your Instagram instead, you can easily update the destination URL from your account dashboard instantly.
               </p>
             </details>
 
@@ -710,7 +708,7 @@ function RecommendedProducts({
   return (
     <div className="w-full">
       <div className="text-center mb-16">
-        <h2 id="recommended-products" className="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight mb-4">Trending Solutions</h2>
+        <h2 id="recommended-products" className="text-4xl md:text-5xl font-medium text-slate-900 tracking-tighter mb-4">Trending Solutions</h2>
         <p className="text-slate-500 text-lg max-w-2xl mx-auto">Select a category to view tailored products.</p>
         
         <div className="mt-8 flex justify-center">
@@ -731,7 +729,7 @@ function RecommendedProducts({
         </div>
       </div>
       
-      <Suspense fallback={<div className="flex justify-center items-center h-64"><div className="w-12 h-12 border-4 border-indigo-200 border-[#1E3A8A] rounded-full animate-spin"></div></div>}>
+      <Suspense fallback={<div className="flex justify-center items-center h-64"><div className="w-12 h-12 border-4 border-[#1E3A8A]/20 border-[#1E3A8A] rounded-full animate-spin"></div></div>}>
         <Await resolve={products}>
           {(response) => {
             const allProducts = response?.products.nodes || [];

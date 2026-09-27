@@ -96,7 +96,7 @@ export default function RegisterPage() {
       </a>
       <div className="w-full max-w-md bg-white rounded-3xl shadow-md overflow-hidden p-6 sm:p-8">
         <div className="mb-8 text-center">
-          <h1 className="text-3xl font-extrabold text-slate-900 mb-2">Create Account</h1>
+          <h1 className="text-3xl font-medium tracking-tighter text-slate-900 mb-2">Create Account</h1>
           <p className="text-sm font-medium text-slate-500">
             Sign up to manage your account and NFC tags.
           </p>
@@ -121,7 +121,7 @@ export default function RegisterPage() {
                 name="email" 
                 required
                 placeholder="you@example.com"
-                className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#1E3A8A] focus:border-transparent transition-all"
               />
             </div>
 
@@ -136,7 +136,7 @@ export default function RegisterPage() {
                 name="password" 
                 required
                 placeholder="••••••••"
-                className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#1E3A8A] focus:border-transparent transition-all"
               />
             </div>
 
@@ -151,7 +151,7 @@ export default function RegisterPage() {
                 name="confirmPassword" 
                 required
                 placeholder="••••••••"
-                className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#1E3A8A] focus:border-transparent transition-all"
               />
             </div>
 
@@ -162,10 +162,10 @@ export default function RegisterPage() {
                 id="legalAgreement" 
                 name="legalAgreement" 
                 required
-                className="mt-1 w-4 h-4 text-blue-600 border-slate-300 rounded focus:ring-blue-500"
+                className="mt-1 w-4 h-4 text-[#1E3A8A] border-slate-300 rounded focus:ring-[#1E3A8A]"
               />
               <label htmlFor="legalAgreement" className="text-xs text-slate-600 leading-relaxed">
-                I confirm I am at least 14 years old and I agree to the <a href="/terms-of-service" target="_blank" rel="noreferrer" className="text-blue-600 hover:underline">Terms of Service</a> and <a href="/privacy-policy" target="_blank" rel="noreferrer" className="text-blue-600 hover:underline">Privacy Policy</a>.
+                I confirm I am at least 14 years old and I agree to the <a href="/terms-of-service" target="_blank" rel="noreferrer" className="text-[#1E3A8A] hover:underline">Terms of Service</a> and <a href="/privacy-policy" target="_blank" rel="noreferrer" className="text-[#1E3A8A] hover:underline">Privacy Policy</a>.
               </label>
             </div>
           </div>
@@ -174,7 +174,7 @@ export default function RegisterPage() {
             <button 
               type="submit"
               disabled={isSubmitting}
-              className="w-full bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-bold py-4 rounded-full transition-colors text-lg shadow-sm disabled:opacity-70 disabled:cursor-not-allowed"
+              className="w-full bg-[#1E3A8A] hover:bg-[#172A66] active:bg-[#0F172A] text-white font-bold py-4 rounded-full transition-colors text-lg shadow-sm disabled:opacity-70 disabled:cursor-not-allowed"
             >
               {isSubmitting ? 'Creating account...' : 'Create Account'}
             </button>
@@ -183,7 +183,7 @@ export default function RegisterPage() {
           <div className="text-center mt-6">
             <p className="text-sm font-medium text-slate-500">
               Already have an account?{' '}
-              <a href={`/login?redirectTo=${encodeURIComponent(redirectTo)}`} className="text-blue-600 hover:text-blue-700 font-semibold transition-colors">
+              <a href={`/login?redirectTo=${encodeURIComponent(redirectTo)}`} className="text-[#1E3A8A] hover:text-[#172A66] font-semibold transition-colors">
                 Log in
               </a>
             </p>

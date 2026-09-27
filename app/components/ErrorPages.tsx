@@ -11,7 +11,7 @@ function ErrorShell({children}: {children: React.ReactNode}) {
   return (
     <div className="min-h-[70vh] bg-[#FDFCF8] relative overflow-hidden">
       <div className="absolute inset-0 pointer-events-none" aria-hidden="true"
-        style={{background: 'linear-gradient(110deg, rgba(253,252,248,0) 25%, rgba(37,99,235,0.07) 50%, rgba(34,211,238,0.06) 70%, rgba(253,252,248,0) 90%)'}}
+        style={{background: 'linear-gradient(110deg, rgba(253,252,248,0) 25%, rgba(30,58,138,0.07) 50%, rgba(30,58,138,0.04) 70%, rgba(253,252,248,0) 90%)'}}
       />
       <div className="container mx-auto px-6 max-w-5xl relative z-10 py-20 md:py-28">{children}</div>
     </div>
@@ -26,7 +26,7 @@ export function NotFoundPage() {
         <div className="inline-block mb-6 px-4 py-2 rounded-full border border-[#1E3A8A]/20 bg-[#1E3A8A]/5 text-[#1E3A8A] text-xs md:text-sm font-bold tracking-widest uppercase">
           Error 404
         </div>
-        <h1 className="text-4xl md:text-6xl font-extrabold text-slate-900 tracking-tight mb-5">
+        <h1 className="text-4xl md:text-6xl font-medium text-slate-900 tracking-tighter mb-5">
           Nothing here to tap.
         </h1>
         <p className="text-slate-500 text-lg md:text-xl leading-relaxed mb-10">
@@ -71,7 +71,7 @@ export function ServerErrorPage({status, detail}: {status: number; detail?: stri
         <div className="inline-block mb-6 px-4 py-2 rounded-full border border-[#1E3A8A]/20 bg-[#1E3A8A]/5 text-[#1E3A8A] text-xs md:text-sm font-bold tracking-widest uppercase">
           Error {status}
         </div>
-        <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight mb-5">
+        <h1 className="text-4xl md:text-5xl font-medium text-slate-900 tracking-tighter mb-5">
           Something went wrong.
         </h1>
         <p className="text-slate-500 text-lg leading-relaxed mb-10">

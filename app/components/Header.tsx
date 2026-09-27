@@ -52,7 +52,7 @@ export function Header({
                   {ACTIVE_MARQUEE_ITEMS.map((statement, j) => (
                     <div key={j} className="flex items-center">
                       <span className="text-[11px] font-bold text-white tracking-widest uppercase drop-shadow-md">{statement}</span>
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#60A5FA] mx-6 shadow-[0_0_8px_rgba(96,165,250,0.8)]"></span>
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#869BD9] mx-6 shadow-[0_0_8px_rgba(134,155,217,0.8)]"></span>
                     </div>
                   ))}
                 </div>

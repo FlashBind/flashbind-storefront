@@ -89,7 +89,7 @@ export default function DeleteAccountPage() {
     <div className="min-h-screen bg-gray-50 py-24">
       <div className="container mx-auto px-6 max-w-xl">
         <div className="bg-white rounded-[2rem] p-8 md:p-12 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100">
-          <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight mb-4">Delete your account</h1>
+          <h1 className="text-3xl font-medium text-slate-900 tracking-tighter mb-4">Delete your account</h1>
           <p className="text-slate-600 mb-4">This permanently deletes your FlashBind account. It can&apos;t be undone.</p>
           <ul className="list-disc pl-6 text-slate-600 text-sm space-y-1 mb-6">
             <li>Your login is deleted.</li>
@@ -107,7 +107,7 @@ export default function DeleteAccountPage() {
                 name="password"
                 required
                 autoComplete="current-password"
-                className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#1E3A8A]"
               />
             </div>
             <label className="flex items-start gap-3 text-sm text-slate-700">

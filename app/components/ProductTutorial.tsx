@@ -176,8 +176,8 @@ export function ProductTutorial({ productHandle }: { productHandle: string }) {
     <div className="w-full bg-[#FDFCF8] relative overflow-hidden mt-0 pt-12 pb-32">
       {/* Background blobs for premium feel */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none -z-10">
-        <div className="absolute top-[-10%] right-[-10%] w-[500px] h-[500px] bg-blue-100/50 rounded-full blur-[100px] opacity-70"></div>
-        <div className="absolute bottom-[10%] left-[-10%] w-[600px] h-[600px] bg-purple-100/40 rounded-full blur-[100px] opacity-60"></div>
+        <div className="absolute top-[-10%] right-[-10%] w-[500px] h-[500px] bg-[#1E3A8A]/5 rounded-full blur-[100px] opacity-70"></div>
+        <div className="absolute bottom-[10%] left-[-10%] w-[600px] h-[600px] bg-[#1E3A8A]/[0.04] rounded-full blur-[100px] opacity-60"></div>
       </div>
 
       <div className="container mx-auto px-6 max-w-7xl relative z-10">
@@ -186,7 +186,7 @@ export function ProductTutorial({ productHandle }: { productHandle: string }) {
           <div className="inline-block mb-6 px-6 py-3 rounded-full border border-[#1E3A8A]/20 bg-[#1E3A8A]/5 text-[#1E3A8A] text-sm font-bold tracking-widest uppercase">
             Simple & Secure
           </div>
-          <h2 className="text-5xl md:text-7xl font-extrabold text-slate-900 tracking-tight mb-8">
+          <h2 className="text-5xl md:text-7xl font-medium text-slate-900 tracking-tighter mb-8">
             {content.title}
           </h2>
           <p className="text-xl md:text-2xl text-slate-600 max-w-3xl mx-auto mb-12 leading-relaxed">
@@ -197,7 +197,7 @@ export function ProductTutorial({ productHandle }: { productHandle: string }) {
               to="/demo"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center px-10 py-5 bg-[#1E3A8A] text-white font-bold rounded-full hover:bg-blue-700 hover:scale-105 shadow-[0_10px_30px_rgba(30,58,138,0.3)] transition-all duration-300 text-lg"
+              className="inline-flex items-center justify-center px-10 py-5 bg-[#1E3A8A] text-white font-bold rounded-full hover:bg-[#172A66] hover:scale-105 shadow-[0_10px_30px_rgba(30,58,138,0.3)] transition-all duration-300 text-lg"
             >
               <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
@@ -271,7 +271,7 @@ export function ProductTutorial({ productHandle }: { productHandle: string }) {
                   </div>
                 </li>
                 <li className="flex items-start">
-                  <div className="flex-shrink-0 w-10 h-10 md:w-12 md:h-12 rounded-full bg-blue-500/20 text-blue-400 flex items-center justify-center mt-1">
+                  <div className="flex-shrink-0 w-10 h-10 md:w-12 md:h-12 rounded-full bg-[#869BD9]/20 text-[#869BD9] flex items-center justify-center mt-1">
                     <svg className="w-5 h-5 md:w-6 md:h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>
                   </div>
                   <div className="ml-4 md:ml-6">

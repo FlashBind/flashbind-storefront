@@ -75,7 +75,7 @@ export default function PhoneMockupCooper() {
             </div>
             
             {/* Action Button */}
-            <button className="block w-full text-center bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-full transition-colors text-lg mt-6 cursor-default">
+            <button className="block w-full text-center bg-[#1E3A8A] hover:bg-[#172A66] text-white font-bold py-4 rounded-full transition-colors text-lg mt-6 cursor-default">
               Call Owner
             </button>
           </div>
