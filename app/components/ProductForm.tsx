@@ -1,5 +1,5 @@
 import {Link, useNavigate} from 'react-router';
-import {type MappedProductOptions, CartForm} from '@shopify/hydrogen';
+import {type MappedProductOptions, CartForm, Money} from '@shopify/hydrogen';
 import type {
   Maybe,
   ProductOptionValueSwatch,
@@ -22,13 +22,10 @@ export function ProductForm({
   const {open} = useAside();
   const [quantity, setQuantity] = useState(1);
 
-  // Format price for button
-  const formattedPrice = selectedVariant?.price
-    ? new Intl.NumberFormat('en-US', {
-        style: 'currency',
-        currency: selectedVariant.price.currencyCode,
-      }).format(parseFloat(selectedVariant.price.amount))
-    : '';
+  // Price for the button, formatted by Shopify in the shop's currency.
+  const formattedPrice = selectedVariant?.price ? (
+    <Money as="span" data={selectedVariant.price} />
+  ) : null;
 
   return (
     <div className="product-form flex flex-col gap-8">

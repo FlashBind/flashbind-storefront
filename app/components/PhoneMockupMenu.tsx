@@ -33,7 +33,7 @@ export default function PhoneMockupMenu() {
                 <h3 className="text-base font-medium tracking-wide">Seared Scallops</h3>
                 <p className="text-xs text-zinc-400 mt-1 leading-relaxed">Cauliflower purée, brown butter, crispy capers, micro herbs</p>
               </div>
-              <span className="text-sm font-medium">$24</span>
+              <span className="text-sm font-medium">€24</span>
             </div>
             
             <div className="flex justify-between items-start gap-4">
@@ -41,7 +41,7 @@ export default function PhoneMockupMenu() {
                 <h3 className="text-base font-medium tracking-wide">Wagyu Beef Tartare</h3>
                 <p className="text-xs text-zinc-400 mt-1 leading-relaxed">Quail egg, truffle emulsion, pickled shallots, sourdough crisp</p>
               </div>
-              <span className="text-sm font-medium">$28</span>
+              <span className="text-sm font-medium">€28</span>
             </div>
 
             <div className="flex justify-between items-start gap-4">
@@ -49,7 +49,7 @@ export default function PhoneMockupMenu() {
                 <h3 className="text-base font-medium tracking-wide">Burrata Heirloom</h3>
                 <p className="text-xs text-zinc-400 mt-1 leading-relaxed">Heirloom tomatoes, basil oil, aged balsamic, toasted pine nuts</p>
               </div>
-              <span className="text-sm font-medium">$19</span>
+              <span className="text-sm font-medium">€19</span>
             </div>
           </div>
 
@@ -61,7 +61,7 @@ export default function PhoneMockupMenu() {
                 <h3 className="text-base font-medium tracking-wide">Black Truffle Risotto</h3>
                 <p className="text-xs text-zinc-400 mt-1 leading-relaxed">Aborio rice, wild mushrooms, parmesan crisp, fresh black truffle</p>
               </div>
-              <span className="text-sm font-medium">$34</span>
+              <span className="text-sm font-medium">€34</span>
             </div>
             
             <div className="flex justify-between items-start gap-4">
@@ -69,7 +69,7 @@ export default function PhoneMockupMenu() {
                 <h3 className="text-base font-medium tracking-wide">Pan-Roasted Halibut</h3>
                 <p className="text-xs text-zinc-400 mt-1 leading-relaxed">Saffron beurre blanc, asparagus, crushed fingerling potatoes</p>
               </div>
-              <span className="text-sm font-medium">$42</span>
+              <span className="text-sm font-medium">€42</span>
             </div>
           </div>
         </div>

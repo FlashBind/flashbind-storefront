@@ -1,6 +1,6 @@
 import {useLoaderData, Link} from 'react-router';
 import type {Route} from './+types/business';
-import {getPaginationVariables} from '@shopify/hydrogen';
+import {getPaginationVariables, Money} from '@shopify/hydrogen';
 import {PaginatedResourceSection} from '~/components/PaginatedResourceSection';
 import {BusinessBenefits} from '~/components/BusinessBenefits';
 
@@ -82,12 +82,14 @@ export default function BusinessCollection() {
 }
 
 function TrendingProductCard({ product }: { product: any }) {
-  // Format price
-  const priceAmount = product.priceRange?.minVariantPrice?.amount;
-  const compareAmount = product.compareAtPriceRange?.minVariantPrice?.amount;
-  
-  const price = priceAmount ? `$${parseFloat(priceAmount).toFixed(2)}` : 'View Price';
-  const comparePrice = compareAmount ? `$${parseFloat(compareAmount).toFixed(2)}` : null;
+  // Prices are formatted by Shopify, in the shop's currency (EUR).
+  const priceMoney = product.priceRange?.minVariantPrice;
+  const compareMoney = product.compareAtPriceRange?.minVariantPrice;
+  const priceAmount = priceMoney?.amount;
+  const compareAmount = compareMoney?.amount;
+
+  const price = priceMoney ? <Money as="span" data={priceMoney} /> : 'View Price';
+  const comparePrice = compareMoney ? <Money as="span" data={compareMoney} /> : null;
   const isSale = compareAmount && priceAmount && parseFloat(compareAmount) > parseFloat(priceAmount);
   const isSoldOut = product.availableForSale === false;
   const isComingSoon = isSoldOut && ['guest-wi-fi-hub', 'nfc-restaurant-menu-stand'].includes(product.handle || '');

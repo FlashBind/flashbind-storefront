@@ -105,10 +105,13 @@ export default function PersonalPage() {
               <p className="font-sans text-slate-500 text-lg mb-8 leading-relaxed text-center px-4">{product?.description || 'Keep your pets safe. Tap to reveal owner contact details instantly.'}</p>
             
               <div className="mt-auto pt-6 border-t border-slate-100 shrink-0 flex flex-col items-center">
-                <div className="text-3xl font-extrabold text-slate-900 mb-6">
-                  {variant?.price ? <Money data={variant.price} /> : '$19.99'}{' '}
-                  <span className="text-sm font-bold text-slate-400 uppercase tracking-widest ml-2">One-time price</span>
-                </div>
+                {/* Only Shopify's real price is shown; no made-up fallback. */}
+                {variant?.price && (
+                  <div className="text-3xl font-extrabold text-slate-900 mb-6">
+                    <Money as="span" data={variant.price} />{' '}
+                    <span className="text-sm font-bold text-slate-400 uppercase tracking-widest ml-2">One-time price</span>
+                  </div>
+                )}
                 {variant?.id ? (
                   <AddToCartButton
                     lines={[{merchandiseId: variant.id, quantity: 1}]}
