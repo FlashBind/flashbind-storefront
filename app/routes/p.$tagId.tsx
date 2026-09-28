@@ -57,7 +57,6 @@ export async function loader({ params, context }: LoaderFunctionArgs) {
     dogName: isPetTag ? rawPet.pet_name : null,
     ownerName: isPetTag ? rawPet.owner_name : null,
     ownerPhone: isPetTag ? rawPet.phone : null,
-    ownerEmail: isPetTag ? rawPet.owner_email : null,
     medicalNotes: isPetTag ? rawPet.medical_notes : null,
     imageUrl: isPetTag ? rawPet.image_url : null,
   };
@@ -73,7 +72,10 @@ export async function loader({ params, context }: LoaderFunctionArgs) {
   }
 
   const userEmail = context.session.get('userEmail');
-  const isOwner = Boolean(userEmail && userEmail === pet.ownerEmail);
+  // The owner's account email is used only for this check. It is never sent
+  // to the browser, because this page is public to anyone who taps the tag.
+  const ownerEmail = isPetTag ? rawPet.owner_email : null;
+  const isOwner = Boolean(userEmail && userEmail === ownerEmail);
 
   return { pet, isOwner, tagId };
 }
@@ -180,16 +182,6 @@ export default function PetTagLandingPage() {
                       </svg>
                     </div>
                     <span className="text-sm font-medium text-slate-900">{pet.ownerPhone}</span>
-                  </div>
-                )}
-                {pet.ownerEmail && (
-                  <div className="bg-slate-50 p-3 rounded-2xl border border-slate-100 flex items-center gap-3">
-                    <div className="bg-blue-100 text-blue-600 p-2 rounded-full">
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
-                      </svg>
-                    </div>
-                    <span className="text-sm font-medium text-slate-900">{pet.ownerEmail}</span>
                   </div>
                 )}
               </div>
