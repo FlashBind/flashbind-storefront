@@ -591,7 +591,7 @@ export default function Homepage() {
                 </span>
               </summary>
               <p className="text-slate-600 px-6 pb-6 leading-relaxed">
-                The tag only holds a web link. Tapping it opens that link in the phone's browser, and the tag cannot read anything from the phone that taps it.
+                The tag only holds a web link. Tapping it opens that link in the phone&apos;s browser, and the tag cannot read anything from the phone that taps it.
               </p>
             </details>
           </div>
