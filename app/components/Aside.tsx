@@ -88,27 +88,27 @@ export function Aside({
 /**
  * Stops the page behind an open overlay from scrolling, and restores it when
  * the overlay closes. Counted, so two overlays open at once don't unlock early.
- * Locks <html> as well as <body>: iOS Safari ignores overflow on <body> alone.
+ * Locks <body> only (its overflow applies to the page viewport). Do not also
+ * lock <html>: <body> has overflow-x-hidden (root.tsx), so any overflow on
+ * <html> turns <body> into its own scroll box and the sticky header scrolls
+ * off the top of the screen behind the open drawer.
  */
 let scrollLockCount = 0;
-let savedOverflow: {html: string; body: string} | null = null;
+let savedOverflow: string | null = null;
 
 export function useBodyScrollLock(locked: boolean) {
   useEffect(() => {
     if (!locked) return;
-    const html = document.documentElement;
     const body = document.body;
     if (scrollLockCount === 0) {
-      savedOverflow = {html: html.style.overflow, body: body.style.overflow};
-      html.style.overflow = 'hidden';
+      savedOverflow = body.style.overflow;
       body.style.overflow = 'hidden';
     }
     scrollLockCount += 1;
     return () => {
       scrollLockCount -= 1;
-      if (scrollLockCount === 0 && savedOverflow) {
-        html.style.overflow = savedOverflow.html;
-        body.style.overflow = savedOverflow.body;
+      if (scrollLockCount === 0 && savedOverflow !== null) {
+        body.style.overflow = savedOverflow;
         savedOverflow = null;
       }
     };
