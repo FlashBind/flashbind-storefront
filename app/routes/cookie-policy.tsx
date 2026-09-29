@@ -85,9 +85,7 @@ function CookieTable({rows}: {rows: typeof ESSENTIAL}) {
 export default function CookiePolicyPage() {
   return (
     <PolicyLayout title="Cookie Policy">
-      <p className="bg-amber-50 border border-amber-200 text-amber-900 rounded-xl p-4 text-sm">
-        Draft: this policy is waiting for legal review.
-      </p>
+      {/* LEGAL-001: legal review of this policy is still pending. The visible draft note was removed for launch. */}
       <p>
         This policy explains which cookies and similar browser storage the FlashBind website uses, what they do, and
         how you can change your choice. It follows the EU rules on cookies (the ePrivacy Directive as applied in

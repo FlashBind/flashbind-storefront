@@ -192,7 +192,7 @@ export default function Homepage() {
 
         <div className="container mx-auto px-6 max-w-7xl relative z-10">
           <div className="text-center mb-16">
-            <span className="text-[#1E3A8A] text-sm font-bold tracking-[0.2em] uppercase mb-4 block">Created for you</span>
+            <span className="text-slate-500 text-sm font-bold tracking-[0.2em] uppercase mb-4 block">Created for you</span>
             <h2 className="text-4xl md:text-5xl font-medium text-slate-900 tracking-tighter mb-4">For <span className="text-[#1E3A8A] italic font-serif">individuals</span> and <span className="text-[#1E3A8A] italic font-serif">businesses</span></h2>
             <p className="text-slate-500 text-lg max-w-2xl mx-auto">Choose what your tag opens: Google reviews, Wi-Fi, digital menus or your pet&apos;s profile.</p>
           </div>

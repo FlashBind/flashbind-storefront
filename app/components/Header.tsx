@@ -1,4 +1,4 @@
-import {Suspense, useState, useEffect} from 'react';
+import {Suspense, useState, useEffect, useRef} from 'react';
 import {Await, NavLink, useAsyncValue, Form} from 'react-router';
 import {
   type CartViewPayload,
@@ -40,9 +40,33 @@ export function Header({
   const { type, close } = useAside();
   const isMobileMenuOpen = type === 'mobile';
 
+  // The mobile menu hangs directly under the header. The header height changes
+  // with the marquee and logo size, so measure it instead of hard-coding it.
+  const headerRef = useRef<HTMLElement>(null);
+  const [headerBottom, setHeaderBottom] = useState(108);
+  useEffect(() => {
+    if (!isMobileMenuOpen) return;
+    const measure = () => {
+      const el = headerRef.current;
+      if (el) setHeaderBottom(Math.max(0, Math.round(el.getBoundingClientRect().bottom)));
+    };
+    measure();
+    const observer = new ResizeObserver(measure);
+    if (headerRef.current) observer.observe(headerRef.current);
+    window.addEventListener('resize', measure);
+    // Keep the page behind the open menu from scrolling.
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      observer.disconnect();
+      window.removeEventListener('resize', measure);
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [isMobileMenuOpen]);
+
   return (
     <>
-      <header className={`sticky top-0 z-50 flex flex-col w-full transition-all duration-500 border-b ${isScrolled ? 'bg-white/95 backdrop-blur-2xl shadow-[0_4px_20px_rgba(0,0,0,0.05)] border-slate-200/60' : 'bg-white shadow-none border-transparent'}`}>
+      <header ref={headerRef} className={`sticky top-0 z-50 flex flex-col w-full transition-all duration-500 border-b ${isScrolled ? 'bg-white/95 backdrop-blur-2xl shadow-[0_4px_20px_rgba(0,0,0,0.05)] border-slate-200/60' : 'bg-white shadow-none border-transparent'}`}>
         {/* Trust Signal Bar (Premium Marquee) -- text lives in ~/config/marquee */}
         {ACTIVE_MARQUEE_ITEMS.length > 0 && (
           <div className="w-full bg-gradient-to-r from-[#172A66] via-[#1E3A8A] to-[#172A66] py-2.5 overflow-hidden flex whitespace-nowrap pointer-events-none border-b border-white/10 shadow-inner">
@@ -147,11 +171,12 @@ export function Header({
 
       {/* Mobile Slide-down Menu */}
       <div 
-        className={`nav:hidden fixed top-[108px] left-0 w-full bg-white shadow-xl border-b border-slate-100 transition-all duration-300 z-40 overflow-hidden ${
-          isMobileMenuOpen ? 'max-h-[85vh] opacity-100' : 'max-h-0 opacity-0'
+        className={`nav:hidden fixed left-0 bottom-0 w-full bg-white shadow-xl transition-opacity duration-300 z-40 overflow-hidden ${
+          isMobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none invisible'
         }`}
+        style={{top: headerBottom}}
       >
-        <div className="p-6 flex flex-col overflow-y-auto max-h-[85vh]">
+        <div className="p-6 flex flex-col overflow-y-auto h-full overscroll-contain">
           {/* Mobile Search Bar */}
           <div className="mb-8">
             <Form method="get" action="/search" className="relative flex items-center" onSubmit={close}>
@@ -227,7 +252,8 @@ export function Header({
       {/* Backdrop for mobile menu */}
       {isMobileMenuOpen && (
         <div 
-          className="nav:hidden fixed inset-0 bg-black/40 backdrop-blur-sm z-30 top-[108px]"
+          className="nav:hidden fixed inset-x-0 bottom-0 bg-black/40 z-30"
+          style={{top: headerBottom}}
           onClick={close}
           aria-hidden="true"
         />
