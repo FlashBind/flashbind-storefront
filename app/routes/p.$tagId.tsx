@@ -74,8 +74,9 @@ export async function loader({ params, context }: LoaderFunctionArgs) {
 
   const userEmail = context.session.get('userEmail');
   // The owner's account email is used only for this check. It is never sent
-  // to the page, because anyone who scans the tag can read the loader data.
-  const isOwner = Boolean(userEmail && userEmail === rawPet.owner_email);
+  // to the browser, because this page is public to anyone who taps the tag.
+  const ownerEmail = isPetTag ? rawPet.owner_email : null;
+  const isOwner = Boolean(userEmail && userEmail === ownerEmail);
 
   return { pet, isOwner, tagId };
 }
