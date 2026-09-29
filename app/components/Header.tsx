@@ -1,4 +1,4 @@
-import {Suspense, useState, useEffect, useRef} from 'react';
+import {Suspense, useState, useEffect, useRef, type CSSProperties} from 'react';
 import {Await, NavLink, useAsyncValue, Form} from 'react-router';
 import {
   type CartViewPayload,
@@ -6,7 +6,7 @@ import {
   useOptimisticCart,
 } from '@shopify/hydrogen';
 import type {HeaderQuery, CartApiQueryFragment} from 'storefrontapi.generated';
-import {useAside} from '~/components/Aside';
+import {useAside, useBodyScrollLock} from '~/components/Aside';
 import {ACTIVE_MARQUEE_ITEMS} from '~/config/marquee';
 
 interface HeaderProps {
@@ -54,15 +54,14 @@ export function Header({
     const observer = new ResizeObserver(measure);
     if (headerRef.current) observer.observe(headerRef.current);
     window.addEventListener('resize', measure);
-    // Keep the page behind the open menu from scrolling.
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
     return () => {
       observer.disconnect();
       window.removeEventListener('resize', measure);
-      document.body.style.overflow = previousOverflow;
     };
   }, [isMobileMenuOpen]);
+  // Keep the page behind the mobile menu or account drawer from scrolling.
+  useBodyScrollLock(isMobileMenuOpen);
+  useBodyScrollLock(isAccountOpen);
 
   return (
     <>
@@ -108,14 +107,14 @@ export function Header({
 
       {/* Account Drawer Overlay */}
       <div 
-        className={`fixed inset-0 bg-black/40 backdrop-blur-sm z-40 transition-opacity duration-300 ${isAccountOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
+        className={`fixed inset-x-0 top-0 h-visible-screen bg-black/40 backdrop-blur-sm z-40 transition-opacity duration-300 ${isAccountOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
         onClick={() => setIsAccountOpen(false)}
         aria-hidden="true"
       />
 
       {/* Account Drawer Panel */}
       <div 
-        className={`fixed top-0 right-0 h-[100vh] w-full sm:w-[400px] max-w-md bg-white shadow-2xl z-50 transform transition-transform duration-300 flex flex-col ${
+        className={`fixed top-0 right-0 h-visible-screen w-full sm:w-[400px] max-w-md bg-white shadow-2xl z-50 transform transition-transform duration-300 flex flex-col ${
           isAccountOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
       >
@@ -171,10 +170,10 @@ export function Header({
 
       {/* Mobile Slide-down Menu */}
       <div 
-        className={`nav:hidden fixed left-0 bottom-0 w-full bg-white shadow-xl transition-opacity duration-300 z-40 overflow-hidden ${
+        className={`nav:hidden fixed left-0 w-full h-below-menu-top bg-white shadow-xl transition-opacity duration-300 z-40 overflow-hidden ${
           isMobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none invisible'
         }`}
-        style={{top: headerBottom}}
+        style={{top: headerBottom, '--menu-top': `${headerBottom}px`} as CSSProperties}
       >
         <div className="p-6 flex flex-col overflow-y-auto h-full overscroll-contain">
           {/* Mobile Search Bar */}
@@ -252,8 +251,8 @@ export function Header({
       {/* Backdrop for mobile menu */}
       {isMobileMenuOpen && (
         <div 
-          className="nav:hidden fixed inset-x-0 bottom-0 bg-black/40 z-30"
-          style={{top: headerBottom}}
+          className="nav:hidden fixed inset-x-0 h-below-menu-top bg-black/40 z-30"
+          style={{top: headerBottom, '--menu-top': `${headerBottom}px`} as CSSProperties}
           onClick={close}
           aria-hidden="true"
         />

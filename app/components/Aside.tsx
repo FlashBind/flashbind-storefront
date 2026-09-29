@@ -52,11 +52,12 @@ export function Aside({
     }
     return () => abortController.abort();
   }, [close, expanded]);
+  useBodyScrollLock(expanded);
 
   return (
     <div
       aria-modal
-      className={`fixed inset-0 z-40 transition-opacity duration-300 ${
+      className={`fixed inset-x-0 top-0 h-visible-screen z-40 transition-opacity duration-300 ${
         expanded ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
       }`}
       role="dialog"
@@ -76,12 +77,42 @@ export function Aside({
         } flex flex-col pt-[115px] md:pt-[124px]`}
       >
 
-        <main className="flex-1 overflow-y-auto p-6 bg-[#F8FAFC] text-slate-800">
+        <main className="flex-1 overflow-y-auto overscroll-contain p-6 bg-[#F8FAFC] text-slate-800">
           {children}
         </main>
       </aside>
     </div>
   );
+}
+
+/**
+ * Stops the page behind an open overlay from scrolling, and restores it when
+ * the overlay closes. Counted, so two overlays open at once don't unlock early.
+ * Locks <html> as well as <body>: iOS Safari ignores overflow on <body> alone.
+ */
+let scrollLockCount = 0;
+let savedOverflow: {html: string; body: string} | null = null;
+
+export function useBodyScrollLock(locked: boolean) {
+  useEffect(() => {
+    if (!locked) return;
+    const html = document.documentElement;
+    const body = document.body;
+    if (scrollLockCount === 0) {
+      savedOverflow = {html: html.style.overflow, body: body.style.overflow};
+      html.style.overflow = 'hidden';
+      body.style.overflow = 'hidden';
+    }
+    scrollLockCount += 1;
+    return () => {
+      scrollLockCount -= 1;
+      if (scrollLockCount === 0 && savedOverflow) {
+        html.style.overflow = savedOverflow.html;
+        body.style.overflow = savedOverflow.body;
+        savedOverflow = null;
+      }
+    };
+  }, [locked]);
 }
 
 const AsideContext = createContext<AsideContextValue | null>(null);
