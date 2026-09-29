@@ -16,11 +16,11 @@ export const meta: MetaFunction = () => [
   {
     name: 'description',
     content:
-      'FlashBind stands work today with no subscription. An optional business subscription for Google Review, Menu and Wi-Fi stands is in development. Request founding-customer pricing.',
+      'FlashBind stands work today with no subscription. An optional business subscription for the Google Review Stand, Digital Menu Stand and Guest Wi-Fi Stand is in development. Request founding-customer pricing.',
   },
 ];
 
-const PRODUCTS = ['Google Review stand', 'Menu stand', 'Wi-Fi stand'] as const;
+const PRODUCTS = ['Google Review Stand', 'Digital Menu Stand', 'Guest Wi-Fi Stand'] as const;
 const LOCATIONS = ['1', '2–5', '6 or more'] as const;
 const CONSENT_TEXT =
   'I agree that FlashBind may email me about founding-customer pricing and the subscription launch. I can unsubscribe at any time.';
@@ -119,7 +119,7 @@ export default function SubscriptionPage() {
             Your stands work today. More is on the way.
           </h1>
           <p className="text-slate-500 text-base md:text-xl leading-relaxed">
-            Google Review, Menu and Wi-Fi stands work on their own, with no subscription. We&apos;re building an optional
+            The Google Review Stand, Digital Menu Stand and Guest Wi-Fi Stand work on their own, with no subscription. We&apos;re building an optional
             subscription for businesses. Founding customers help shape it and get special pricing.
           </p>
         </div>
@@ -146,7 +146,7 @@ export default function SubscriptionPage() {
           <div className="lg:col-span-3 bg-white rounded-[2rem] p-6 md:p-8 border-2 border-[#1E3A8A]/15 shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
             <div className="mb-3"><Badge tone="soon">Coming soon · subscription</Badge></div>
             <h2 className="text-2xl font-extrabold text-slate-900 mb-1">In development</h2>
-            <p className="text-slate-500 text-sm mb-5">For Google Review, Menu and Wi-Fi stands. Not available to buy yet; order and timing may change.</p>
+            <p className="text-slate-500 text-sm mb-5">For the Google Review Stand, Digital Menu Stand and Guest Wi-Fi Stand. Not available to buy yet; order and timing may change.</p>
             <ul className="space-y-4">
               {COMING.map((item) => (
                 <li key={item.title} className="border-l-2 border-[#1E3A8A]/20 pl-4">

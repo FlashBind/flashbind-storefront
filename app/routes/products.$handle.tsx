@@ -227,7 +227,6 @@ export default function Product() {
                 <ProductForm
                   productOptions={productOptions}
                   selectedVariant={selectedVariant}
-                  productHandle={product.handle}
                 />
               </div>
               

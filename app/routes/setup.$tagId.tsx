@@ -243,7 +243,7 @@ export default function SetupTagPage() {
   } else if (type === 'menu') {
     description = "Enter the link to your digital menu.";
   } else if (type === 'wifi') {
-    description = "Enter your Wi-Fi details so guests can connect instantly.";
+    description = "Enter your Wi-Fi details. Guests who tap or scan will see the network name and can copy the password.";
   }
 
   return (

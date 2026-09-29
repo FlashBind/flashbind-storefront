@@ -61,11 +61,14 @@ export function Header({
           </div>
         )}
 
-        <div className="px-6 py-3 md:py-4 flex items-center justify-between w-full relative">
-          <NavLink prefetch="intent" to="/" className="flex items-center gap-3 relative z-10" onClick={close}>
-            <img src="/logo-transparent.png" alt="FlashBind Logo" className="h-16 md:h-20 object-contain" />
+        {/* Desktop: three columns (logo | nav | icons). The nav is centred in the
+            space between logo and icons, so it can never overlap them; below the
+            `nav` breakpoint (tailwind.config.js) the hamburger menu takes over. */}
+        <div className="px-6 py-3 nav:py-4 flex items-center justify-between nav:grid nav:grid-cols-[auto_1fr_auto] nav:gap-8 w-full relative">
+          <NavLink prefetch="intent" to="/" className="flex items-center gap-3 relative z-10 justify-self-start" onClick={close}>
+            <img src="/logo-transparent.png" alt="FlashBind Logo" className="h-16 xl:h-20 max-w-none shrink-0 object-contain" />
           </NavLink>
-          <div className="hidden md:flex md:absolute md:left-1/2 md:top-1/2 md:-translate-x-1/2 md:-translate-y-1/2 z-10">
+          <div className="hidden nav:flex justify-center min-w-0 z-10">
             <HeaderMenu
               menu={menu}
               viewport="desktop"
@@ -73,7 +76,7 @@ export function Header({
               publicStoreDomain={publicStoreDomain}
             />
           </div>
-          <div className="relative z-10">
+          <div className="relative z-10 justify-self-end">
             <HeaderCtas isLoggedIn={isLoggedIn} cart={cart} setIsAccountOpen={setIsAccountOpen} />
           </div>
         </div>
@@ -144,7 +147,7 @@ export function Header({
 
       {/* Mobile Slide-down Menu */}
       <div 
-        className={`md:hidden fixed top-[108px] left-0 w-full bg-white shadow-xl border-b border-slate-100 transition-all duration-300 z-40 overflow-hidden ${
+        className={`nav:hidden fixed top-[108px] left-0 w-full bg-white shadow-xl border-b border-slate-100 transition-all duration-300 z-40 overflow-hidden ${
           isMobileMenuOpen ? 'max-h-[85vh] opacity-100' : 'max-h-0 opacity-0'
         }`}
       >
@@ -170,15 +173,29 @@ export function Header({
             <NavLink to="/products" onClick={close} className="text-lg font-semibold text-slate-900 hover:text-[#1E3A8A] py-3 border-b border-slate-50">
               All Products
             </NavLink>
+            <NavLink to="/business" onClick={close} className="text-lg font-semibold text-slate-900 hover:text-[#1E3A8A] py-3 border-b border-slate-50">
+              For Business
+            </NavLink>
+            <NavLink to="/personal" onClick={close} className="text-lg font-semibold text-slate-900 hover:text-[#1E3A8A] py-3 border-b border-slate-50">
+              For Individuals
+            </NavLink>
             <NavLink to="/services" onClick={close} className="text-lg font-semibold text-slate-900 hover:text-[#1E3A8A] py-3 border-b border-slate-50">
               Custom Solutions
             </NavLink>
             <NavLink to="/software" onClick={close} className="text-lg font-semibold text-slate-900 hover:text-[#1E3A8A] py-3 border-b border-slate-50">
               Business Subscription
             </NavLink>
-            <NavLink to="/blog" onClick={close} className="text-lg font-semibold text-slate-900 hover:text-[#1E3A8A] py-3">
+            <NavLink to="/blog" onClick={close} className="text-lg font-semibold text-slate-900 hover:text-[#1E3A8A] py-3 border-b border-slate-50">
               Blog
             </NavLink>
+            <NavLink to="/contact" onClick={close} className="text-lg font-semibold text-slate-900 hover:text-[#1E3A8A] py-3">
+              Contact
+            </NavLink>
+          </div>
+
+          {/* Social links (hidden in the header below xl) */}
+          <div className="mt-6 -ml-3 flex items-center gap-2 [&>a]:p-3">
+            <SocialLinks />
           </div>
 
           {/* Account & Login Links */}
@@ -210,7 +227,7 @@ export function Header({
       {/* Backdrop for mobile menu */}
       {isMobileMenuOpen && (
         <div 
-          className="md:hidden fixed inset-0 bg-black/40 backdrop-blur-sm z-30 top-[108px]" 
+          className="nav:hidden fixed inset-0 bg-black/40 backdrop-blur-sm z-30 top-[108px]"
           onClick={close}
           aria-hidden="true"
         />
@@ -252,7 +269,7 @@ export function HeaderMenu({
   };
 
   return (
-    <nav className={viewport === 'mobile' ? 'flex flex-col gap-4 text-left' : 'flex items-center gap-6'} role="navigation">
+    <nav className={viewport === 'mobile' ? 'flex flex-col gap-4 text-left' : 'flex items-center gap-1 xl:gap-3'} role="navigation">
       {NFC_HEADER_MENU.items.map((item, index) => {
         if (item.subItems) {
           return (
@@ -279,7 +296,7 @@ export function HeaderMenu({
                 </>
               ) : (
                 <>
-                  <button className="text-[15px] font-sans font-semibold text-slate-600 tracking-wide transition-all duration-300 group-hover:text-[#1E3A8A] flex items-center gap-1.5 focus:outline-none">
+                  <button className="whitespace-nowrap text-[15px] font-sans font-semibold text-slate-600 tracking-wide transition-all duration-300 group-hover:text-[#1E3A8A] flex items-center gap-1.5 focus:outline-none">
                     {item.title}
                     <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 transform group-hover:rotate-180 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
@@ -317,7 +334,7 @@ export function HeaderMenu({
             className={({isActive}) => 
               viewport === 'mobile'
                 ? `text-lg font-semibold transition-colors py-1 ${isActive ? 'text-[#1E3A8A]' : 'text-slate-800 hover:text-[#1E3A8A]'}`
-                : `relative group px-3 py-2 text-[15px] font-sans tracking-wide transition-all duration-300 no-underline hover:no-underline ${isActive ? 'text-slate-900 font-bold' : 'text-slate-600 font-semibold hover:text-[#1E3A8A] hover:drop-shadow-[0_0_8px_rgba(30,58,138,0.2)]'}`
+                : `relative group whitespace-nowrap px-3 py-2 text-[15px] font-sans tracking-wide transition-all duration-300 no-underline hover:no-underline ${isActive ? 'text-slate-900 font-bold' : 'text-slate-600 font-semibold hover:text-[#1E3A8A] hover:drop-shadow-[0_0_8px_rgba(30,58,138,0.2)]'}`
             }
             end
             key={item.id}
@@ -346,21 +363,12 @@ function HeaderCtas({
     <nav className="flex items-center gap-3" role="navigation">
       <HeaderMenuMobileToggle />
       
-      {/* Social Icons */}
-      <div className="hidden md:flex items-center gap-4 border-r border-slate-200 pr-6 mr-2">
-        <a href="https://www.instagram.com/flashbind_nfc/" target="_blank" rel="noreferrer" className="flex items-center text-slate-600 hover:text-[#1E3A8A] transition-colors" title="Instagram">
-          <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z" />
-          </svg>
-        </a>
-        <a href="https://www.tiktok.com/@flashbind" target="_blank" rel="noreferrer" className="flex items-center text-slate-600 hover:text-[#1E3A8A] transition-colors" title="TikTok">
-          <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
-          </svg>
-        </a>
+      {/* Social icons only from xl (1280px); below that they are in the footer and the mobile menu. */}
+      <div className="hidden xl:flex items-center gap-3 border-r border-slate-200 pr-4 mr-1">
+        <SocialLinks />
       </div>
 
-      <div className="hidden md:flex items-center gap-3">
+      <div className="hidden nav:flex items-center gap-3">
         <NavbarSearch />
         
         <NavLink prefetch="intent" to="/contact" className="flex items-center text-slate-600 hover:text-[#1E3A8A] transition-colors" title="Contact Us">
@@ -372,7 +380,7 @@ function HeaderCtas({
 
       <button 
         onClick={() => setIsAccountOpen(true)}
-        className="hidden md:flex items-center text-slate-600 hover:text-[#1E3A8A] transition-colors py-2" 
+        className="hidden nav:flex items-center text-slate-600 hover:text-[#1E3A8A] transition-colors py-2"
         title="Account"
       >
         <UserIcon />
@@ -381,10 +389,27 @@ function HeaderCtas({
       <CartToggle cart={cart} />
       
       {/* Premium CTA */}
-      <NavLink to="/#recommended-products" className="hidden lg:flex ml-2 px-6 py-2.5 bg-slate-900 text-white text-sm font-bold rounded-full hover:bg-[#1E3A8A] hover:scale-105 hover:shadow-[0_0_25px_rgba(30,58,138,0.4)] transition-all duration-300 shadow-md no-underline hover:no-underline">
+      <NavLink to="/#recommended-products" className="hidden nav:flex whitespace-nowrap ml-2 px-6 py-2.5 bg-slate-900 text-white text-sm font-bold rounded-full hover:bg-[#1E3A8A] hover:scale-105 hover:shadow-[0_0_25px_rgba(30,58,138,0.4)] transition-all duration-300 shadow-md no-underline hover:no-underline">
         Get Started
       </NavLink>
     </nav>
+  );
+}
+
+function SocialLinks() {
+  return (
+    <>
+      <a href="https://www.instagram.com/flashbind_nfc/" target="_blank" rel="noreferrer" className="flex items-center text-slate-600 hover:text-[#1E3A8A] transition-colors" title="Instagram">
+        <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z" />
+        </svg>
+      </a>
+      <a href="https://www.tiktok.com/@flashbind" target="_blank" rel="noreferrer" className="flex items-center text-slate-600 hover:text-[#1E3A8A] transition-colors" title="TikTok">
+        <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
+        </svg>
+      </a>
+    </>
   );
 }
 
@@ -401,7 +426,7 @@ function HeaderMenuMobileToggle() {
   const isMobileMenuOpen = type === 'mobile';
   return (
     <button
-      className="md:hidden text-slate-600 hover:text-[#1E3A8A] transition-colors p-2 order-last"
+      className="nav:hidden text-slate-600 hover:text-[#1E3A8A] transition-colors p-2 order-last"
       onClick={() => isMobileMenuOpen ? close() : open('mobile')}
       aria-label="Toggle Mobile Menu"
     >
@@ -450,7 +475,7 @@ function CartBadge({count}: {count: number}) {
           } as CartViewPayload);
         }
       }}
-      className="relative flex items-center text-slate-600 hover:text-[#1E3A8A] transition-colors md:mr-4 order-first md:order-none"
+      className="relative flex items-center text-slate-600 hover:text-[#1E3A8A] transition-colors nav:mr-4 order-first nav:order-none"
       title="Cart"
     >
       <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>

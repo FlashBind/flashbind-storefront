@@ -122,7 +122,6 @@ function SearchResultsProducts({
             const compareAtPrice = product?.selectedOrFirstAvailableVariant?.compareAtPrice;
             const isSale = compareAtPrice && price && parseFloat(compareAtPrice.amount) > parseFloat(price.amount);
             const isSoldOut = (product as any)?.availableForSale === false;
-            const isComingSoon = isSoldOut && ['guest-wi-fi-hub', 'nfc-restaurant-menu-stand'].includes(product?.handle || '');
             const isSellingFast = (product as any)?.tags?.includes('selling-fast');
             const image = product?.selectedOrFirstAvailableVariant?.image;
 
@@ -136,7 +135,7 @@ function SearchResultsProducts({
                 <div className="absolute top-8 left-8 z-10 flex flex-col items-start gap-2">
                   {isSoldOut ? (
                     <div className="bg-slate-800/90 backdrop-blur-sm border border-slate-700/50 text-white text-[11px] font-extrabold uppercase tracking-widest py-1.5 px-3 rounded-full shadow-sm">
-                      {isComingSoon ? 'Coming Soon' : 'Sold Out'}
+                      Coming Soon
                     </div>
                   ) : isSellingFast ? (
                     <div className="bg-[#1E3A8A] text-white text-[11px] font-extrabold uppercase tracking-widest py-1.5 px-3 rounded-full shadow-sm flex items-center gap-1.5">

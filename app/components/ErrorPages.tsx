@@ -2,8 +2,8 @@ import {Link} from 'react-router';
 
 const PRODUCT_LINKS = [
   {to: '/products/google-review-stand', title: 'Google Review Stand', text: 'Customers tap to leave a review.'},
-  {to: '/products/nfc-restaurant-menu-stand', title: 'Menu Stand', text: 'Guests tap or scan to open your menu.'},
-  {to: '/products/guest-wi-fi-hub', title: 'Wi-Fi Stand', text: 'Share your network without spelling it out.'},
+  {to: '/products/nfc-restaurant-menu-stand', title: 'Digital Menu Stand', text: 'Guests tap or scan to open your menu.'},
+  {to: '/products/guest-wi-fi-hub', title: 'Guest Wi-Fi Stand', text: 'Share your network without spelling it out.'},
   {to: '/products/smart-pet-collar-tag', title: 'Smart Pet Tag', text: 'A tap shows your contact details.'},
 ];
 

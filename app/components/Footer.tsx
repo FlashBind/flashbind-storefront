@@ -42,10 +42,10 @@ export function Footer({
                   <h4 className="text-white font-bold mb-6 tracking-widest uppercase text-sm">Shop</h4>
                   <ul className="space-y-4">
                     <li><NavLink to="/products" className="hover:text-white transition-colors">All Products</NavLink></li>
-                    <li><NavLink to="/products/google-review-stand" className="hover:text-white transition-colors">Review Stands</NavLink></li>
-                    <li><NavLink to="/products/nfc-restaurant-menu-stand" className="hover:text-white transition-colors">Menu Stands</NavLink></li>
-                    <li><NavLink to="/products/guest-wi-fi-hub" className="hover:text-white transition-colors">Wi-Fi Stands</NavLink></li>
-                    <li><NavLink to="/products/smart-pet-collar-tag" className="hover:text-white transition-colors">Pet Tags</NavLink></li>
+                    <li><NavLink to="/products/google-review-stand" className="hover:text-white transition-colors">Google Review Stand</NavLink></li>
+                    <li><NavLink to="/products/nfc-restaurant-menu-stand" className="hover:text-white transition-colors">Digital Menu Stand</NavLink></li>
+                    <li><NavLink to="/products/guest-wi-fi-hub" className="hover:text-white transition-colors">Guest Wi-Fi Stand</NavLink></li>
+                    <li><NavLink to="/products/smart-pet-collar-tag" className="hover:text-white transition-colors">Smart Pet Tag</NavLink></li>
                   </ul>
                 </div>
 

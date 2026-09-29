@@ -12,11 +12,9 @@ import {useState} from 'react';
 export function ProductForm({
   productOptions,
   selectedVariant,
-  productHandle,
 }: {
   productOptions: MappedProductOptions[];
   selectedVariant: ProductFragment['selectedOrFirstAvailableVariant'];
-  productHandle?: string;
 }) {
   const navigate = useNavigate();
   const {open} = useAside();
@@ -148,11 +146,7 @@ export function ProductForm({
         >
           {selectedVariant?.availableForSale
             ? <span>ADD TO CART &mdash; {formattedPrice}</span>
-            : <span>
-                {['guest-wi-fi-hub', 'nfc-restaurant-menu-stand'].includes(productHandle || '')
-                  ? 'COMING SOON'
-                  : 'SOLD OUT'}
-              </span>
+            : <span>COMING SOON</span>
           }
         </AddToCartButton>
 

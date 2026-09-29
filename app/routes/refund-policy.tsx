@@ -25,6 +25,7 @@ export default function RefundPolicyPage() {
         <li>This includes your legal 14-day right of withdrawal, described in full below; days 15 to 30 are our extra promise.</li>
         <li>We refund you within 14 days of hearing from you, including the standard delivery cost.</li>
         <li>You pay the cost of sending the product back, unless it is faulty or we sent the wrong item.</li>
+        <li><strong>Business customers</strong> can return products that are unused and not activated within <strong>30 days</strong> of receiving them. The business pays the return shipping, and the original delivery cost is refunded only if the product is faulty.</li>
         <li>Custom-branded products made with your own logo or design can&apos;t be returned unless they are faulty.</li>
         <li>Faulty products are covered by our <Link to="/warranty" className="text-[#1E3A8A] underline">Warranty</Link>, whether you are a consumer or a business.</li>
       </ul>
@@ -57,11 +58,21 @@ export default function RefundPolicyPage() {
         damaged on arrival, or not what you ordered, we pay the return cost or send you a prepaid label.
       </p>
 
-      <PolicyHeading>5. Business customers</PolicyHeading>
+      <PolicyHeading id="business-returns">5. Business customers</PolicyHeading>
       <p>
-        The 14-day right of withdrawal and our 30-day returns promise apply to consumers only. If you buy for your business, you can&apos;t withdraw
-        from the purchase, but faulty products are still covered by our <Link to="/warranty" className="text-[#1E3A8A] underline">Warranty</Link>.
-        If you ordered the wrong product, contact us; we&apos;ll help where we can.
+        The legal 14-day right of withdrawal applies to consumers only. If you buy for your business, you can still
+        return products within <strong>30 days</strong> of receiving them if they are <strong>unused, undamaged, in
+        their original packaging and not activated</strong> in a FlashBind account.
+      </p>
+      <ul className="list-disc pl-6 space-y-1">
+        <li>Email us with your order number within the 30 days; we confirm the return and the address.</li>
+        <li>You pay the cost of sending the products back.</li>
+        <li>We refund the price of the returned products within 14 days of receiving them and checking their condition. The original delivery cost is not refunded for these returns.</li>
+        <li>Custom-branded products made with your own logo or design can&apos;t be returned unless they are faulty.</li>
+      </ul>
+      <p>
+        Faulty products are always covered by our <Link to="/warranty" className="text-[#1E3A8A] underline">Warranty</Link>,
+        whether or not they have been activated. For a faulty product we pay the return cost and also refund the original delivery cost.
       </p>
 
       <PolicyHeading>6. Contact</PolicyHeading>

@@ -164,7 +164,7 @@ export default function EditTagPage() {
   let description = `Update ${pet.dogName}'s information.`;
   if (type === 'google_review') {
     title = 'Edit Google Review Link';
-    description = 'Update the destination link for your review stand.';
+    description = 'Update the destination link for your Google Review Stand.';
   } else if (type === 'menu') {
     title = 'Edit Menu Link';
     description = 'Update the destination link for your digital menu.';

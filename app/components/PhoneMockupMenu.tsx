@@ -2,7 +2,7 @@ import React from 'react';
 
 export default function PhoneMockupMenu() {
   return (
-    <div className="w-[350px] h-[700px] border-[14px] border-gray-900 rounded-[3rem] shadow-2xl bg-zinc-950 relative p-0 overflow-hidden flex-shrink-0 font-sans text-white">
+    <div aria-hidden="true" className="w-[350px] h-[700px] border-[14px] border-gray-900 rounded-[3rem] shadow-2xl bg-zinc-950 relative p-0 overflow-hidden flex-shrink-0 font-sans text-white pointer-events-none select-none">
       <div className="w-full h-full overflow-y-auto rounded-none shadow-none pb-8" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
         
         {/* Header Image */}
@@ -59,7 +59,7 @@ export default function PhoneMockupMenu() {
             <div className="flex justify-between items-start gap-4">
               <div>
                 <h3 className="text-base font-medium tracking-wide">Black Truffle Risotto</h3>
-                <p className="text-xs text-zinc-400 mt-1 leading-relaxed">Aborio rice, wild mushrooms, parmesan crisp, fresh black truffle</p>
+                <p className="text-xs text-zinc-400 mt-1 leading-relaxed">Arborio rice, wild mushrooms, parmesan crisp, fresh black truffle</p>
               </div>
               <span className="text-sm font-medium">€34</span>
             </div>
@@ -72,14 +72,6 @@ export default function PhoneMockupMenu() {
               <span className="text-sm font-medium">€42</span>
             </div>
           </div>
-        </div>
-
-        {/* Call to waiter */}
-        <div className="fixed bottom-6 w-full px-6 left-0">
-          <button className="w-full bg-white text-black font-semibold tracking-wide text-sm py-4 rounded-full shadow-lg flex justify-center items-center gap-2 hover:bg-zinc-200 transition-colors">
-            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" /></svg>
-            Call Waiter
-          </button>
         </div>
 
       </div>

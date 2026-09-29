@@ -5,6 +5,7 @@ import type {
   RecommendedProductFragment,
 } from 'storefrontapi.generated';
 import {useVariantUrl} from '~/lib/variants';
+import {productBlurb} from '~/config/products';
 
 export function ProductItem({
   product,
@@ -23,7 +24,6 @@ export function ProductItem({
   const compareAtPrice = product?.compareAtPriceRange?.minVariantPrice;
   const isSale = compareAtPrice && price && parseFloat(compareAtPrice.amount) > parseFloat(price.amount);
   const isSoldOut = product?.availableForSale === false;
-  const isComingSoon = isSoldOut && ['guest-wi-fi-hub', 'nfc-restaurant-menu-stand'].includes(product?.handle || '');
   const isSellingFast = product?.tags?.includes('selling-fast');
 
 
@@ -38,7 +38,7 @@ export function ProductItem({
       <div className="absolute top-8 left-8 z-10 flex flex-col gap-2 items-start">
         {isSoldOut ? (
           <div className="bg-slate-800/90 backdrop-blur-sm border border-slate-700/50 text-white text-[11px] font-extrabold uppercase tracking-widest py-1.5 px-3 rounded-full shadow-sm">
-            {isComingSoon ? 'Coming Soon' : 'Sold Out'}
+            Coming Soon
           </div>
         ) : isSellingFast ? (
           <div className="bg-[#1E3A8A] text-white text-[11px] font-extrabold uppercase tracking-widest py-1.5 px-3 rounded-full shadow-sm flex items-center gap-1.5">
@@ -78,7 +78,7 @@ export function ProductItem({
       <h3 className="text-[1.35rem] font-bold text-slate-900 mb-1 leading-tight">{product.title}</h3>
 
       <p className="text-sm text-slate-500 leading-relaxed mb-8 flex-grow">
-        Perfect for your business. Let customers connect instantly with a single tap.
+        {productBlurb(product.handle)}
       </p>
       
       <div className="flex items-end justify-between mt-auto pt-2">

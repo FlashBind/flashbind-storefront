@@ -41,7 +41,7 @@ export default function WarrantyPage() {
       <ul className="list-disc pl-6 space-y-1">
         <li>normal wear, scratches and fading from everyday use;</li>
         <li>damage caused by accidents, misuse, or changes to the product;</li>
-        <li>phones that don&apos;t support NFC (Menu and Wi-Fi plaques also have a QR code that can be scanned with the camera; Google Review stands and pet tags are NFC-only).</li>
+        <li>phones that don&apos;t support NFC (the Digital Menu Stand and Guest Wi-Fi Stand also have a QR code that can be scanned with the camera; the Google Review Stand and Smart Pet Tag are NFC-only).</li>
       </ul>
       <p>These exclusions don&apos;t reduce your legal rights as a consumer.</p>
 

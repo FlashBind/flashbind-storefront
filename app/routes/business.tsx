@@ -3,6 +3,7 @@ import type {Route} from './+types/business';
 import {getPaginationVariables, Money} from '@shopify/hydrogen';
 import {PaginatedResourceSection} from '~/components/PaginatedResourceSection';
 import {BusinessBenefits} from '~/components/BusinessBenefits';
+import {productBlurb} from '~/config/products';
 
 export const meta: Route.MetaFunction = () => {
   return [{title: `FlashBind | For Business`}];
@@ -92,7 +93,6 @@ function TrendingProductCard({ product }: { product: any }) {
   const comparePrice = compareMoney ? <Money as="span" data={compareMoney} /> : null;
   const isSale = compareAmount && priceAmount && parseFloat(compareAmount) > parseFloat(priceAmount);
   const isSoldOut = product.availableForSale === false;
-  const isComingSoon = isSoldOut && ['guest-wi-fi-hub', 'nfc-restaurant-menu-stand'].includes(product.handle || '');
   const isSellingFast = product.tags?.includes('selling-fast');
 
   return (
@@ -102,7 +102,7 @@ function TrendingProductCard({ product }: { product: any }) {
           <div className="absolute top-4 left-4 z-20 flex flex-col items-start gap-2">
             {isSoldOut ? (
               <div className="bg-slate-800/90 backdrop-blur-sm border border-slate-700/50 text-white text-[11px] font-extrabold uppercase tracking-widest py-1.5 px-3 rounded-full shadow-sm">
-                {isComingSoon ? 'Coming Soon' : 'Sold Out'}
+                Coming Soon
               </div>
             ) : isSellingFast ? (
               <div className="bg-[#1E3A8A] text-white text-[11px] font-extrabold uppercase tracking-widest py-1.5 px-3 rounded-full shadow-sm flex items-center gap-1.5">
@@ -137,7 +137,7 @@ function TrendingProductCard({ product }: { product: any }) {
             {product.title}
           </h3>
           <p className="font-sans text-slate-500 text-[15px] mb-6 leading-relaxed line-clamp-2">
-            {product.description || "View product details for more information."}
+            {productBlurb(product.handle)}
           </p>
 
           <div className="flex items-center justify-between mt-auto pt-4 border-t border-slate-100">

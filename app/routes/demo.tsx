@@ -57,15 +57,6 @@ export default function DemoPage() {
                           </div>
                           <span className="text-sm font-medium text-slate-900">+1 (555) 123-4567</span>
                         </div>
-                        
-                        <div className="bg-slate-50 p-3 rounded-2xl border border-slate-100 flex items-center gap-3">
-                          <div className="bg-[#1E3A8A]/10 text-[#1E3A8A] p-2 rounded-full flex-shrink-0">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
-                              <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
-                            </svg>
-                          </div>
-                          <span className="text-sm font-medium text-slate-900">sarah@example.com</span>
-                        </div>
                       </div>
                       
                       <div>
@@ -103,7 +94,7 @@ export default function DemoPage() {
                 This is what the finder sees.
               </h1>
               <p className="text-lg md:text-xl text-slate-600 mb-2 md:mb-4">
-                Interact with the phone on the left to see exactly how your profile looks when scanned.
+                <span className="md:hidden">Try the phone below</span><span className="hidden md:inline">Interact with the phone on the left</span> to see exactly how your profile looks when scanned.
               </p>
             </div>
 

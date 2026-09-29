@@ -33,7 +33,7 @@ export default function BlogPage() {
             <div className="w-full md:w-2/5 flex flex-col justify-center py-6 pr-6">
               <div className="flex items-center gap-4 mb-6">
                  <span className="px-4 py-1.5 bg-[#1E3A8A]/10 text-[#172A66] rounded-full text-xs font-bold uppercase tracking-widest">Technology</span>
-                 <span className="text-slate-400 font-medium text-sm">Oct 24, 2026</span>
+                 <span className="text-slate-400 font-medium text-sm">Sep 24, 2026</span>
               </div>
               <h2 className="text-3xl md:text-4xl font-medium text-slate-900 tracking-tighter mb-6 group-hover:text-[#1E3A8A] transition-colors leading-tight">
                 Why NFC is Replacing QR Codes in Hospitality
@@ -65,13 +65,13 @@ export default function BlogPage() {
             </div>
             <div className="flex items-center gap-3 mb-4">
                <span className="px-3 py-1 bg-[#1E3A8A]/10 text-[#172A66] rounded-full text-[10px] font-bold uppercase tracking-widest">Marketing</span>
-               <span className="text-slate-400 font-medium text-[11px]">Oct 18, 2026</span>
+               <span className="text-slate-400 font-medium text-[11px]">Sep 18, 2026</span>
             </div>
             <h3 className="text-2xl font-extrabold text-slate-900 tracking-tight mb-4 group-hover:text-[#1E3A8A] transition-colors">
-              How to Boost Your Local SEO with Google Review Stands
+              Google Reviews and Local SEO: How a Google Review Stand Helps
             </h3>
             <p className="text-slate-500 leading-relaxed mb-8 flex-grow">
-              How an NFC review stand at your counter makes it easier for happy customers to leave a Google review.
+              How a Google Review Stand at your counter makes it effortless for customers to leave a Google review.
             </p>
             <div className="flex items-center text-[#1E3A8A] font-bold text-sm">
               Read article <span className="ml-2 transform group-hover:translate-x-1 transition-transform">→</span>
@@ -87,7 +87,7 @@ export default function BlogPage() {
             </div>
             <div className="flex items-center gap-3 mb-4">
                <span className="px-3 py-1 bg-[#1E3A8A]/10 text-[#172A66] rounded-full text-[10px] font-bold uppercase tracking-widest">Pets</span>
-               <span className="text-slate-400 font-medium text-[11px]">Oct 5, 2026</span>
+               <span className="text-slate-400 font-medium text-[11px]">Sep 5, 2026</span>
             </div>
             <h3 className="text-2xl font-extrabold text-slate-900 tracking-tight mb-4 group-hover:text-[#1E3A8A] transition-colors">
               Why Smart Pet Tags are the New Standard for Pet Safety

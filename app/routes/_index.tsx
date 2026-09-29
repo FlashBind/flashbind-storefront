@@ -1,6 +1,6 @@
 import {Await, useLoaderData, Link} from 'react-router';
 import type {Route} from './+types/_index';
-import {Suspense, useState, useEffect, useRef} from 'react';
+import {Suspense, useState, useEffect, useRef, type ReactNode} from 'react';
 import {Image} from '@shopify/hydrogen';
 import PhoneMockupCooper from '../components/PhoneMockupCooper';
 import PhoneMockupReviews from '../components/PhoneMockupReviews';
@@ -30,7 +30,7 @@ export const meta: Route.MetaFunction = ({data, matches}) => {
       (m) => !('name' in m && m.name === 'description') && !('title' in m)
     ),
     {title: 'FlashBind | Premium NFC Products'},
-    {name: 'description', content: 'FlashBind sells premium NFC-powered products — Google Review stands, digital menu cards, guest WiFi cards, and pet tags. Tap to connect instantly, no app required.'},
+    {name: 'description', content: 'FlashBind sells NFC products: the Google Review Stand, Digital Menu Stand, Guest Wi-Fi Stand and Smart Pet Tag. Tap with a phone, no app required.'},
     {property: 'og:title', content: 'FlashBind | Premium NFC Products'},
     {property: 'og:image', content: 'https://flashbind.com/hero_new_1.jpg'},
   ];
@@ -145,7 +145,7 @@ export default function Homepage() {
             </h1>
             
             <p className="text-slate-300 text-lg md:text-xl max-w-2xl mb-10 font-light leading-relaxed tracking-tight">
-              Branded NFC stands and cards that connect customers to what matters most — the moment they arrive.
+              Branded NFC stands and tags that connect customers to what matters most — the moment they arrive.
             </p>
             
             <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start w-full gap-4">
@@ -193,79 +193,39 @@ export default function Homepage() {
         <div className="container mx-auto px-6 max-w-7xl relative z-10">
           <div className="text-center mb-16">
             <span className="text-[#1E3A8A] text-sm font-bold tracking-[0.2em] uppercase mb-4 block">Created for you</span>
-            <h2 className="text-4xl md:text-5xl font-medium text-slate-900 tracking-tighter mb-4">For professionals and <span className="text-[#1E3A8A] italic font-serif">businesses</span></h2>
-            <p className="text-slate-500 text-lg max-w-2xl mx-auto">Choose what your product opens, from Google reviews to Wi-Fi and digital menus.</p>
+            <h2 className="text-4xl md:text-5xl font-medium text-slate-900 tracking-tighter mb-4">For <span className="text-[#1E3A8A] italic font-serif">individuals</span> and <span className="text-[#1E3A8A] italic font-serif">businesses</span></h2>
+            <p className="text-slate-500 text-lg max-w-2xl mx-auto">Choose what your tag opens: Google reviews, Wi-Fi, digital menus or your pet&apos;s profile.</p>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            
-            {/* Card 1: Google Reviews */}
-            <div className="bg-white rounded-[2.5rem] p-8 md:p-12 shadow-[0_8px_30px_rgb(0,0,0,0.08)] border border-slate-200 hover:border-[#1E3A8A]/30 hover:shadow-[0_8px_40px_rgb(0,0,0,0.12)] flex flex-col sm:flex-row items-center gap-8 group hover:-translate-y-2 transition-all duration-300">
-              <div className="flex-1 text-center sm:text-left sm:self-start">
-                <h3 className="text-2xl font-bold text-slate-900 mb-4">Google Reviews</h3>
-                <p className="text-slate-600 leading-relaxed mb-8 text-sm md:text-base">Direct customers instantly to your Google Review page with a single tap. Built for storefronts, cafes, and reception desks.</p>
-                <Link to={PRODUCT_ROUTES.googleReview} className="text-slate-900 font-bold text-sm inline-flex items-center gap-2 hover:text-[#1E3A8A] transition-colors">
-                  Learn more <span className="transform group-hover:translate-x-1 transition-transform">&rarr;</span>
-                </Link>
-              </div>
-              {/* Standardized Review Mockup */}
-              <div className="w-48 md:w-64 h-[220px] md:h-[280px] bg-gradient-to-br from-[#FDFCF8] to-[#F5F4EE] rounded-[2rem] md:rounded-[2.5rem] relative flex-shrink-0 transition-transform duration-500 flex items-center justify-center overflow-hidden border border-black/5 shadow-sm">
-                 <div className="absolute origin-center scale-[0.26] md:scale-[0.32] drop-shadow-[0_20px_25px_rgba(0,0,0,0.15)] transition-all duration-500 group-hover:scale-[0.28] md:group-hover:scale-[0.35] group-hover:-translate-y-2">
-                   <PhoneMockupReviews />
-                 </div>
-              </div>
-            </div>
-
-            {/* Card 2: Smart Pet Tags */}
-            <div className="bg-white rounded-[2.5rem] p-8 md:p-12 shadow-[0_8px_30px_rgb(0,0,0,0.08)] border border-slate-200 hover:border-[#1E3A8A]/30 hover:shadow-[0_8px_40px_rgb(0,0,0,0.12)] flex flex-col sm:flex-row items-center gap-8 group hover:-translate-y-2 transition-all duration-300">
-              <div className="flex-1 text-center sm:text-left sm:self-start">
-                <h3 className="text-2xl font-bold text-slate-900 mb-4">Smart Pet Tags</h3>
-                <p className="text-slate-600 leading-relaxed mb-8 text-sm md:text-base">Keep your best friend safe. A quick tap with a phone shows the owner's contact details. Works with nearly all modern smartphones.</p>
-                <Link to={PRODUCT_ROUTES.petTag} className="text-slate-900 font-bold text-sm inline-flex items-center gap-2 hover:text-[#1E3A8A] transition-colors">
-                  Learn more <span className="transform group-hover:translate-x-1 transition-transform">&rarr;</span>
-                </Link>
-              </div>
-              {/* Standardized Cooper Preview */}
-              <div className="w-48 md:w-64 h-[220px] md:h-[280px] bg-gradient-to-br from-[#FDFCF8] to-[#F5F4EE] rounded-[2rem] md:rounded-[2.5rem] relative flex-shrink-0 transition-transform duration-500 flex items-center justify-center overflow-hidden border border-black/5 shadow-sm">
-                 <div className="absolute origin-center scale-[0.26] md:scale-[0.32] drop-shadow-[0_20px_25px_rgba(0,0,0,0.15)] transition-all duration-500 group-hover:scale-[0.28] md:group-hover:scale-[0.35] group-hover:-translate-y-2">
-                   <PhoneMockupCooper />
-                 </div>
-              </div>
-            </div>
-
-            {/* Card 3: Tap-to-View Menus */}
-            <div className="bg-white rounded-[2.5rem] p-8 md:p-12 shadow-[0_8px_30px_rgb(0,0,0,0.08)] border border-slate-200 hover:border-[#1E3A8A]/30 hover:shadow-[0_8px_40px_rgb(0,0,0,0.12)] flex flex-col sm:flex-row items-center gap-8 group hover:-translate-y-2 transition-all duration-300">
-              <div className="flex-1 text-center sm:text-left sm:self-start">
-                <h3 className="text-2xl font-bold text-slate-900 mb-4">Tap-to-View Menus</h3>
-                <p className="text-slate-600 leading-relaxed mb-8 text-sm md:text-base">Modernize your hospitality business. Let customers tap your tabletop stands to view your digital menu instantly.</p>
-                <Link to={PRODUCT_ROUTES.menu} className="text-slate-900 font-bold text-sm inline-flex items-center gap-2 hover:text-[#1E3A8A] transition-colors">
-                  Learn more <span className="transform group-hover:translate-x-1 transition-transform">&rarr;</span>
-                </Link>
-              </div>
-              {/* Standardized Menu Mockup */}
-              <div className="w-48 md:w-64 h-[220px] md:h-[280px] bg-gradient-to-br from-[#FDFCF8] to-[#F5F4EE] rounded-[2rem] md:rounded-[2.5rem] relative flex-shrink-0 transition-transform duration-500 flex items-center justify-center overflow-hidden border border-black/5 shadow-sm">
-                 <div className="absolute origin-center scale-[0.26] md:scale-[0.32] drop-shadow-[0_20px_25px_rgba(0,0,0,0.15)] transition-all duration-500 group-hover:scale-[0.28] md:group-hover:scale-[0.35] group-hover:-translate-y-2">
-                   <PhoneMockupMenu />
-                 </div>
-              </div>
-            </div>
-
-            {/* Card 4: Guest Wi-Fi */}
-            <div className="bg-white rounded-[2.5rem] p-8 md:p-12 shadow-[0_8px_30px_rgb(0,0,0,0.08)] border border-slate-200 hover:border-[#1E3A8A]/30 hover:shadow-[0_8px_40px_rgb(0,0,0,0.12)] flex flex-col sm:flex-row items-center gap-8 group hover:-translate-y-2 transition-all duration-300">
-              <div className="flex-1 text-center sm:text-left sm:self-start">
-                <h3 className="text-2xl font-bold text-slate-900 mb-4">Guest Wi-Fi</h3>
-                <p className="text-slate-600 leading-relaxed mb-8 text-sm md:text-base">No more spelling out complex passwords. Guests tap or scan to see your network name and password.</p>
-                <Link to={PRODUCT_ROUTES.wifi} className="text-slate-900 font-bold text-sm inline-flex items-center gap-2 hover:text-[#1E3A8A] transition-colors">
-                  Learn more <span className="transform group-hover:translate-x-1 transition-transform">&rarr;</span>
-                </Link>
-              </div>
-              {/* Standardized Wifi Mockup */}
-              <div className="w-48 md:w-64 h-[220px] md:h-[280px] bg-gradient-to-br from-[#FDFCF8] to-[#F5F4EE] rounded-[2rem] md:rounded-[2.5rem] relative flex-shrink-0 transition-transform duration-500 flex items-center justify-center overflow-hidden border border-black/5 shadow-sm">
-                 <div className="absolute origin-center scale-[0.26] md:scale-[0.32] drop-shadow-[0_20px_25px_rgba(0,0,0,0.15)] transition-all duration-500 group-hover:scale-[0.28] md:group-hover:scale-[0.35] group-hover:-translate-y-2">
-                   <PhoneMockupWifi />
-                 </div>
-              </div>
-            </div>
+            <SolutionCard
+              to={PRODUCT_ROUTES.googleReview}
+              title="Google Reviews"
+              text="Direct customers instantly to your Google Review page with a single tap. Built for storefronts, cafes, and reception desks."
+            >
+              <PhoneMockupReviews />
+            </SolutionCard>
+            <SolutionCard
+              to={PRODUCT_ROUTES.petTag}
+              title="Smart Pet Tags"
+              text="Keep your best friend safe. A quick tap with a phone shows the owner's contact details. Works with nearly all modern smartphones."
+            >
+              <PhoneMockupCooper />
+            </SolutionCard>
+            <SolutionCard
+              to={PRODUCT_ROUTES.menu}
+              title="Tap-to-View Menus"
+              text="Modernize your hospitality business. Let customers tap your tabletop stands to view your digital menu instantly."
+            >
+              <PhoneMockupMenu />
+            </SolutionCard>
+            <SolutionCard
+              to={PRODUCT_ROUTES.wifi}
+              title="Guest Wi-Fi"
+              text="No more spelling out complex passwords. Guests tap or scan to see your network name and password."
+            >
+              <PhoneMockupWifi />
+            </SolutionCard>
 
           </div>
         </div>
@@ -360,7 +320,7 @@ export default function Homepage() {
                 Guest Wi-Fi
               </h2>
               <div className="text-gray-600 text-lg leading-relaxed mb-6 space-y-3">
-                <p><strong>1. Zero Friction:</strong> Visitors tap the Wi-Fi stand at the counter or table.</p>
+                <p><strong>1. Zero Friction:</strong> Visitors tap the Guest Wi-Fi Stand at the counter or table.</p>
                 <p><strong>2. Name and Password:</strong> Guests tap or scan to see your network name and password.</p>
                 <p><strong>3. No Spelling Out:</strong> Staff no longer need to read out or write up long passwords.</p>
               </div>
@@ -434,7 +394,7 @@ export default function Homepage() {
                 </svg>
               </div>
               <h3 className="text-2xl font-bold text-slate-900 mb-3">Order Your Tech</h3>
-              <p className="text-slate-500 leading-relaxed max-w-xs">Choose a Google review, menu or Wi-Fi stand, or a pet tag.</p>
+              <p className="text-slate-500 leading-relaxed max-w-xs">Choose a Google Review Stand, Digital Menu Stand, Guest Wi-Fi Stand or Smart Pet Tag.</p>
             </div>
 
             {/* Step 2 */}
@@ -486,7 +446,7 @@ export default function Homepage() {
               
               <div className="relative z-10 mb-12">
                 <h3 className="text-3xl font-extrabold text-slate-900 mb-3">Universal Compatibility</h3>
-                <p className="text-slate-600 max-w-sm leading-relaxed">No app required. Works with nearly all modern smartphones. Menu and Wi-Fi plaques also have a QR code as backup.</p>
+                <p className="text-slate-600 max-w-sm leading-relaxed">No app required. Works with nearly all modern smartphones. The Digital Menu Stand and Guest Wi-Fi Stand also have a QR code as backup.</p>
               </div>
 
               {/* Visual Apple/Android Graphic */}
@@ -592,7 +552,7 @@ export default function Homepage() {
                 </span>
               </summary>
               <p className="text-slate-600 px-6 pb-6 leading-relaxed">
-                No. Works with nearly all modern smartphones. Hold the top of the phone near the product and the page opens. Menu and Wi-Fi plaques also have a QR code as backup; Google Review stands and pet tags have no QR code.
+                No. Works with nearly all modern smartphones. Hold the top of the phone near the product and the page opens. The Digital Menu Stand and Guest Wi-Fi Stand also have a QR code as backup; the Google Review Stand and Smart Pet Tag have no QR code.
               </p>
             </details>
 
@@ -639,6 +599,46 @@ export default function Homepage() {
       </section>
 
     </div>
+  );
+}
+
+/**
+ * One homepage solution card. The whole card is a single link (no nested
+ * links); "Learn more" is a styled span inside it. Movement is motion-safe only.
+ */
+function SolutionCard({
+  to,
+  title,
+  text,
+  children,
+}: {
+  to: string;
+  title: string;
+  text: string;
+  children: ReactNode;
+}) {
+  return (
+    <Link
+      to={to}
+      prefetch="intent"
+      className="group bg-white rounded-[2.5rem] p-8 md:p-12 shadow-[0_8px_30px_rgb(0,0,0,0.08)] border border-slate-200 flex flex-col sm:flex-row items-center gap-8 no-underline hover:no-underline transition-[box-shadow,border-color,transform] duration-300 hover:border-[#1E3A8A]/30 hover:shadow-[0_16px_40px_rgb(0,0,0,0.12)] motion-safe:hover:-translate-y-1 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#1E3A8A] focus-visible:ring-offset-4"
+    >
+      <div className="flex-1 text-center sm:text-left sm:self-start">
+        <h3 className="text-2xl font-bold text-slate-900 mb-4">{title}</h3>
+        <p className="text-slate-600 leading-relaxed mb-8 text-sm md:text-base">{text}</p>
+        <span className="inline-flex items-center gap-2 min-h-[44px] px-6 rounded-full border-2 border-[#1E3A8A] text-[#1E3A8A] font-bold text-sm transition-colors duration-300 group-hover:bg-[#1E3A8A] group-hover:text-white group-focus-visible:bg-[#1E3A8A] group-focus-visible:text-white">
+          Learn more
+          <span aria-hidden="true" className="motion-safe:transition-transform motion-safe:duration-300 motion-safe:group-hover:translate-x-1">
+            &rarr;
+          </span>
+        </span>
+      </div>
+      <div className="w-48 md:w-64 h-[220px] md:h-[280px] bg-gradient-to-br from-[#FDFCF8] to-[#F5F4EE] rounded-[2rem] md:rounded-[2.5rem] relative flex-shrink-0 flex items-center justify-center overflow-hidden border border-black/5 shadow-sm">
+        <div className="absolute origin-center scale-[0.26] md:scale-[0.32] drop-shadow-[0_20px_25px_rgba(0,0,0,0.15)] motion-safe:transition-transform motion-safe:duration-500 motion-safe:group-hover:scale-[0.28] md:motion-safe:group-hover:scale-[0.35] motion-safe:group-hover:-translate-y-2">
+          {children}
+        </div>
+      </div>
+    </Link>
   );
 }
 
