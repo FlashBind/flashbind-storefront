@@ -114,6 +114,11 @@
   height: 100dvh;
 }
 
+/* Momentum scrolling inside overlay panels on older iOS Safari. */
+.scroll-touch {
+  -webkit-overflow-scrolling: touch;
+}
+
 /* Mobile menu: from the header's bottom edge (--menu-top, set inline) down to
    the bottom of the visible screen. */
 .h-below-menu-top {

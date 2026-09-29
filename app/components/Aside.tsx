@@ -6,6 +6,7 @@ import {
   useState,
 } from 'react';
 import {useId} from 'react';
+import {useScrollLock} from '~/lib/scrollLock';
 
 type AsideType = 'search' | 'cart' | 'mobile' | 'closed';
 type AsideContextValue = {
@@ -52,7 +53,7 @@ export function Aside({
     }
     return () => abortController.abort();
   }, [close, expanded]);
-  useBodyScrollLock(expanded);
+  useScrollLock(expanded);
 
   return (
     <div
@@ -77,42 +78,12 @@ export function Aside({
         } flex flex-col pt-[115px] md:pt-[124px]`}
       >
 
-        <main className="flex-1 overflow-y-auto overscroll-contain p-6 bg-[#F8FAFC] text-slate-800">
+        <main className="flex-1 overflow-y-auto overscroll-contain scroll-touch p-6 bg-[#F8FAFC] text-slate-800">
           {children}
         </main>
       </aside>
     </div>
   );
-}
-
-/**
- * Stops the page behind an open overlay from scrolling, and restores it when
- * the overlay closes. Counted, so two overlays open at once don't unlock early.
- * Locks <body> only (its overflow applies to the page viewport). Do not also
- * lock <html>: <body> has overflow-x-hidden (root.tsx), so any overflow on
- * <html> turns <body> into its own scroll box and the sticky header scrolls
- * off the top of the screen behind the open drawer.
- */
-let scrollLockCount = 0;
-let savedOverflow: string | null = null;
-
-export function useBodyScrollLock(locked: boolean) {
-  useEffect(() => {
-    if (!locked) return;
-    const body = document.body;
-    if (scrollLockCount === 0) {
-      savedOverflow = body.style.overflow;
-      body.style.overflow = 'hidden';
-    }
-    scrollLockCount += 1;
-    return () => {
-      scrollLockCount -= 1;
-      if (scrollLockCount === 0 && savedOverflow !== null) {
-        body.style.overflow = savedOverflow;
-        savedOverflow = null;
-      }
-    };
-  }, [locked]);
 }
 
 const AsideContext = createContext<AsideContextValue | null>(null);

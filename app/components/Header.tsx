@@ -6,7 +6,8 @@ import {
   useOptimisticCart,
 } from '@shopify/hydrogen';
 import type {HeaderQuery, CartApiQueryFragment} from 'storefrontapi.generated';
-import {useAside, useBodyScrollLock} from '~/components/Aside';
+import {useAside} from '~/components/Aside';
+import {useScrollLock} from '~/lib/scrollLock';
 import {ACTIVE_MARQUEE_ITEMS} from '~/config/marquee';
 
 interface HeaderProps {
@@ -60,8 +61,8 @@ export function Header({
     };
   }, [isMobileMenuOpen]);
   // Keep the page behind the mobile menu or account drawer from scrolling.
-  useBodyScrollLock(isMobileMenuOpen);
-  useBodyScrollLock(isAccountOpen);
+  useScrollLock(isMobileMenuOpen);
+  useScrollLock(isAccountOpen);
 
   return (
     <>
@@ -170,12 +171,12 @@ export function Header({
 
       {/* Mobile Slide-down Menu */}
       <div 
-        className={`nav:hidden fixed left-0 w-full h-below-menu-top bg-white shadow-xl transition-opacity duration-300 z-40 overflow-hidden ${
+        className={`nav:hidden fixed left-0 w-full h-below-menu-top bg-white shadow-xl transition-opacity duration-300 z-40 overflow-y-auto overscroll-contain scroll-touch ${
           isMobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none invisible'
         }`}
         style={{top: headerBottom, '--menu-top': `${headerBottom}px`} as CSSProperties}
       >
-        <div className="p-6 flex flex-col overflow-y-auto h-full overscroll-contain">
+        <div className="p-6 flex flex-col">
           {/* Mobile Search Bar */}
           <div className="mb-8">
             <Form method="get" action="/search" className="relative flex items-center" onSubmit={close}>
