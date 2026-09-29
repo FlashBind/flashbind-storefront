@@ -6,6 +6,7 @@ import {
   useState,
 } from 'react';
 import {useId} from 'react';
+import {useScrollLock} from '~/lib/scrollLock';
 
 type AsideType = 'search' | 'cart' | 'mobile' | 'closed';
 type AsideContextValue = {
@@ -52,11 +53,12 @@ export function Aside({
     }
     return () => abortController.abort();
   }, [close, expanded]);
+  useScrollLock(expanded);
 
   return (
     <div
       aria-modal
-      className={`fixed inset-0 z-40 transition-opacity duration-300 ${
+      className={`fixed inset-x-0 top-0 h-visible-screen z-40 transition-opacity duration-300 ${
         expanded ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
       }`}
       role="dialog"
@@ -76,7 +78,7 @@ export function Aside({
         } flex flex-col pt-[115px] md:pt-[124px]`}
       >
 
-        <main className="flex-1 overflow-y-auto p-6 bg-[#F8FAFC] text-slate-800">
+        <main className="flex-1 overflow-y-auto overscroll-contain scroll-touch p-6 bg-[#F8FAFC] text-slate-800">
           {children}
         </main>
       </aside>

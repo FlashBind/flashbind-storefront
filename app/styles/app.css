@@ -106,6 +106,26 @@
   min-height: calc(100svh - var(--header-h));
 }
 
+/* Overlays (cart, search, account drawer): exactly the visible screen height
+   on mobile browsers. 100vh alone is taller than the visible area on phones;
+   it stays only as the fallback where dvh isn't supported. */
+.h-visible-screen {
+  height: 100vh;
+  height: 100dvh;
+}
+
+/* Momentum scrolling inside overlay panels on older iOS Safari. */
+.scroll-touch {
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Mobile menu: from the header's bottom edge (--menu-top, set inline) down to
+   the bottom of the visible screen. */
+.h-below-menu-top {
+  height: calc(100vh - var(--menu-top, 0px));
+  height: calc(100dvh - var(--menu-top, 0px));
+}
+
 /* Edge glow (AmbientGlow.tsx): covers the hero. */
 .hero-glow-canvas {
   position: absolute;
