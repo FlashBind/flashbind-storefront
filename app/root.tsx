@@ -17,13 +17,15 @@ import resetStyles from '~/styles/reset.css?url';
 import appStyles from '~/styles/app.css?url';
 import {PageLayout} from './components/PageLayout';
 import {CookieBanner} from './components/CookieBanner';
+import {NotFoundPage, ServerErrorPage} from './components/ErrorPages';
+import {canTrackWithConsent} from './lib/cookieConsent';
 
 export type RootLoader = typeof loader;
 
 export const meta: Route.MetaFunction = () => {
   return [
     {title: 'FlashBind'},
-    {name: 'description', content: 'FlashBind sells NFC products that help hospitality businesses collect more Google reviews, share menus, and connect with guests instantly.'},
+    {name: 'description', content: 'FlashBind sells NFC products that help hospitality businesses make it easy for customers to leave a Google review, open your menu and get your Wi-Fi details.'},
   ];
 };
 
@@ -190,6 +192,7 @@ export default function App() {
         cart={data.cart}
         shop={data.shop}
         consent={data.consent}
+        canTrack={canTrackWithConsent}
       >
         <Outlet />
         <CookieBanner />
@@ -202,6 +205,7 @@ export default function App() {
       cart={data.cart}
       shop={data.shop}
       consent={data.consent}
+      canTrack={canTrackWithConsent}
     >
       <PageLayout {...data}>
         <Outlet />
@@ -213,6 +217,7 @@ export default function App() {
 
 export function ErrorBoundary() {
   const error = useRouteError();
+  const data = useRouteLoaderData<RootLoader>('root');
   let errorMessage = 'Unknown error';
   let errorStatus = 500;
 
@@ -223,15 +228,20 @@ export function ErrorBoundary() {
     errorMessage = error.message;
   }
 
+  const content =
+    errorStatus === 404 ? (
+      <NotFoundPage />
+    ) : (
+      // Error details only in development; visitors never see internals.
+      <ServerErrorPage status={errorStatus} detail={import.meta.env.DEV ? String(errorMessage) : undefined} />
+    );
+
+  // If the site's own data loaded (the usual case for a 404), show the page
+  // inside the normal header and footer.
+  if (!data) return content;
   return (
-    <div className="route-error">
-      <h1>Oops</h1>
-      <h2>{errorStatus}</h2>
-      {errorMessage && (
-        <fieldset>
-          <pre>{errorMessage}</pre>
-        </fieldset>
-      )}
-    </div>
+    <Analytics.Provider cart={data.cart} shop={data.shop} consent={data.consent} canTrack={canTrackWithConsent}>
+      <PageLayout {...data}>{content}</PageLayout>
+    </Analytics.Provider>
   );
 }

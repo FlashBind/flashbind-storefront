@@ -1,7 +1,9 @@
 import { describe, it, expect, vi } from 'vitest';
-import { generateBatch, getSupplierCSV, getInternalCSV, claimTagAtomically, removePinFromSettings } from './app/utils/tagAdmin.server';
-import { normalizeTrustedClientIp, buildActivationRateLimitIdentifiers } from './app/utils/requestSecurity.server';
+import { generateBatch, getSupplierCSV, getInternalCSV, claimTagAtomically, removePinFromSettings, buildReleasedTagUpdate } from './app/utils/tagAdmin.server';
+import { retentionCutoff, attachmentPathFromUrl, RATE_LIMIT_RETENTION_DAYS, CONTACT_MESSAGE_RETENTION_DAYS } from './app/utils/retention.server';
+import { normalizeTrustedClientIp, buildActivationRateLimitIdentifiers, isSameOriginRequest, assertSameOrigin } from './app/utils/requestSecurity.server';
 import crypto from 'node:crypto';
+import { escapeHtml } from './app/utils/email.server';
 
 // Fluent Mock Supabase Client Factory
 function createMockSupabase(responses: any = {}) {
@@ -449,5 +451,97 @@ describe('Rate-Limit IP Identifier Validation', () => {
       expect(identifiers[0]).toBe(ACCOUNT_BUCKET);
       expect(identifiers).toContain(ACCOUNT_BUCKET);
     }
+  });
+});
+
+describe('Same-origin check (CSRF)', () => {
+  const post = (headers: Record<string, string>) =>
+    new Request('https://flashbind.com/logout', {method: 'POST', headers});
+
+  it('accepts a post whose Origin is this site', () => {
+    expect(isSameOriginRequest(post({origin: 'https://flashbind.com', host: 'flashbind.com'}))).toBe(true);
+  });
+
+  it('rejects a post from another site', () => {
+    expect(isSameOriginRequest(post({origin: 'https://evil.example', host: 'flashbind.com'}))).toBe(false);
+  });
+
+  it('rejects a look-alike host', () => {
+    expect(isSameOriginRequest(post({origin: 'https://flashbind.com.evil.example', host: 'flashbind.com'}))).toBe(false);
+  });
+
+  it('rejects the opaque "null" origin and malformed origins', () => {
+    expect(isSameOriginRequest(post({origin: 'null', host: 'flashbind.com'}))).toBe(false);
+    expect(isSameOriginRequest(post({origin: 'not a url', host: 'flashbind.com'}))).toBe(false);
+  });
+
+  it('uses X-Forwarded-Host when present, like the framework check', () => {
+    expect(isSameOriginRequest(post({origin: 'https://flashbind.com', host: 'internal:8080', 'x-forwarded-host': 'flashbind.com'}))).toBe(true);
+  });
+
+  it('falls back to Sec-Fetch-Site when Origin is missing', () => {
+    expect(isSameOriginRequest(post({'sec-fetch-site': 'same-origin'}))).toBe(true);
+    expect(isSameOriginRequest(post({'sec-fetch-site': 'none'}))).toBe(true);
+    expect(isSameOriginRequest(post({'sec-fetch-site': 'cross-site'}))).toBe(false);
+    expect(isSameOriginRequest(post({'sec-fetch-site': 'same-site'}))).toBe(false);
+  });
+
+  it('allows non-browser clients that send neither header', () => {
+    expect(isSameOriginRequest(post({}))).toBe(true);
+  });
+
+  it('assertSameOrigin throws a 403 response for a cross-site post', () => {
+    try {
+      assertSameOrigin(post({origin: 'https://evil.example', host: 'flashbind.com'}));
+      expect.unreachable('should have thrown');
+    } catch (e) {
+      expect(e).toBeInstanceOf(Response);
+      expect((e as Response).status).toBe(403);
+    }
+    expect(() => assertSameOrigin(post({origin: 'https://flashbind.com', host: 'flashbind.com'}))).not.toThrow();
+  });
+});
+
+describe('Account deletion: tag reset (PRIV-002)', () => {
+  it('clears every personal field and unclaims the tag', () => {
+    const update = buildReleasedTagUpdate({batch_id: 'b1'});
+    expect(update).toMatchObject({
+      is_claimed: false, owner_email: null, owner_name: null, pet_name: null,
+      phone: null, medical_notes: null, image_url: null,
+    });
+  });
+
+  it('gives batch tags a fresh 6-digit PIN (satisfies tags_batch_pin_check) and nothing else', () => {
+    const update = buildReleasedTagUpdate({batch_id: 'b1'});
+    expect(Object.keys(update.settings)).toEqual(['activation_pin']);
+    expect((update.settings as {activation_pin: string}).activation_pin).toMatch(/^[0-9]{6}$/);
+  });
+
+  it('gives legacy (non-batch) tags empty settings', () => {
+    expect(buildReleasedTagUpdate({batch_id: null}).settings).toEqual({});
+  });
+});
+
+describe('Retention helpers (PRIV-002)', () => {
+  it('matches the periods in the Privacy Policy', () => {
+    expect(RATE_LIMIT_RETENTION_DAYS).toBe(30);
+    expect(CONTACT_MESSAGE_RETENTION_DAYS).toBe(730);
+  });
+
+  it('computes the cutoff date', () => {
+    expect(retentionCutoff(30, new Date('2026-09-26T00:00:00Z'))).toBe('2026-08-27T00:00:00.000Z');
+  });
+
+  it('extracts attachment file names only from the attachments bucket', () => {
+    expect(attachmentPathFromUrl('https://x.supabase.co/storage/v1/object/public/attachments/1727-abc.png')).toBe('1727-abc.png');
+    expect(attachmentPathFromUrl('https://x.supabase.co/storage/v1/object/public/attachments/a%2F..%2Fb.png')).toBeNull();
+    expect(attachmentPathFromUrl('https://x.supabase.co/storage/v1/object/public/other/1727-abc.png')).toBeNull();
+    expect(attachmentPathFromUrl(null)).toBeNull();
+  });
+});
+
+describe('Notification email escaping', () => {
+  it('escapes HTML typed by visitors', () => {
+    expect(escapeHtml(`<img src=x onerror="alert(1)"> & 'hi'`)).toBe('&lt;img src=x onerror=&quot;alert(1)&quot;&gt; &amp; &#39;hi&#39;');
   });
 });

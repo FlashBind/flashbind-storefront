@@ -42,17 +42,17 @@ async function loadCriticalData({context, request, params}: Route.LoaderArgs) {
     let mockPublishedAt = new Date().toISOString();
 
     if (articleHandle === 'google-review-seo') {
-      mockTitle = "How to Boost Your Local SEO with Google Review Stands";
+      mockTitle = "Google Reviews and Local SEO: How a Google Review Stand Helps";
       mockImageUrl = "/seo_blog_featured.png";
-      mockPublishedAt = "2026-10-18T00:00:00Z";
+      mockPublishedAt = "2026-09-18T00:00:00Z";
     } else if (articleHandle === 'nfc-hospitality') {
       mockTitle = "Why NFC is Replacing QR Codes in Hospitality";
       mockImageUrl = "/nfc_blog_featured_new.png";
-      mockPublishedAt = "2026-10-24T00:00:00Z";
+      mockPublishedAt = "2026-09-24T00:00:00Z";
     } else if (articleHandle === 'smart-pet-tags') {
       mockTitle = "Why Smart Pet Tags are the New Standard for Pet Safety";
       mockImageUrl = "/pet_tags_blog_featured.png";
-      mockPublishedAt = "2026-10-05T00:00:00Z";
+      mockPublishedAt = "2026-09-05T00:00:00Z";
     }
 
     const mockArticle = {
@@ -121,7 +121,7 @@ export default function Article() {
           <div className="inline-block mb-6 px-4 py-1.5 rounded-full bg-slate-100 text-slate-500 text-sm font-bold tracking-widest uppercase">
             Article
           </div>
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-slate-900 tracking-tight mb-8 leading-tight text-center">
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-medium text-slate-900 tracking-tighter mb-8 leading-tight text-center">
             {title}
           </h1>
           <div className="flex items-center justify-center gap-4 text-slate-500 font-medium w-full text-center">
@@ -171,12 +171,12 @@ export default function Article() {
                 <li><strong>Dynamic Updating:</strong> 86'd a menu item? Changed the price of the special? The digital destination tied to the NFC chip can be updated from the cloud in seconds without ever replacing the physical stand.</li>
               </ul>
 
-              <h2 className="text-2xl md:text-3xl font-bold text-gray-900 pt-6">Skyrocketing Local SEO with Frictionless Reviews</h2>
+              <h2 className="text-2xl md:text-3xl font-bold text-gray-900 pt-6">Making Google Reviews Effortless</h2>
               <p>
-                Beyond just menus, NFC is solving one of the biggest marketing hurdles for local businesses: capturing Google Reviews. Happy customers are rarely motivated to manually search for your business on Google just to leave a five-star rating. 
+                Beyond just menus, NFC is solving one of the biggest marketing hurdles for local businesses: capturing Google Reviews. Few customers will search for your business on Google by hand just to leave a review.
               </p>
               <p>
-                By placing a Smart Review Stand at the host stand or checkout counter, staff can simply ask, <em>"Did you enjoy your meal? A quick tap here really helps us out."</em> The tap instantly bypasses the search process, dropping the customer directly onto the five-star review submission page. It turns a multi-step chore into a single-second favor.
+                With a Google Review Stand at the host stand or checkout counter, staff can simply ask, <em>"Would you leave us a Google review? Just tap here."</em> The tap skips the search and opens your Google review page, where the customer rates and writes freely. It makes it effortless for customers to leave a Google review.
               </p>
 
               <h2 className="text-2xl md:text-3xl font-bold text-gray-900 pt-6">The Future is Frictionless</h2>
@@ -199,21 +199,21 @@ export default function Article() {
                 Here is the frustrating reality of running a business: people are lazy. Your customers might love your service, but asking them to manually pull out their phone, open the Google app, search for your business name, navigate to the review tab, and type out a response is a massive ask. 
               </p>
               <p>
-                Because of this friction, businesses usually only get reviews from the extremes: customers who are absolutely thrilled, or customers who are furious. The silent majority of happy, satisfied customers leave without ever boosting your local SEO.
+                Because of this friction, businesses usually only get reviews from the extremes: customers who are absolutely thrilled, or customers who are furious. Most ordinary visitors leave without ever writing anything.
               </p>
               
               <h2 className="text-2xl md:text-3xl font-bold text-gray-900 pt-6">Bridging the Gap with NFC Technology</h2>
               <p>
-                This is where physical NFC (Near Field Communication) endpoints completely change the game. By placing a Smart Google Review Stand at your point of sale, host stand, or reception desk, you eliminate 100% of the digital friction.
+                This is where physical NFC (Near Field Communication) endpoints completely change the game. By placing a Google Review Stand at your point of sale, host stand, or reception desk, you remove most of those steps.
               </p>
               <p>
-                When staff finish a positive interaction, they simply ask, <em>"We're so glad you had a great experience! Would you mind giving us a quick tap?"</em> The customer taps their phone to the acrylic stand, and their screen instantly opens directly to your Google Review submission form. 
+                Staff can ask every customer, <em>"Would you mind leaving us a Google review? Just tap here."</em> The customer taps their phone to the acrylic stand and your Google review page opens, where they can give whatever rating they choose.
               </p>
               
               <ul className="list-disc pl-8 space-y-3">
-                <li><strong>Skyrocketing Review Velocity:</strong> Google monitors how fast you get reviews. A steady stream of daily tap-and-go reviews signals to the algorithm that your business is highly active and relevant.</li>
-                <li><strong>Higher Conversion Rates:</strong> By asking for the review while the customer is physically in the store and highly engaged, conversion rates jump from a dismal 2% (via email follow-ups) to over 30%.</li>
-                <li><strong>Capturing the Silent Majority:</strong> When the process takes two seconds, the everyday happy customer is suddenly willing to leave you that crucial 5-star rating.</li>
+                <li><strong>More Recent Reviews:</strong> Asking every day at the counter makes a steady flow of new reviews more likely.</li>
+                <li><strong>The Right Moment:</strong> You ask while the customer is still with you, instead of in a follow-up email they may never open.</li>
+                <li><strong>Hearing From More Customers:</strong> When leaving a review takes seconds, more of your everyday customers are willing to share honest feedback.</li>
               </ul>
 
               <h2 className="text-2xl md:text-3xl font-bold text-gray-900 pt-6">Stop Leaving SEO to Chance</h2>
@@ -221,7 +221,7 @@ export default function Article() {
                 Search Engine Optimization doesn't always have to mean paying thousands of dollars to agencies for backlink campaigns. For local hospitality and retail venues, the most powerful SEO tool you have is the voice of your customers. 
               </p>
               <p>
-                By bridging the physical world with your digital reputation using a Smart Review Stand, you take control of your local rankings, dominate the map pack, and drive passive foot traffic to your door for years to come.
+                A Google Review Stand makes it effortless for customers to leave a Google review while they are still with you, so your review profile reflects more of the people you actually serve.
               </p>
             </div>
           ) : article.handle === 'smart-pet-tags' ? (
@@ -240,17 +240,13 @@ export default function Article() {
               </p>
               
               <ul className="list-disc pl-8 space-y-3">
-                <li><strong>Multiple Contacts:</strong> Include secondary phone numbers for spouses, neighbors, or your local vet.</li>
+                <li><strong>Easy Updates:</strong> Change your phone number any time without buying a new tag.</li>
                 <li><strong>Medical Needs:</strong> Instantly alert the finder if your pet needs daily medication or has severe allergies.</li>
                 <li><strong>Behavioral Notes:</strong> Let people know if your dog is friendly but skittish, or if they should avoid sudden movements.</li>
               </ul>
 
-              <h2 className="text-2xl md:text-3xl font-bold text-gray-900 pt-6">The Magic of Passive GPS Tracking</h2>
               <p>
-                While bulky GPS collars require constant charging and monthly subscriptions, Smart Pet Tags work seamlessly without batteries. Many advanced tags automatically capture the GPS location of the finder's phone the moment the tag is scanned, sending you an instant notification with a map pin of exactly where your pet was found.
-              </p>
-              <p>
-                It's time to ditch the clunky, noisy metal tags that wear out over time. Upgrade to a modern, durable, and infinitely updatable Smart Pet Tag and give yourself the ultimate peace of mind.
+                It's time to ditch the clunky, noisy metal tags that wear out over time. Upgrade to a Smart Pet Tag you can update any time and give yourself the ultimate peace of mind.
               </p>
             </div>
           ) : (

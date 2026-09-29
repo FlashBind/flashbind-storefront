@@ -1,7 +1,8 @@
 import {useLoaderData, Link} from 'react-router';
 import type {Route} from './+types/collections.all';
-import {getPaginationVariables} from '@shopify/hydrogen';
+import {getPaginationVariables, Money} from '@shopify/hydrogen';
 import {PaginatedResourceSection} from '~/components/PaginatedResourceSection';
+import {productBlurb} from '~/config/products';
 
 export const meta: Route.MetaFunction = () => {
   return [{title: `FlashBind | All Products`}];
@@ -31,7 +32,7 @@ export default function Collection() {
           <div className="inline-block mb-4 px-4 py-2 rounded-full border border-[#1E3A8A]/20 bg-[#1E3A8A]/5 text-[#1E3A8A] text-sm font-bold tracking-widest uppercase">
             Catalog
           </div>
-          <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight mb-4">All Products</h1>
+          <h1 className="text-4xl md:text-5xl font-medium text-slate-900 tracking-tighter mb-4">All Products</h1>
           <p className="text-slate-500 text-lg max-w-2xl mx-auto">Explore our complete range of premium NFC technology for businesses and individuals.</p>
         </div>
 
@@ -49,28 +50,29 @@ export default function Collection() {
 }
 
 function TrendingProductCard({ product }: { product: any }) {
-  // Format price
-  const priceAmount = product.priceRange?.minVariantPrice?.amount;
-  const compareAmount = product.compareAtPriceRange?.minVariantPrice?.amount;
-  
-  const price = priceAmount ? `$${parseFloat(priceAmount).toFixed(2)}` : 'View Price';
-  const comparePrice = compareAmount ? `$${parseFloat(compareAmount).toFixed(2)}` : null;
+  // Prices are formatted by Shopify, in the shop's currency (EUR).
+  const priceMoney = product.priceRange?.minVariantPrice;
+  const compareMoney = product.compareAtPriceRange?.minVariantPrice;
+  const priceAmount = priceMoney?.amount;
+  const compareAmount = compareMoney?.amount;
+
+  const price = priceMoney ? <Money as="span" data={priceMoney} /> : 'View Price';
+  const comparePrice = compareMoney ? <Money as="span" data={compareMoney} /> : null;
   const isSale = compareAmount && priceAmount && parseFloat(compareAmount) > parseFloat(priceAmount);
   const isSoldOut = product.availableForSale === false;
-  const isComingSoon = isSoldOut && ['guest-wi-fi-hub', 'nfc-restaurant-menu-stand'].includes(product.handle || '');
-  const isSellingFast = product.tags?.includes('selling-fast') || product.handle?.includes('pet');
+  const isSellingFast = product.tags?.includes('selling-fast');
 
   return (
     <Link to={`/products/${product.handle}`} className="block">
       <div className="bg-white/60 backdrop-blur-3xl rounded-[2.5rem] p-6 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:-translate-y-2 hover:shadow-[0_0_25px_rgba(30,58,138,0.4)] transition-all duration-500 group border-2 border-white/80 hover:border-[#1E3A8A] relative overflow-hidden" style={{ animation: 'fadeIn 0.5s ease-out both' }}>
         <div className="relative z-10">
-          <div className="relative z-10 flex flex-col items-start gap-2 absolute top-4 left-4 z-20">
+          <div className="absolute top-4 left-4 z-20 flex flex-col items-start gap-2">
             {isSoldOut ? (
               <div className="bg-slate-800/90 backdrop-blur-sm border border-slate-700/50 text-white text-[11px] font-extrabold uppercase tracking-widest py-1.5 px-3 rounded-full shadow-sm">
-                {isComingSoon ? 'Coming Soon' : 'Sold Out'}
+                Coming Soon
               </div>
             ) : isSellingFast ? (
-              <div className="bg-orange-500 text-white text-[11px] font-extrabold uppercase tracking-widest py-1.5 px-3 rounded-full shadow-sm flex items-center gap-1.5">
+              <div className="bg-[#1E3A8A] text-white text-[11px] font-extrabold uppercase tracking-widest py-1.5 px-3 rounded-full shadow-sm flex items-center gap-1.5">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" viewBox="0 0 20 20" fill="currentColor">
                   <path fillRule="evenodd" d="M12.395 2.553a1 1 0 00-1.45-.385c-.345.23-.614.558-.822.88-.214.33-.403.713-.57 1.116-.334.804-.614 1.768-.84 2.734a31.365 31.365 0 00-.613 3.58 2.64 2.64 0 01-.945-1.067c-.328-.68-.398-1.534-.398-2.654A1 1 0 005.05 6.05 6.981 6.981 0 003 11a7 7 0 1011.95-4.95c-.592-.591-.98-.985-1.348-1.467-.363-.476-.724-1.063-1.207-2.03zM12.12 15.12A3 3 0 017 13s.879.5 2.5.5c0-1 .5-4 1.25-4.5.5 1 .786 1.293 1.371 1.879A2.99 2.99 0 0113 13a2.99 2.99 0 01-.879 2.121z" clipRule="evenodd" />
                 </svg>
@@ -102,7 +104,7 @@ function TrendingProductCard({ product }: { product: any }) {
             {product.title}
           </h3>
           <p className="font-sans text-slate-500 text-[15px] mb-6 leading-relaxed line-clamp-2">
-            {product.description || "View product details for more information."}
+            {productBlurb(product.handle)}
           </p>
 
           <div className="flex items-center justify-between mt-auto pt-4 border-t border-slate-100">

@@ -50,21 +50,12 @@ export default function DemoPage() {
                       {/* Contact Information */}
                       <div className="grid grid-cols-1 gap-3">
                         <div className="bg-slate-50 p-3 rounded-2xl border border-slate-100 flex items-center gap-3">
-                          <div className="bg-blue-100 text-blue-600 p-2 rounded-full flex-shrink-0">
+                          <div className="bg-[#1E3A8A]/10 text-[#1E3A8A] p-2 rounded-full flex-shrink-0">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
                               <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-2.896-1.596-5.48-4.18-7.076-7.076l1.293-.97c.362-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z" />
                             </svg>
                           </div>
                           <span className="text-sm font-medium text-slate-900">+1 (555) 123-4567</span>
-                        </div>
-                        
-                        <div className="bg-slate-50 p-3 rounded-2xl border border-slate-100 flex items-center gap-3">
-                          <div className="bg-blue-100 text-blue-600 p-2 rounded-full flex-shrink-0">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
-                              <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
-                            </svg>
-                          </div>
-                          <span className="text-sm font-medium text-slate-900">sarah@example.com</span>
                         </div>
                       </div>
                       
@@ -81,7 +72,7 @@ export default function DemoPage() {
                     </div>
                     
                     {/* Action Button */}
-                    <button className="block w-full text-center bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 md:py-4 rounded-full transition-colors text-lg mt-4 md:mt-6 cursor-default">
+                    <button className="block w-full text-center bg-[#1E3A8A] hover:bg-[#172A66] text-white font-bold py-3 md:py-4 rounded-full transition-colors text-lg mt-4 md:mt-6 cursor-default">
                       Call Owner
                     </button>
                   </div>
@@ -93,7 +84,7 @@ export default function DemoPage() {
           {/* Right Column: Explanation (Appears 1st on mobile) */}
           <div className="order-1 md:order-2 flex flex-col gap-5 md:gap-6">
             <div>
-              <Link to="/products/smart-pet-collar-tag" className="inline-flex items-center text-slate-500 hover:text-blue-600 text-sm font-semibold mb-6 transition-colors group">
+              <Link to="/products/smart-pet-collar-tag" className="inline-flex items-center text-slate-500 hover:text-[#1E3A8A] text-sm font-semibold mb-6 transition-colors group">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2 transform group-hover:-translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                 </svg>
@@ -103,13 +94,13 @@ export default function DemoPage() {
                 This is what the finder sees.
               </h1>
               <p className="text-lg md:text-xl text-slate-600 mb-2 md:mb-4">
-                Interact with the phone on the left to see exactly how your profile looks when scanned.
+                <span className="md:hidden">Try the phone below</span><span className="hidden md:inline">Interact with the phone on the left</span> to see exactly how your profile looks when scanned.
               </p>
             </div>
 
             <div className="space-y-3 md:space-y-4">
               <div className="bg-white p-4 md:p-6 rounded-2xl shadow-sm border border-slate-100 flex gap-4 md:gap-5 items-center">
-                <div className="flex-shrink-0 bg-blue-50 text-blue-600 p-3 rounded-xl border border-blue-100/50">
+                <div className="flex-shrink-0 bg-[#1E3A8A]/5 text-[#1E3A8A] p-3 rounded-xl border border-[#1E3A8A]/5">
                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6">
                     <path d="M6 8.32a7.43 7.43 0 0 1 0 7.36" />
                     <path d="M9.46 6.21a11.76 11.76 0 0 1 0 11.58" />
@@ -123,7 +114,7 @@ export default function DemoPage() {
                 </div>
               </div>
               <div className="bg-white p-4 md:p-6 rounded-2xl shadow-sm border border-slate-100 flex gap-4 md:gap-5 items-center">
-                <div className="flex-shrink-0 bg-blue-50 text-blue-600 p-3 rounded-xl border border-blue-100/50">
+                <div className="flex-shrink-0 bg-[#1E3A8A]/5 text-[#1E3A8A] p-3 rounded-xl border border-[#1E3A8A]/5">
                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6">
                     <path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z" />
                   </svg>
@@ -134,7 +125,7 @@ export default function DemoPage() {
                 </div>
               </div>
               <div className="bg-white p-4 md:p-6 rounded-2xl shadow-sm border border-slate-100 flex gap-4 md:gap-5 items-center">
-                <div className="flex-shrink-0 bg-blue-50 text-blue-600 p-3 rounded-xl border border-blue-100/50">
+                <div className="flex-shrink-0 bg-[#1E3A8A]/5 text-[#1E3A8A] p-3 rounded-xl border border-[#1E3A8A]/5">
                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6">
                     <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
                     <path d="M14.05 2a9 9 0 0 1 8 7.94" />
@@ -151,7 +142,7 @@ export default function DemoPage() {
             <div className="pt-4 md:pt-6">
               <Link
                 to="/products/smart-pet-collar-tag"
-                className="w-full md:w-auto inline-flex items-center justify-center bg-blue-600 text-white font-bold py-4 px-10 rounded-full hover:bg-blue-700 transition-all text-lg shadow-lg hover:shadow-xl hover:-translate-y-1"
+                className="w-full md:w-auto inline-flex items-center justify-center bg-[#1E3A8A] text-white font-bold py-4 px-10 rounded-full hover:bg-[#172A66] transition-all text-lg shadow-lg hover:shadow-xl hover:-translate-y-1"
               >
                 Get Your Tag
               </Link>

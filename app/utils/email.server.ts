@@ -1,3 +1,13 @@
+/** Escapes visitor-typed text before it goes into the notification HTML. */
+export function escapeHtml(value: string): string {
+  return value
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
 export async function sendEmailNotification({
   subject,
   email,
@@ -15,12 +25,12 @@ export async function sendEmailNotification({
   adminEmail: string;
   apiKey: string;
 }) {
-  let htmlMessage = `<h2>New ${type} submission</h2>`;
-  htmlMessage += `<p><strong>From:</strong> ${email}</p>`;
-  htmlMessage += `<p><strong>Message:</strong><br/>${message.replace(/\n/g, '<br/>')}</p>`;
-  
+  let htmlMessage = `<h2>New ${escapeHtml(type)} submission</h2>`;
+  htmlMessage += `<p><strong>From:</strong> ${escapeHtml(email)}</p>`;
+  htmlMessage += `<p><strong>Message:</strong><br/>${escapeHtml(message).replace(/\n/g, '<br/>')}</p>`;
+
   if (attachmentUrl) {
-    htmlMessage += `<hr/><p><strong>Design File Attachment:</strong> <a href="${attachmentUrl}">View File</a></p>`;
+    htmlMessage += `<hr/><p><strong>Design File Attachment:</strong> <a href="${escapeHtml(attachmentUrl)}">View File</a></p>`;
   }
 
   try {

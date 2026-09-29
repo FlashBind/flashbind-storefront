@@ -1,5 +1,5 @@
 import {Link, useNavigate} from 'react-router';
-import {type MappedProductOptions, CartForm} from '@shopify/hydrogen';
+import {type MappedProductOptions, CartForm, Money} from '@shopify/hydrogen';
 import type {
   Maybe,
   ProductOptionValueSwatch,
@@ -12,23 +12,18 @@ import {useState} from 'react';
 export function ProductForm({
   productOptions,
   selectedVariant,
-  productHandle,
 }: {
   productOptions: MappedProductOptions[];
   selectedVariant: ProductFragment['selectedOrFirstAvailableVariant'];
-  productHandle?: string;
 }) {
   const navigate = useNavigate();
   const {open} = useAside();
   const [quantity, setQuantity] = useState(1);
 
-  // Format price for button
-  const formattedPrice = selectedVariant?.price
-    ? new Intl.NumberFormat('en-US', {
-        style: 'currency',
-        currency: selectedVariant.price.currencyCode,
-      }).format(parseFloat(selectedVariant.price.amount))
-    : '';
+  // Price for the button, formatted by Shopify in the shop's currency.
+  const formattedPrice = selectedVariant?.price ? (
+    <Money as="span" data={selectedVariant.price} />
+  ) : null;
 
   return (
     <div className="product-form flex flex-col gap-8">
@@ -145,17 +140,13 @@ export function ProductForm({
           }
           className={`w-full text-white font-extrabold uppercase tracking-widest h-14 rounded-xl shadow-lg transition-all duration-300 flex justify-center items-center gap-2 text-sm sm:text-base border-2 border-transparent ${
             selectedVariant?.availableForSale
-              ? 'bg-blue-600 hover:bg-blue-700 hover:shadow-xl hover:-translate-y-1'
+              ? 'bg-[#1E3A8A] hover:bg-[#172A66] hover:shadow-xl hover:-translate-y-1'
               : 'bg-slate-400 cursor-not-allowed opacity-80'
           }`}
         >
           {selectedVariant?.availableForSale
             ? <span>ADD TO CART &mdash; {formattedPrice}</span>
-            : <span>
-                {['guest-wi-fi-hub', 'nfc-restaurant-menu-stand'].includes(productHandle || '')
-                  ? 'COMING SOON'
-                  : 'SOLD OUT'}
-              </span>
+            : <span>COMING SOON</span>
           }
         </AddToCartButton>
 

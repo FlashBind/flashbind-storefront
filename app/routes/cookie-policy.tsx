@@ -1,44 +1,138 @@
 import type {MetaFunction} from 'react-router';
+import {Link} from 'react-router';
+import {PolicyLayout, PolicyHeading} from '~/components/PolicyLayout';
+import {SellerDetails} from '~/components/SellerDetails';
+import {SELLER} from '~/config/seller';
+
+// DRAFT for legal review (LEGAL-001, LEGAL-003). EU cookie notice. The list
+// matches what the site sets as of 2026-09-28: our login session cookie, the
+// Hydrogen cart cookie, the consent choice (our localStorage key
+// flashbind_cookie_consent plus Shopify's consent cookie), and Shopify's
+// analytics/marketing cookies, which load only after "Accept". Durations of
+// Shopify's cookies are taken from Shopify's published cookie list; confirm
+// them in the legal review. Keep this list in sync with the code.
 
 export const meta: MetaFunction = () => {
   return [{title: 'FlashBind | Cookie Policy'}];
 };
 
+const link = 'text-[#1E3A8A] underline';
+const cell = 'p-3 border-b align-top';
+
+const ESSENTIAL = [
+  {
+    name: 'session',
+    by: 'FlashBind',
+    purpose: 'Keeps you logged in to your FlashBind account.',
+    duration: 'Until you close your browser or log out',
+  },
+  {
+    name: 'cart',
+    by: 'FlashBind (Shopify cart)',
+    purpose: 'Remembers what is in your shopping cart.',
+    duration: '14 days',
+  },
+  {
+    name: 'flashbind_cookie_consent (browser storage) and _tracking_consent',
+    by: 'FlashBind and Shopify',
+    purpose: 'Remembers your cookie choice so we don’t ask again and only load the cookies you allowed.',
+    duration: 'Until you change it (browser storage); 1 year (_tracking_consent)',
+  },
+];
+
+const OPTIONAL = [
+  {
+    name: '_shopify_y, _shopify_s',
+    by: 'Shopify',
+    purpose: 'Analytics: counts visits and how the shop is used (for example which pages are viewed), so we can improve it.',
+    duration: '1 year (_shopify_y); 30 minutes (_shopify_s)',
+  },
+  {
+    name: '_shopify_sa_p, _shopify_sa_t',
+    by: 'Shopify',
+    purpose: 'Marketing: tells us which link or campaign brought a visitor to the shop.',
+    duration: '30 minutes',
+  },
+];
+
+function CookieTable({rows}: {rows: typeof ESSENTIAL}) {
+  return (
+    <div className="overflow-x-auto">
+      <table className="w-full text-sm border border-slate-200">
+        <thead className="bg-slate-50 text-slate-900">
+          <tr>
+            <th className="text-left p-3 border-b">Name</th>
+            <th className="text-left p-3 border-b">Set by</th>
+            <th className="text-left p-3 border-b">What it does</th>
+            <th className="text-left p-3 border-b">How long</th>
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((row) => (
+            <tr key={row.name}>
+              <td className={`${cell} font-mono text-xs break-words`}>{row.name}</td>
+              <td className={cell}>{row.by}</td>
+              <td className={cell}>{row.purpose}</td>
+              <td className={cell}>{row.duration}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
 export default function CookiePolicyPage() {
   return (
-    <div className="min-h-screen bg-gray-50 py-24 relative overflow-hidden">
-      <div className="container mx-auto px-6 max-w-4xl relative z-10">
-        <div className="bg-white rounded-[2rem] p-10 md:p-16 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100">
-          <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight mb-8">Cookie Policy</h1>
-          
-          <div className="prose prose-slate max-w-none text-slate-600 leading-relaxed space-y-6">
-            <p className="font-semibold text-slate-900">Last updated: October 24, 2026</p>
-            
-            <p>This Cookie Policy explains how FlashBind uses cookies and similar technologies to recognize you when you visit our website. It explains what these technologies are and why we use them, as well as your rights to control our use of them.</p>
+    <PolicyLayout title="Cookie Policy">
+      {/* LEGAL-001: legal review of this policy is still pending. The visible draft note was removed for launch. */}
+      <p>
+        This policy explains which cookies and similar browser storage the FlashBind website uses, what they do, and
+        how you can change your choice. It follows the EU rules on cookies (the ePrivacy Directive as applied in
+        Lithuania) and the GDPR.
+      </p>
 
-            <h2 className="text-2xl font-bold text-slate-900 mt-8 mb-4">1. What are cookies?</h2>
-            <p>Cookies are small data files that are placed on your computer or mobile device when you visit a website. Cookies are widely used by website owners in order to make their websites work, or to work more efficiently, as well as to provide reporting information.</p>
+      <PolicyHeading>1. Who we are</PolicyHeading>
+      <SellerDetails className="bg-slate-50 border border-slate-200 rounded-2xl p-6 text-sm" />
 
-            <h2 className="text-2xl font-bold text-slate-900 mt-8 mb-4">2. Why do we use cookies?</h2>
-            <p>We use first and third-party cookies for several reasons. Some cookies are required for technical reasons in order for our website to operate, and we refer to these as "essential" or "strictly necessary" cookies. Other cookies also enable us to track and target the interests of our users to enhance the experience on our online properties.</p>
+      <PolicyHeading>2. What cookies are</PolicyHeading>
+      <p>
+        Cookies are small text files a website saves in your browser. Browser storage works in a similar way. We use
+        both only for the purposes listed below.
+      </p>
 
-            <h2 className="text-2xl font-bold text-slate-900 mt-8 mb-4">3. Types of Cookies We Use</h2>
-            <ul className="list-disc pl-6 space-y-2">
-              <li><strong>Essential website cookies:</strong> These cookies are strictly necessary to provide you with services available through our website and to use some of its features, such as access to secure areas.</li>
-              <li><strong>Performance and functionality cookies:</strong> These cookies are used to enhance the performance and functionality of our website but are non-essential to their use. However, without these cookies, certain functionality may become unavailable.</li>
-              <li><strong>Analytics and customization cookies:</strong> These cookies collect information that is used either in aggregate form to help us understand how our website is being used or how effective our marketing campaigns are, or to help us customize our website for you.</li>
-              <li><strong>Advertising cookies:</strong> These cookies are used to make advertising messages more relevant to you. They perform functions like preventing the same ad from continuously reappearing, ensuring that ads are properly displayed for advertisers, and in some cases selecting advertisements that are based on your interests.</li>
-            </ul>
+      <PolicyHeading>3. Essential cookies (always on)</PolicyHeading>
+      <p>
+        These are needed for the shop and your account to work, so they don&apos;t need your consent. We don&apos;t use them
+        to track you.
+      </p>
+      <CookieTable rows={ESSENTIAL} />
 
-            <h2 className="text-2xl font-bold text-slate-900 mt-8 mb-4">4. How can I control cookies?</h2>
-            <p>You have the right to decide whether to accept or reject cookies. You can exercise your cookie rights by setting your preferences in our Cookie Consent Banner (available at the bottom of the screen on your first visit, or by clicking "Do Not Sell My Personal Information" in the footer).</p>
-            <p>If you choose to reject cookies, you may still use our website though your access to some functionality and areas of our website may be restricted. You may also set or amend your web browser controls to accept or refuse cookies.</p>
+      <PolicyHeading>4. Analytics and marketing cookies (only with your consent)</PolicyHeading>
+      <p>
+        Our shop runs on Shopify. Shopify&apos;s analytics and marketing cookies are set <strong>only if you click
+        &ldquo;Accept All Cookies&rdquo;</strong> in our cookie banner. If you choose &ldquo;Reject Non-Essential&rdquo;, or
+        make no choice, they are not set. We don&apos;t use advertising cookies and we don&apos;t sell your personal data.
+      </p>
+      <CookieTable rows={OPTIONAL} />
 
-            <h2 className="text-2xl font-bold text-slate-900 mt-8 mb-4">5. Contact Us</h2>
-            <p>If you have questions or comments about our use of cookies or other technologies, please email us at info@flashbind.com.</p>
-          </div>
-        </div>
-      </div>
-    </div>
+      <PolicyHeading>5. Checkout</PolicyHeading>
+      <p>
+        When you go to checkout, you move to Shopify&apos;s checkout pages. Shopify sets the cookies it needs to process
+        your order and payment there. See Shopify&apos;s cookie and privacy information for details.
+      </p>
+
+      <PolicyHeading>6. Changing your choice</PolicyHeading>
+      <p>
+        You can change your choice at any time by clicking <strong>&ldquo;Cookie settings&rdquo;</strong> at the bottom of
+        every page. You can also delete cookies in your browser settings; the banner will then ask you again.
+      </p>
+
+      <PolicyHeading>7. More information</PolicyHeading>
+      <p>
+        How we handle personal data is explained in our <Link to="/privacy-policy" className={link}>Privacy Policy</Link>.
+        Questions about cookies: <a href={`mailto:${SELLER.email}`} className={link}>{SELLER.email}</a>.
+      </p>
+    </PolicyLayout>
   );
 }

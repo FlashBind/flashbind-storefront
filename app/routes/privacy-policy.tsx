@@ -1,60 +1,147 @@
 import type {MetaFunction} from 'react-router';
+import {Link} from 'react-router';
+import {PolicyLayout, PolicyHeading} from '~/components/PolicyLayout';
+import {SellerDetails} from '~/components/SellerDetails';
+import {SELLER, sellerName} from '~/config/seller';
+
+// DRAFT for legal review (LEGAL-001). GDPR privacy notice. The data list
+// matches what the code stores as of 2026-09-26; keep it in sync.
 
 export const meta: MetaFunction = () => {
   return [{title: 'FlashBind | Privacy Policy'}];
 };
 
+const link = 'text-[#1E3A8A] underline';
+
 export default function PrivacyPolicyPage() {
   return (
-    <div className="min-h-screen bg-gray-50 py-24 relative overflow-hidden">
-      <div className="container mx-auto px-6 max-w-4xl relative z-10">
-        <div className="bg-white rounded-[2rem] p-10 md:p-16 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100">
-          <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight mb-8">Privacy Policy</h1>
-          
-          <div className="prose prose-slate max-w-none text-slate-600 leading-relaxed space-y-6">
-            <p className="font-semibold text-slate-900">Last updated: October 24, 2026</p>
-            
-            <p>At FlashBind, we take your privacy seriously. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website or use our NFC hardware and services.</p>
+    <PolicyLayout title="Privacy Policy">
+      <p>
+        This policy explains what personal data we collect when you use the FlashBind website, products and online
+        service, why we use it, who processes it for us, how long we keep it, and your rights under the EU General Data
+        Protection Regulation (GDPR).
+      </p>
 
-            <h2 className="text-2xl font-bold text-slate-900 mt-8 mb-4">1. Information We Collect</h2>
-            <p>We collect information that you voluntarily provide to us when you register on the website, express an interest in obtaining information about us or our products, or otherwise when you contact us. The personal information that we collect depends on the context of your interactions with us and may include:</p>
-            <ul className="list-disc pl-6 space-y-2">
-              <li>Names, phone numbers, email addresses, and mailing addresses.</li>
-              <li>Payment information required to process your orders securely.</li>
-              <li>Links and URLs that you explicitly program into your dashboard for NFC tag routing.</li>
-            </ul>
+      <PolicyHeading>1. Who is responsible for your data</PolicyHeading>
+      <p>The data controller is:</p>
+      <SellerDetails className="bg-slate-50 border border-slate-200 rounded-2xl p-6 text-sm" />
+      <p>
+        For any privacy question or request, email <a href={`mailto:${SELLER.email}`} className={link}>{SELLER.email}</a>.
+      </p>
 
-            <h2 className="text-2xl font-bold text-slate-900 mt-8 mb-4">2. How We Use Your Information</h2>
-            <p>We use personal information collected via our website for a variety of business purposes described below. We process your personal information for these purposes in reliance on our legitimate business interests, in order to enter into or perform a contract with you, with your consent, and/or for compliance with our legal obligations.</p>
-            <ul className="list-disc pl-6 space-y-2">
-              <li>To facilitate account creation and logon process.</li>
-              <li>To fulfill and manage your orders, payments, returns, and exchanges.</li>
-              <li>To dynamically route your NFC tags based on the preferences saved in your dashboard.</li>
-            </ul>
-
-            <h2 className="text-2xl font-bold text-slate-900 mt-8 mb-4">3. Security of Your Information</h2>
-            <p>We use administrative, technical, and physical security measures to help protect your personal information. While we have taken reasonable steps to secure the personal information you provide to us, please be aware that despite our efforts, no security measures are perfect or impenetrable, and no method of data transmission can be guaranteed against any interception or other type of misuse.</p>
-
-            <h2 className="text-2xl font-bold text-slate-900 mt-8 mb-4">4. Cookies and Tracking Technologies</h2>
-            <p>We may use cookies, web beacons, tracking pixels, and other tracking technologies on our website to help customize the site and improve your experience. When you access the website, your personal information is not collected through the use of tracking technology, but it helps us understand site usage and improve performance.</p>
-
-            <h2 className="text-2xl font-bold text-slate-900 mt-8 mb-4">5. Data Sharing and Third Parties</h2>
-            <p>We do not sell, trade, or rent your personal identification information to others. We may share generic aggregated demographic information not linked to any personal identification information with our business partners. We may use third-party service providers (such as Shopify for e-commerce, Stripe for secure payments, and database hosting providers) to help us operate our business. These third parties have access to your personal data only to perform specific tasks on our behalf and are obligated not to disclose or use it for any other purpose.</p>
-
-            <h2 className="text-2xl font-bold text-slate-900 mt-8 mb-4">6. European Privacy Rights (GDPR Compliance)</h2>
-            <p>If you are a resident of the European Economic Area (EEA), you have certain data protection rights. We aim to take reasonable steps to allow you to correct, amend, delete, or limit the use of your Personal Data. Your rights include: the right to access, update or delete your information; the right of rectification; the right to object; the right of restriction; the right to data portability; and the right to withdraw consent. To exercise any of these rights, please contact us.</p>
-
-            <h2 className="text-2xl font-bold text-slate-900 mt-8 mb-4">7. California Privacy Rights (CCPA Compliance)</h2>
-            <p>If you are a resident of California, the California Consumer Privacy Act (CCPA) provides you with specific rights regarding your personal information. You have the right to request that we disclose certain information to you about our collection and use of your personal information over the past 12 months. You also have the right to request the deletion of your personal information. We do not sell your personal data. We will not discriminate against you for exercising any of your CCPA rights.</p>
-
-            <h2 className="text-2xl font-bold text-slate-900 mt-8 mb-4">8. Children's Privacy (COPPA Compliance)</h2>
-            <p>Our website and services are not intended for or directed at children under the age of 13. We do not knowingly collect personal information from children under 13. If you are a parent or guardian and believe that your child under 13 has provided us with personal information without your consent, please contact us immediately at info@flashbind.com so we can promptly delete such information from our systems.</p>
-
-            <h2 className="text-2xl font-bold text-slate-900 mt-8 mb-4">9. Contact Us</h2>
-            <p>If you have questions, comments, or requests regarding this Privacy Policy or your data rights, you may email us at info@flashbind.com or by post to our registered office.</p>
-          </div>
-        </div>
+      <PolicyHeading>2. What we collect and why</PolicyHeading>
+      <div className="overflow-x-auto">
+        <table className="w-full text-sm border border-slate-200">
+          <thead className="bg-slate-50 text-slate-900">
+            <tr>
+              <th className="text-left p-3 border-b">Data</th>
+              <th className="text-left p-3 border-b">Why</th>
+              <th className="text-left p-3 border-b">Legal basis</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td className="p-3 border-b align-top"><strong>Account:</strong> email address and password (stored only in scrambled, hashed form by our login provider).</td>
+              <td className="p-3 border-b align-top">To let you log in and manage your products.</td>
+              <td className="p-3 border-b align-top">Contract (Art. 6(1)(b))</td>
+            </tr>
+            <tr>
+              <td className="p-3 border-b align-top"><strong>Product settings you enter:</strong> links (e.g. review page, menu); Wi-Fi network name and password; pet profile (pet name, owner name, phone number, medical notes, photo).</td>
+              <td className="p-3 border-b align-top">To show this information to people who tap or scan your product. <strong>It is public to anyone who taps or scans the product.</strong> Your account email is not shown.</td>
+              <td className="p-3 border-b align-top">Contract (Art. 6(1)(b))</td>
+            </tr>
+            <tr>
+              <td className="p-3 border-b align-top"><strong>Orders:</strong> name, delivery and billing address, email, phone, products bought, payment status.</td>
+              <td className="p-3 border-b align-top">To process, deliver and support your order, and keep accounting records.</td>
+              <td className="p-3 border-b align-top">Contract (Art. 6(1)(b)); legal obligation for accounting (Art. 6(1)(c))</td>
+            </tr>
+            <tr>
+              <td className="p-3 border-b align-top"><strong>Contact, quote and founding-pricing requests:</strong> your email, message, business name and any file you attach.</td>
+              <td className="p-3 border-b align-top">To answer you and prepare quotes. For founding-pricing requests, to email you about pricing and the subscription launch, which you agree to on the form and can withdraw at any time.</td>
+              <td className="p-3 border-b align-top">Steps before a contract (Art. 6(1)(b)); legitimate interest in answering enquiries (Art. 6(1)(f)); consent for founding-pricing emails (Art. 6(1)(a))</td>
+            </tr>
+            <tr>
+              <td className="p-3 border-b align-top"><strong>Security data:</strong> IP address and a scrambled account identifier when someone tries to activate a product.</td>
+              <td className="p-3 border-b align-top">To limit repeated guessing of activation codes.</td>
+              <td className="p-3 border-b align-top">Legitimate interest in security (Art. 6(1)(f))</td>
+            </tr>
+            <tr>
+              <td className="p-3 align-top"><strong>Cookies:</strong> essential cookies for login and your cart; other cookies only with your consent.</td>
+              <td className="p-3 align-top">To run the site. See our <Link to="/cookie-policy" className={link}>Cookie Policy</Link>.</td>
+              <td className="p-3 align-top">Necessary for the service; consent for non-essential cookies (Art. 6(1)(a))</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
-    </div>
+      <p>We don&apos;t sell your personal data, and we don&apos;t use it for automated decision-making or profiling.</p>
+
+      <PolicyHeading>3. Who processes your data for us</PolicyHeading>
+      <ul className="list-disc pl-6 space-y-1">
+        <li><strong>Shopify</strong>: online store, checkout, order emails and website hosting.</li>
+        <li><strong>Payment providers</strong> offered at checkout (for example PayPal or Google Pay): payments.</li>
+        <li><strong>Supabase</strong>: user accounts and login, and the database storing product settings, contact messages and attachments.</li>
+        <li><strong>Resend</strong>: sends us an email notification when you use the contact or quote form.</li>
+        <li><strong>Delivery companies</strong>: your name, address and phone number, to deliver your order.</li>
+      </ul>
+      <p>
+        These providers process data only on our instructions and under data processing agreements. Some of them may
+        process data outside the European Economic Area, for example in the United States. Where this happens, the
+        transfer is protected by an EU adequacy decision (such as the EU-US Data Privacy Framework) or by the European
+        Commission&apos;s Standard Contractual Clauses.
+      </p>
+
+      <PolicyHeading>4. How long we keep data</PolicyHeading>
+      <ul className="list-disc pl-6 space-y-1">
+        <li><strong>Account and product settings:</strong> while your account exists. You can delete your account yourself at any time from your dashboard (&ldquo;Delete account&rdquo;); this erases them immediately.</li>
+        <li><strong>Orders and invoices:</strong> as long as tax and accounting law requires.</li>
+        <li><strong>Contact and quote requests</strong> (including attachments): deleted automatically 2 years after they were sent.</li>
+        <li><strong>Security data:</strong> deleted automatically after 30 days.</li>
+      </ul>
+
+      <PolicyHeading>5. Your rights</PolicyHeading>
+      <p>You have the right to:</p>
+      <ul className="list-disc pl-6 space-y-1">
+        <li>get a copy of your personal data (access);</li>
+        <li>have incorrect data corrected;</li>
+        <li>have your data deleted;</li>
+        <li>restrict how we use your data;</li>
+        <li>receive your data in a portable format;</li>
+        <li>object to use based on our legitimate interests;</li>
+        <li>withdraw consent at any time, without affecting earlier use.</li>
+      </ul>
+      <p>
+        You can change most product settings, and delete your account, yourself in your FlashBind account. For anything else, email{' '}
+        <a href={`mailto:${SELLER.email}`} className={link}>{SELLER.email}</a>. We reply within one month.
+      </p>
+      <p>
+        You also have the right to complain to a data protection authority, in particular in the EU country where you
+        live or work.{' '}
+        {SELLER.confirmed ? `Our lead authority is ${SELLER.dataProtectionAuthority}.` : ''}
+      </p>
+
+      <PolicyHeading>6. Children</PolicyHeading>
+      <p>
+        You must be at least 14 years old to create a FlashBind account. We don&apos;t knowingly collect data from
+        younger children; if you think a child has created an account, contact us and we will delete it.
+      </p>
+
+      <PolicyHeading>7. Security</PolicyHeading>
+      <p>
+        Access to stored data is limited to our servers and the people who need it to run the service. Passwords are
+        stored only in hashed form, and the site is served over HTTPS. No online service can be completely secure, so
+        please use a strong password and don&apos;t reuse it elsewhere.
+      </p>
+
+      <PolicyHeading>8. Changes to this policy</PolicyHeading>
+      <p>
+        We may update this policy when our service or the law changes. We show the date of the latest version at the
+        top, and we tell account holders about important changes.
+      </p>
+
+      <PolicyHeading>9. Contact</PolicyHeading>
+      <p>
+        {sellerName()}, <a href={`mailto:${SELLER.email}`} className={link}>{SELLER.email}</a>.
+      </p>
+    </PolicyLayout>
   );
 }

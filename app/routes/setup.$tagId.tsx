@@ -1,4 +1,6 @@
 import { Form, redirect, useActionData, useNavigation, useLoaderData, useNavigate } from 'react-router';
+import { resizeImageToDataUrl } from '~/utils/resizeImage';
+import { purgeExpiredRateLimits } from '~/utils/retention.server';
 import { useEffect } from 'react';
 import type { LoaderFunctionArgs, ActionFunctionArgs } from 'react-router';
 import {
@@ -85,6 +87,9 @@ export async function action({ request, params, context }: ActionFunctionArgs) {
   const isOrphan = !tagData.owner_email;
 
   if (isOrphan) {
+    // Drop rate-limit rows older than the retention period (PRIV-002).
+    await purgeExpiredRateLimits(adminSupabase);
+
     // Rate Limiting Check
     const clientIdentifiers = buildActivationRateLimitIdentifiers(
       request.headers,
@@ -150,7 +155,8 @@ export async function action({ request, params, context }: ActionFunctionArgs) {
   if (type === 'pet_tag') {
     const imageValue = formData.get('imageBase64');
     const imageBase64 = typeof imageValue === 'string' ? imageValue : '';
-    let imageUrl = 'https://images.unsplash.com/photo-1543466835-00a7907e9de1?q=80&w=800&auto=format&fit=crop';
+    // No stock photo: without an upload the public page shows a neutral placeholder.
+    let imageUrl: string | null = null;
     if (imageBase64 && imageBase64.startsWith('data:image')) {
       if (!imageBase64.startsWith('data:image/jpeg;base64,') && !imageBase64.startsWith('data:image/png;base64,')) {
         return { error: 'Image must be a JPEG or PNG.' };
@@ -237,7 +243,7 @@ export default function SetupTagPage() {
   } else if (type === 'menu') {
     description = "Enter the link to your digital menu.";
   } else if (type === 'wifi') {
-    description = "Enter your Wi-Fi details so guests can connect instantly.";
+    description = "Enter your Wi-Fi details. Guests who tap or scan will see the network name and can copy the password.";
   }
 
   return (
@@ -259,7 +265,7 @@ export default function SetupTagPage() {
 
         <div className="w-full bg-white rounded-3xl shadow-md overflow-hidden p-6 sm:p-8">
           <div className="mb-8 text-center">
-            <h1 className="text-3xl font-extrabold text-slate-900 mb-2">{title}</h1>
+            <h1 className="text-3xl font-medium tracking-tighter text-slate-900 mb-2">{title}</h1>
             <p className="text-sm font-medium text-slate-500">
               {description}
             </p>
@@ -286,7 +292,7 @@ export default function SetupTagPage() {
                     maxLength={12}
                     required
                     placeholder="6-digit PIN"
-                    className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all font-mono tracking-widest text-lg"
+                    className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#1E3A8A] focus:border-transparent transition-all font-mono tracking-widest text-lg"
                   />
                 </div>
               )}
@@ -304,7 +310,7 @@ export default function SetupTagPage() {
                       maxLength={100}
                       required
                       placeholder="e.g. Buddy"
-                      className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                      className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#1E3A8A] focus:border-transparent transition-all"
                     />
                   </div>
 
@@ -320,7 +326,7 @@ export default function SetupTagPage() {
                       maxLength={100}
                       required
                       placeholder="e.g. Alice Smith"
-                      className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                      className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#1E3A8A] focus:border-transparent transition-all"
                     />
                   </div>
 
@@ -336,14 +342,14 @@ export default function SetupTagPage() {
                       maxLength={40}
                       required
                       placeholder="e.g. (555) 123-4567"
-                      className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                      className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#1E3A8A] focus:border-transparent transition-all"
                     />
                   </div>
 
                   {/* Email (Read-Only) */}
                   <div>
                     <label htmlFor="ownerEmail" className="block text-sm font-semibold text-slate-700 mb-1">
-                      Email
+                      Account email <span className="font-normal text-slate-500">(private, not shown on the tag)</span>
                     </label>
                     <input 
                       type="email" 
@@ -367,15 +373,18 @@ export default function SetupTagPage() {
                       maxLength={2000}
                       rows={3}
                       placeholder="Allergies, medications, or special needs..."
-                      className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                      className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#1E3A8A] focus:border-transparent transition-all"
                     />
                   </div>
 
                   {/* File Input (Pet Photo) */}
                   <div>
                     <label htmlFor="photo" className="block text-sm font-semibold text-slate-700 mb-1">
-                      Pet Photo
+                      Pet Photo <span className="font-normal text-slate-500">(recommended)</span>
                     </label>
+                    <p className="text-xs text-slate-500 mb-2">
+                      A clear photo helps whoever finds your pet recognise them. You can skip this and add one later.
+                    </p>
                     <input 
                       type="hidden" 
                       name="imageBase64" 
@@ -389,17 +398,13 @@ export default function SetupTagPage() {
                       onChange={(e) => {
                         const file = e.target.files?.[0];
                         if (file) {
-                          const reader = new FileReader();
-                          reader.onload = (event) => {
+                          void resizeImageToDataUrl(file).then((dataUrl) => {
                             const hiddenInput = document.getElementById('imageBase64') as HTMLInputElement;
-                            if (hiddenInput && event.target?.result) {
-                              hiddenInput.value = event.target.result.toString();
-                            }
-                          };
-                          reader.readAsDataURL(file);
+                            if (hiddenInput) hiddenInput.value = dataUrl ?? '';
+                          });
                         }
                       }}
-                      className="w-full text-sm text-slate-500 file:mr-4 file:py-3 file:px-6 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 transition-all cursor-pointer"
+                      className="w-full text-sm text-slate-500 file:mr-4 file:py-3 file:px-6 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-[#1E3A8A]/5 file:text-[#172A66] hover:file:bg-[#1E3A8A]/10 transition-all cursor-pointer"
                     />
                   </div>
                 </>
@@ -418,7 +423,7 @@ export default function SetupTagPage() {
                     required
                     defaultValue="https://"
                     placeholder="e.g. yourwebsite.com"
-                    className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                    className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#1E3A8A] focus:border-transparent transition-all"
                   />
                   <p className="text-xs text-slate-500 mt-2 font-medium">
                     This is the link your customers will be sent to when they tap the tag.
@@ -439,7 +444,7 @@ export default function SetupTagPage() {
                       maxLength={64}
                       required
                       placeholder="e.g. Guest_Network_5G"
-                      className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                      className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#1E3A8A] focus:border-transparent transition-all"
                     />
                   </div>
                   <div>
@@ -453,7 +458,7 @@ export default function SetupTagPage() {
                       maxLength={128}
                       required
                       placeholder="Enter the Wi-Fi password"
-                      className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                      className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#1E3A8A] focus:border-transparent transition-all"
                     />
                   </div>
                 </>
@@ -464,7 +469,7 @@ export default function SetupTagPage() {
               <button 
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-bold py-4 rounded-full transition-colors text-lg shadow-sm disabled:opacity-70 disabled:cursor-not-allowed"
+                className="w-full bg-[#1E3A8A] hover:bg-[#172A66] active:bg-[#0F172A] text-white font-bold py-4 rounded-full transition-colors text-lg shadow-sm disabled:opacity-70 disabled:cursor-not-allowed"
               >
                 {isSubmitting ? 'Activating...' : 'Activate Tag'}
               </button>

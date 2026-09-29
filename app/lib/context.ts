@@ -1,4 +1,4 @@
-import {createHydrogenContext} from '@shopify/hydrogen';
+import {cartSetIdDefault, createHydrogenContext} from '@shopify/hydrogen';
 import {AppSession} from '~/lib/session';
 import {CART_QUERY_FRAGMENT} from '~/lib/fragments';
 import type {CartApiQueryFragment} from 'storefrontapi.generated';
@@ -67,6 +67,9 @@ export async function createHydrogenRouterContext(
       i18n: {language: 'EN', country: 'US'},
       cart: {
         queryFragment: CART_QUERY_FRAGMENT,
+        // The cart ID is only read server-side, so keep it out of reach of
+        // page scripts and off plain-HTTP requests.
+        setId: cartSetIdDefault({secure: true, httponly: true, samesite: 'Lax'}),
       },
     },
     customContext,

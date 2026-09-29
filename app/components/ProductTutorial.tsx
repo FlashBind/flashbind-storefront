@@ -4,40 +4,40 @@ import { useRef, useState } from 'react';
 const TUTORIAL_DATA: Record<string, any> = {
   'google-review-stand': {
     title: 'How FlashBind Works',
-    description: 'Get your smart stand set up in seconds. No apps to download, no batteries to charge. Just tap and boost your reviews.',
+    description: 'Get your Google Review Stand set up in seconds. No apps to download, no batteries to charge.',
     steps: [
       {
         title: 'Tap',
-        description: 'Customer taps the stand with their smartphone. Our built-in NFC chip instantly communicates—no app required.',
+        description: 'Customer taps the stand with their smartphone, no app required. Works with nearly all modern smartphones.',
       },
       {
         title: 'Connect',
         description: 'They are instantly routed to your exact Google Review page without having to search or type anything.',
       },
       {
-        title: 'Boost',
-        description: 'Watch your 5-star reviews multiply with zero friction, leading to more customers and higher local rankings.',
+        title: 'Review',
+        description: 'Make it effortless for customers to leave a Google review while they are still with you.',
       }
     ],
     dashboardTitle: 'Manage Your Links',
     dashboardDesc: 'Update your review link anytime, anywhere. Our intuitive dashboard makes it easy to keep information up to date.',
     dashboardPoints: [
       { title: 'Update instantly', desc: 'Change the destination URL on the fly.' },
-      { title: 'Secure cloud storage', desc: 'Your links are safely stored in the cloud.' },
-      { title: 'Track performance', desc: 'Monitor how many taps your stand receives.' }
+      { title: 'Private settings', desc: 'Only you can change them, from your FlashBind account.' },
+      { title: 'Tap statistics', desc: 'See how many taps your stand receives.', comingSoon: true }
     ]
   },
   'nfc-restaurant-menu-stand': {
     title: 'How FlashBind Works',
-    description: 'Get your digital menu set up in seconds. No apps to download, no QR codes to squint at. Just tap and view.',
+    description: 'Get your Digital Menu Stand set up in minutes. Guests tap or scan the stand to open your menu, no app needed.',
     steps: [
       {
         title: 'Tap',
-        description: 'Diners simply tap the table stand with their smartphone. The menu opens instantly on their device.',
+        description: 'Diners tap the table stand with their smartphone and the menu opens. Works with nearly all modern smartphones, with a QR code as backup.',
       },
       {
-        title: 'Upload',
-        description: 'Instantly link the stand to your live digital menu URL or upload a PDF from your free dashboard.',
+        title: 'Link',
+        description: 'Link the stand to your online menu (a web page or a PDF link) from your free FlashBind account.',
       },
       {
         title: 'Serve',
@@ -47,47 +47,47 @@ const TUTORIAL_DATA: Record<string, any> = {
     dashboardTitle: 'Menu Management',
     dashboardDesc: 'Manage your digital menus anytime, anywhere. Update specials or prices instantly without re-printing.',
     dashboardPoints: [
-      { title: 'Update instantly', desc: 'Change the menu link or PDF on the fly.' },
-      { title: 'Secure cloud storage', desc: 'Your menus are safely stored in the cloud.' },
-      { title: 'Track performance', desc: 'Monitor how many times your menu is viewed.' }
+      { title: 'Update instantly', desc: 'Change the menu link on the fly.' },
+      { title: 'Private settings', desc: 'Only you can change them, from your FlashBind account.' },
+      { title: 'View statistics', desc: 'See how many times your menu is opened. PDF menu upload is also planned.', comingSoon: true }
     ]
   },
   'guest-wi-fi-hub': {
     title: 'How FlashBind Works',
-    description: 'Get your Wi-Fi Hub set up in seconds. Stop spelling out long passwords and get guests connected instantly.',
+    description: 'Get your Guest Wi-Fi Stand set up in minutes. Stop spelling out long passwords.',
     steps: [
       {
         title: 'Tap',
-        description: 'Guests tap the hub with their smartphone to instantly prompt a connection to your secure Wi-Fi network.',
+        description: 'Guests tap or scan to see your network name and password. Works with nearly all modern smartphones, with a QR code as backup.',
       },
       {
         title: 'Configure',
-        description: 'You securely input your network credentials into the dashboard once. The hub encrypts and stores the data.',
+        description: 'You enter your network name and password in your FlashBind account once.',
       },
       {
-        title: 'Connect',
-        description: 'Guests join your network instantly without typing a password, improving their experience at your venue.',
+        title: 'Copy',
+        description: 'Guests copy the password with one tap instead of asking staff to spell it out.',
       }
     ],
     dashboardTitle: 'Network Settings',
-    dashboardDesc: 'Manage your Wi-Fi settings securely. Update your password anytime without needing to replace the hub.',
+    dashboardDesc: 'Manage your Wi-Fi settings securely. Update your password anytime without needing to replace the stand.',
     dashboardPoints: [
       { title: 'Update instantly', desc: 'Change your Wi-Fi password on the fly.' },
-      { title: 'Encrypted storage', desc: 'Your credentials are encrypted and secure.' },
+      { title: 'Private settings', desc: 'Only you can change them, from your FlashBind account.' },
       { title: 'No more signs', desc: 'Never write a password on a chalkboard again.' }
     ]
   },
   'smart-pet-collar-tag': {
     title: 'How FlashBind Works',
-    description: 'Get your smart tag set up in seconds. No apps to download, no batteries to charge. Just tap and protect.',
+    description: 'Get your Smart Pet Tag set up in seconds. No apps to download, no batteries to charge.',
     steps: [
       {
         title: 'Tap',
-        description: 'Simply tap your smartphone to the FlashBind tag. Our built-in NFC chip instantly communicates with any modern smartphone.',
+        description: 'Simply tap your smartphone to the FlashBind tag, no app needed. Works with nearly all modern smartphones.',
       },
       {
         title: 'Setup',
-        description: 'Create your account in seconds and fill out your pet\'s profile. Add photos, medical info, and emergency contacts securely.',
+        description: 'Create your account in seconds and fill out your pet\'s profile. Add a photo, your phone number and any medical notes.',
       },
       {
         title: 'Protect',
@@ -98,8 +98,8 @@ const TUTORIAL_DATA: Record<string, any> = {
     dashboardDesc: 'Manage your pet\'s profile anytime, anywhere. Our intuitive dashboard makes it easy to keep information up to date.',
     dashboardPoints: [
       { title: 'Update info instantly', desc: 'Change phone numbers or medical info on the fly.' },
-      { title: 'Secure cloud storage', desc: 'Your data is encrypted and safely stored in the cloud.' },
-      { title: 'Emergency contact alerts', desc: 'Ensure multiple trusted contacts can be reached.' }
+      { title: 'Private account', desc: 'Only you can change the profile, from your FlashBind account.' },
+      { title: 'No app for finders', desc: 'Whoever finds your pet just taps the tag with their phone.' }
     ]
   },
   'default': {
@@ -108,7 +108,7 @@ const TUTORIAL_DATA: Record<string, any> = {
     steps: [
       {
         title: 'Tap',
-        description: 'Tap the product with any modern smartphone. Our built-in NFC chip instantly communicates—no app required.',
+        description: 'Tap the product with a smartphone, no app needed. Works with nearly all modern smartphones.',
       },
       {
         title: 'Setup',
@@ -123,8 +123,8 @@ const TUTORIAL_DATA: Record<string, any> = {
     dashboardDesc: 'Manage your product settings anytime, anywhere. Our intuitive dashboard makes it easy to keep information up to date.',
     dashboardPoints: [
       { title: 'Update instantly', desc: 'Change your destination link on the fly.' },
-      { title: 'Secure cloud storage', desc: 'Your settings are encrypted and safely stored.' },
-      { title: 'Track performance', desc: 'Monitor how many times your product is tapped.' }
+      { title: 'Private settings', desc: 'Only you can change them, from your FlashBind account.' },
+      { title: 'No reprinting', desc: 'Change where the product points without buying a new one.' }
     ]
   }
 };
@@ -176,8 +176,8 @@ export function ProductTutorial({ productHandle }: { productHandle: string }) {
     <div className="w-full bg-[#FDFCF8] relative overflow-hidden mt-0 pt-12 pb-32">
       {/* Background blobs for premium feel */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none -z-10">
-        <div className="absolute top-[-10%] right-[-10%] w-[500px] h-[500px] bg-blue-100/50 rounded-full blur-[100px] opacity-70"></div>
-        <div className="absolute bottom-[10%] left-[-10%] w-[600px] h-[600px] bg-purple-100/40 rounded-full blur-[100px] opacity-60"></div>
+        <div className="absolute top-[-10%] right-[-10%] w-[500px] h-[500px] bg-[#1E3A8A]/5 rounded-full blur-[100px] opacity-70"></div>
+        <div className="absolute bottom-[10%] left-[-10%] w-[600px] h-[600px] bg-[#1E3A8A]/[0.04] rounded-full blur-[100px] opacity-60"></div>
       </div>
 
       <div className="container mx-auto px-6 max-w-7xl relative z-10">
@@ -186,7 +186,7 @@ export function ProductTutorial({ productHandle }: { productHandle: string }) {
           <div className="inline-block mb-6 px-6 py-3 rounded-full border border-[#1E3A8A]/20 bg-[#1E3A8A]/5 text-[#1E3A8A] text-sm font-bold tracking-widest uppercase">
             Simple & Secure
           </div>
-          <h2 className="text-5xl md:text-7xl font-extrabold text-slate-900 tracking-tight mb-8">
+          <h2 className="text-5xl md:text-7xl font-medium text-slate-900 tracking-tighter mb-8">
             {content.title}
           </h2>
           <p className="text-xl md:text-2xl text-slate-600 max-w-3xl mx-auto mb-12 leading-relaxed">
@@ -197,7 +197,7 @@ export function ProductTutorial({ productHandle }: { productHandle: string }) {
               to="/demo"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center px-10 py-5 bg-[#1E3A8A] text-white font-bold rounded-full hover:bg-blue-700 hover:scale-105 shadow-[0_10px_30px_rgba(30,58,138,0.3)] transition-all duration-300 text-lg"
+              className="inline-flex items-center justify-center px-10 py-5 bg-[#1E3A8A] text-white font-bold rounded-full hover:bg-[#172A66] hover:scale-105 shadow-[0_10px_30px_rgba(30,58,138,0.3)] transition-all duration-300 text-lg"
             >
               <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
@@ -271,7 +271,7 @@ export function ProductTutorial({ productHandle }: { productHandle: string }) {
                   </div>
                 </li>
                 <li className="flex items-start">
-                  <div className="flex-shrink-0 w-10 h-10 md:w-12 md:h-12 rounded-full bg-blue-500/20 text-blue-400 flex items-center justify-center mt-1">
+                  <div className="flex-shrink-0 w-10 h-10 md:w-12 md:h-12 rounded-full bg-[#869BD9]/20 text-[#869BD9] flex items-center justify-center mt-1">
                     <svg className="w-5 h-5 md:w-6 md:h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>
                   </div>
                   <div className="ml-4 md:ml-6">
@@ -280,11 +280,25 @@ export function ProductTutorial({ productHandle }: { productHandle: string }) {
                   </div>
                 </li>
                 <li className="flex items-start">
-                  <div className="flex-shrink-0 w-10 h-10 md:w-12 md:h-12 rounded-full bg-red-500/20 text-red-400 flex items-center justify-center mt-1">
-                    <svg className="w-5 h-5 md:w-6 md:h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>
-                  </div>
+                  {content.dashboardPoints[2].comingSoon ? (
+                    // Not built yet: planned for the business subscription.
+                    <div className="flex-shrink-0 w-10 h-10 md:w-12 md:h-12 rounded-full bg-white/10 text-slate-300 flex items-center justify-center mt-1">
+                      <svg className="w-5 h-5 md:w-6 md:h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                    </div>
+                  ) : (
+                    <div className="flex-shrink-0 w-10 h-10 md:w-12 md:h-12 rounded-full bg-red-500/20 text-red-400 flex items-center justify-center mt-1">
+                      <svg className="w-5 h-5 md:w-6 md:h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>
+                    </div>
+                  )}
                   <div className="ml-4 md:ml-6">
-                    <h4 className="text-xl md:text-2xl font-bold text-white mb-1 md:mb-2">{content.dashboardPoints[2].title}</h4>
+                    <h4 className="text-xl md:text-2xl font-bold text-white mb-1 md:mb-2">
+                      {content.dashboardPoints[2].title}
+                      {content.dashboardPoints[2].comingSoon && (
+                        <Link to="/software" className="block w-fit mt-2 md:mt-0 md:ml-3 md:inline-block align-middle whitespace-nowrap text-[10px] md:text-xs font-bold uppercase tracking-wide md:tracking-widest text-slate-200 border border-white/30 rounded-full px-3 py-1 hover:bg-white/10">
+                          Coming soon · subscription
+                        </Link>
+                      )}
+                    </h4>
                     <p className="text-base md:text-lg text-slate-400">{content.dashboardPoints[2].desc}</p>
                   </div>
                 </li>

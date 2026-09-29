@@ -34,7 +34,7 @@ export default function ForgotPassword() {
     <div className="flex min-h-[80vh] items-center justify-center bg-slate-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="w-full max-w-md bg-white rounded-3xl shadow-xl p-8 border border-slate-100">
         <div className="mb-8 text-center">
-          <h1 className="text-3xl font-extrabold text-slate-900 mb-2">Reset Password</h1>
+          <h1 className="text-3xl font-medium tracking-tighter text-slate-900 mb-2">Reset Password</h1>
           <p className="text-sm font-medium text-slate-500">
             Enter your email to receive a password reset link.
           </p>
@@ -62,7 +62,7 @@ export default function ForgotPassword() {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="w-full flex justify-center py-3.5 px-4 border border-transparent rounded-full shadow-sm text-sm font-bold text-white bg-[#1E3A8A] hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1E3A8A] transition-all disabled:opacity-50"
+              className="w-full flex justify-center py-3.5 px-4 border border-transparent rounded-full shadow-sm text-sm font-bold text-white bg-[#1E3A8A] hover:bg-[#0F172A] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1E3A8A] transition-all disabled:opacity-50"
             >
               {isSubmitting ? 'Sending...' : 'Send Reset Link'}
             </button>

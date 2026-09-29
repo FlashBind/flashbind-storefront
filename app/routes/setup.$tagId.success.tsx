@@ -54,7 +54,7 @@ export default function SetupSuccessPage() {
           </svg>
         </div>
 
-        <h1 className="text-3xl font-extrabold text-slate-900 mb-4">Tag Activated!</h1>
+        <h1 className="text-3xl font-medium tracking-tighter text-slate-900 mb-4">Tag Activated!</h1>
         
         <div className="bg-slate-50 p-6 rounded-2xl border border-slate-100 mb-8">
           <p className="text-slate-600 font-medium">
@@ -73,7 +73,7 @@ export default function SetupSuccessPage() {
         <div className="flex flex-col gap-4">
           <Link 
             to={`/p/${tagId}`}
-            className="w-full bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-bold py-4 rounded-full transition-colors text-lg shadow-sm"
+            className="w-full bg-[#1E3A8A] hover:bg-[#172A66] active:bg-[#0F172A] text-white font-bold py-4 rounded-full transition-colors text-lg shadow-sm"
           >
             View Public Page
           </Link>

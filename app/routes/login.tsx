@@ -2,6 +2,7 @@ import { Form, useActionData, useNavigation, useSearchParams } from 'react-route
 import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
 import { redirect } from 'react-router';
 import { getSupabase } from '~/utils/supabase.server';
+import { safeRedirectPath } from '~/utils/requestSecurity.server';
 
 export const handle = {
   hideLayout: true,
@@ -11,7 +12,7 @@ export async function loader({ context, request }: LoaderFunctionArgs) {
   const email = context.session.get('userEmail');
   if (email) {
     const url = new URL(request.url);
-    const redirectTo = url.searchParams.get('redirectTo') || '/';
+    const redirectTo = safeRedirectPath(url.searchParams.get('redirectTo'), '/');
     return redirect(redirectTo);
   }
   return null;
@@ -23,7 +24,7 @@ export async function action({ request, context }: ActionFunctionArgs) {
   const password = formData.get('password') as string;
   const intent = formData.get('intent') as string;
   const url = new URL(request.url);
-  const redirectTo = url.searchParams.get('redirectTo') || '/dashboard';
+  const redirectTo = safeRedirectPath(url.searchParams.get('redirectTo'), '/dashboard');
 
   if (intent === 'resend') {
     if (!email) return Response.json({ error: 'Email is required to resend confirmation.' }, { status: 400 });
@@ -103,7 +104,7 @@ export default function LoginPage() {
       </a>
       <div className="w-full max-w-md bg-white rounded-3xl shadow-md overflow-hidden p-6 sm:p-8">
         <div className="mb-8 text-center">
-          <h1 className="text-3xl font-extrabold text-slate-900 mb-2">Welcome Back</h1>
+          <h1 className="text-3xl font-medium tracking-tighter text-slate-900 mb-2">Welcome Back</h1>
           <p className="text-sm font-medium text-slate-500">
             Log in to manage your account and NFC tags.
           </p>
@@ -116,7 +117,7 @@ export default function LoginPage() {
               <Form method="post" action={`/login?redirectTo=${encodeURIComponent(redirectTo)}`}>
                 <input type="hidden" name="intent" value="resend" />
                 <input type="hidden" name="email" value={actionData.email} />
-                <button type="submit" className="text-blue-700 hover:text-blue-800 hover:underline font-bold bg-transparent border-none p-0 cursor-pointer text-sm transition-colors">
+                <button type="submit" className="text-[#172A66] hover:text-[#0F172A] hover:underline font-bold bg-transparent border-none p-0 cursor-pointer text-sm transition-colors">
                   Resend Confirmation Email
                 </button>
               </Form>
@@ -143,7 +144,7 @@ export default function LoginPage() {
                 name="email" 
                 required
                 placeholder="you@example.com"
-                className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#1E3A8A] focus:border-transparent transition-all"
               />
             </div>
 
@@ -153,7 +154,7 @@ export default function LoginPage() {
                 <label htmlFor="password" className="block text-sm font-semibold text-slate-700">
                   Password
                 </label>
-                <a href="/forgot-password" className="text-sm font-semibold text-blue-600 hover:text-blue-700 transition-colors">
+                <a href="/forgot-password" className="text-sm font-semibold text-[#1E3A8A] hover:text-[#172A66] transition-colors">
                   Forgot Password?
                 </a>
               </div>
@@ -163,7 +164,7 @@ export default function LoginPage() {
                 name="password" 
                 required
                 placeholder="••••••••"
-                className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#1E3A8A] focus:border-transparent transition-all"
               />
             </div>
           </div>
@@ -172,7 +173,7 @@ export default function LoginPage() {
             <button 
               type="submit"
               disabled={isSubmitting}
-              className="w-full bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-bold py-4 rounded-full transition-colors text-lg shadow-sm disabled:opacity-70 disabled:cursor-not-allowed"
+              className="w-full bg-[#1E3A8A] hover:bg-[#172A66] active:bg-[#0F172A] text-white font-bold py-4 rounded-full transition-colors text-lg shadow-sm disabled:opacity-70 disabled:cursor-not-allowed"
             >
               {isSubmitting ? 'Logging in...' : 'Log In'}
             </button>
@@ -181,7 +182,7 @@ export default function LoginPage() {
           <div className="text-center mt-6">
             <p className="text-sm font-medium text-slate-500">
               Don't have an account?{' '}
-              <a href={`/register?redirectTo=${encodeURIComponent(redirectTo)}`} className="text-blue-600 hover:text-blue-700 font-semibold transition-colors">
+              <a href={`/register?redirectTo=${encodeURIComponent(redirectTo)}`} className="text-[#1E3A8A] hover:text-[#172A66] font-semibold transition-colors">
                 Create one
               </a>
             </p>

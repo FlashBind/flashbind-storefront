@@ -1,6 +1,8 @@
 import {Suspense} from 'react';
 import {Await, NavLink} from 'react-router';
 import type {FooterQuery, HeaderQuery} from 'storefrontapi.generated';
+import {SELLER} from '~/config/seller';
+import {CONSENT_STORAGE_KEY} from '~/lib/cookieConsent';
 
 interface FooterProps {
   footer: Promise<FooterQuery | null>;
@@ -30,8 +32,8 @@ export function Footer({
                     Bridging the physical and digital world. Upgrade your business presence in milliseconds with premium NFC technology.
                   </p>
                   <form className="flex gap-2 max-w-sm" onSubmit={(e) => e.preventDefault()}>
-                    <input type="email" placeholder="Enter your email" className="bg-slate-900 border border-slate-800 rounded-full px-4 py-3 flex-grow text-white focus:outline-none focus:border-blue-500 transition-colors" />
-                    <button type="submit" className="bg-[#1E3A8A] text-white font-bold rounded-full px-6 py-3 hover:bg-blue-500 transition-colors">Subscribe</button>
+                    <input type="email" placeholder="Enter your email" className="bg-slate-900 border border-slate-800 rounded-full px-4 py-3 flex-grow text-white focus:outline-none focus:border-[#1E3A8A] transition-colors" />
+                    <button type="submit" className="bg-[#1E3A8A] text-white font-bold rounded-full px-6 py-3 hover:bg-[#1E3A8A] transition-colors">Subscribe</button>
                   </form>
                 </div>
 
@@ -40,9 +42,10 @@ export function Footer({
                   <h4 className="text-white font-bold mb-6 tracking-widest uppercase text-sm">Shop</h4>
                   <ul className="space-y-4">
                     <li><NavLink to="/products" className="hover:text-white transition-colors">All Products</NavLink></li>
-                    <li><NavLink to="/category/business-cards" className="hover:text-white transition-colors">Business Cards</NavLink></li>
-                    <li><NavLink to="/category/review-stands" className="hover:text-white transition-colors">Review Stands</NavLink></li>
-                    <li><NavLink to="/category/pet-tags" className="hover:text-white transition-colors">Pet Tags</NavLink></li>
+                    <li><NavLink to="/products/google-review-stand" className="hover:text-white transition-colors">Google Review Stand</NavLink></li>
+                    <li><NavLink to="/products/nfc-restaurant-menu-stand" className="hover:text-white transition-colors">Digital Menu Stand</NavLink></li>
+                    <li><NavLink to="/products/guest-wi-fi-hub" className="hover:text-white transition-colors">Guest Wi-Fi Stand</NavLink></li>
+                    <li><NavLink to="/products/smart-pet-collar-tag" className="hover:text-white transition-colors">Smart Pet Tag</NavLink></li>
                   </ul>
                 </div>
 
@@ -54,10 +57,11 @@ export function Footer({
                     <li><NavLink to="/cookie-policy" className="hover:text-white transition-colors">Cookie Policy</NavLink></li>
                     <li><NavLink to="/terms-of-service" className="hover:text-white transition-colors">Terms of Service</NavLink></li>
                     <li><NavLink to="/shipping-policy" className="hover:text-white transition-colors">Shipping Policy</NavLink></li>
-                    <li><NavLink to="/refund-policy" className="hover:text-white transition-colors">Refund/Returns Policy</NavLink></li>
+                    <li><NavLink to="/refund-policy" className="hover:text-white transition-colors">Returns and Refunds</NavLink></li>
+                    <li><NavLink to="/warranty" className="hover:text-white transition-colors">Warranty</NavLink></li>
                     <li className="pt-2">
-                      <button onClick={() => { if(typeof window !== 'undefined') { localStorage.removeItem('flashbind_cookie_consent'); window.location.reload(); } }} className="text-[11px] text-slate-500 hover:text-slate-300 transition-colors uppercase tracking-wider underline">
-                        Do Not Sell My Personal Information
+                      <button onClick={() => { if(typeof window !== 'undefined') { localStorage.removeItem(CONSENT_STORAGE_KEY); window.location.reload(); } }} className="text-[11px] text-slate-500 hover:text-slate-300 transition-colors uppercase tracking-wider underline">
+                        Cookie settings
                       </button>
                     </li>
                   </ul>
@@ -66,7 +70,15 @@ export function Footer({
 
               {/* Bottom Bar */}
               <div className="pt-8 border-t border-slate-900 flex flex-col md:flex-row justify-between items-center gap-6">
-                <p className="text-slate-500 text-sm">© {new Date().getFullYear()} FlashBind. All rights reserved.</p>
+                <div className="text-slate-500 text-sm space-y-2">
+                  <p>© {new Date().getFullYear()} FlashBind. All rights reserved.</p>
+                  {/* Company details: shown once the seller is confirmed (LEGAL-001). */}
+                  {SELLER.confirmed && (
+                    <p className="text-xs">
+                      {SELLER.legalName} · Company code {SELLER.companyCode} · VAT {SELLER.vatCode} · {SELLER.address}
+                    </p>
+                  )}
+                </div>
                 
                 {/* Social Icons */}
                 <div className="flex items-center gap-4">
