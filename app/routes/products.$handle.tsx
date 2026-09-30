@@ -201,12 +201,12 @@ export default function Product() {
             
             {/* Right Column: Details Stack */}
             <div className="w-full md:w-1/2 flex flex-col pt-2">
-              <div className="text-sm font-black text-blue-600 tracking-[0.2em] uppercase mb-3">
+              <div className="text-sm font-black text-[#1E3A8A] tracking-[0.2em] uppercase mb-3">
                 FlashBind
               </div>
               
               <div className="flex items-center gap-4 mb-4 flex-wrap">
-                <h1 className="text-4xl lg:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight">
+                <h1 className="text-4xl lg:text-5xl font-medium text-slate-900 tracking-tighter leading-tight">
                   {title}
                 </h1>
                 {selectedVariant?.compareAtPrice && selectedVariant?.price && parseFloat(selectedVariant.compareAtPrice.amount) > parseFloat(selectedVariant.price.amount) && (
@@ -227,7 +227,6 @@ export default function Product() {
                 <ProductForm
                   productOptions={productOptions}
                   selectedVariant={selectedVariant}
-                  productHandle={product.handle}
                 />
               </div>
               
@@ -245,7 +244,7 @@ export default function Product() {
                   }}
                 >
                   <div className="w-full sm:w-auto flex-shrink-0 snap-center bg-white border border-slate-200 rounded-2xl p-5 shadow-[0_4px_20px_rgb(0,0,0,0.03)] flex flex-col items-center text-center group hover:-translate-y-1 transition-transform duration-300">
-                    <div className="w-12 h-12 bg-blue-50 rounded-full flex items-center justify-center mb-4 group-hover:bg-blue-600 transition-colors duration-300 text-blue-600 group-hover:text-white shadow-sm border border-blue-100 group-hover:border-blue-600">
+                    <div className="w-12 h-12 bg-[#1E3A8A]/5 rounded-full flex items-center justify-center mb-4 group-hover:bg-[#1E3A8A] transition-colors duration-300 text-[#1E3A8A] group-hover:text-white shadow-sm border border-[#1E3A8A]/10 group-hover:border-[#1E3A8A]">
                       <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
                       </svg>
@@ -255,7 +254,7 @@ export default function Product() {
                   </div>
                   
                   <div className="w-full sm:w-auto flex-shrink-0 snap-center bg-white border border-slate-200 rounded-2xl p-5 shadow-[0_4px_20px_rgb(0,0,0,0.03)] flex flex-col items-center text-center group hover:-translate-y-1 transition-transform duration-300">
-                    <div className="w-12 h-12 bg-blue-50 rounded-full flex items-center justify-center mb-4 group-hover:bg-blue-600 transition-colors duration-300 text-blue-600 group-hover:text-white shadow-sm border border-blue-100 group-hover:border-blue-600">
+                    <div className="w-12 h-12 bg-[#1E3A8A]/5 rounded-full flex items-center justify-center mb-4 group-hover:bg-[#1E3A8A] transition-colors duration-300 text-[#1E3A8A] group-hover:text-white shadow-sm border border-[#1E3A8A]/10 group-hover:border-[#1E3A8A]">
                       <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.141 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0" />
                       </svg>
@@ -265,7 +264,7 @@ export default function Product() {
                   </div>
                   
                   <div className="w-full sm:w-auto flex-shrink-0 snap-center bg-white border border-slate-200 rounded-2xl p-5 shadow-[0_4px_20px_rgb(0,0,0,0.03)] flex flex-col items-center text-center group hover:-translate-y-1 transition-transform duration-300">
-                    <div className="w-12 h-12 bg-blue-50 rounded-full flex items-center justify-center mb-4 group-hover:bg-blue-600 transition-colors duration-300 text-blue-600 group-hover:text-white shadow-sm border border-blue-100 group-hover:border-blue-600">
+                    <div className="w-12 h-12 bg-[#1E3A8A]/5 rounded-full flex items-center justify-center mb-4 group-hover:bg-[#1E3A8A] transition-colors duration-300 text-[#1E3A8A] group-hover:text-white shadow-sm border border-[#1E3A8A]/10 group-hover:border-[#1E3A8A]">
                       <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                       </svg>
@@ -280,7 +279,7 @@ export default function Product() {
                   {[0, 1, 2].map((i) => (
                     <div 
                       key={i} 
-                      className={`h-2 rounded-full transition-all duration-300 ${activeFeature === i ? 'w-6 bg-blue-600' : 'w-2 bg-slate-200'}`} 
+                      className={`h-2 rounded-full transition-all duration-300 ${activeFeature === i ? 'w-6 bg-[#1E3A8A]' : 'w-2 bg-slate-200'}`}
                     />
                   ))}
                 </div>
@@ -306,12 +305,12 @@ export default function Product() {
           
           {/* Standalone FAQ Section */}
           <div className="mt-16 md:mt-24 max-w-3xl mx-auto">
-            <h2 className="text-3xl font-extrabold text-slate-900 mb-8 text-center tracking-tight">
+            <h2 className="text-3xl font-medium text-slate-900 mb-8 text-center tracking-tighter">
               Frequently Asked Questions
             </h2>
             <div className="space-y-4">
               <details className="group border border-slate-200 rounded-xl bg-white shadow-sm [&_summary::-webkit-details-marker]:hidden">
-                <summary className="flex cursor-pointer items-center justify-between gap-1.5 p-6 text-slate-900 font-bold transition-colors hover:text-blue-600">
+                <summary className="flex cursor-pointer items-center justify-between gap-1.5 p-6 text-slate-900 font-bold transition-colors hover:text-[#1E3A8A]">
                   Does this require an app?
                   <span className="shrink-0 transition duration-300 group-open:-rotate-180 text-slate-400">
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
@@ -325,7 +324,7 @@ export default function Product() {
               </details>
               
               <details className="group border border-slate-200 rounded-xl bg-white shadow-sm [&_summary::-webkit-details-marker]:hidden">
-                <summary className="flex cursor-pointer items-center justify-between gap-1.5 p-6 text-slate-900 font-bold transition-colors hover:text-blue-600">
+                <summary className="flex cursor-pointer items-center justify-between gap-1.5 p-6 text-slate-900 font-bold transition-colors hover:text-[#1E3A8A]">
                   Are there any monthly subscription fees?
                   <span className="shrink-0 transition duration-300 group-open:-rotate-180 text-slate-400">
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
@@ -339,7 +338,7 @@ export default function Product() {
               </details>
 
               <details className="group border border-slate-200 rounded-xl bg-white shadow-sm [&_summary::-webkit-details-marker]:hidden">
-                <summary className="flex cursor-pointer items-center justify-between gap-1.5 p-6 text-slate-900 font-bold transition-colors hover:text-blue-600">
+                <summary className="flex cursor-pointer items-center justify-between gap-1.5 p-6 text-slate-900 font-bold transition-colors hover:text-[#1E3A8A]">
                   How do I change where the product links to?
                   <span className="shrink-0 transition duration-300 group-open:-rotate-180 text-slate-400">
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">

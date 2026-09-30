@@ -28,7 +28,7 @@ export default function TermsOfServicePage() {
         for example a café, restaurant, hotel or shop, even if you use a personal account.
       </p>
       <p>
-        Some rules differ: the right of withdrawal applies only to consumers (section 6), the warranty differs
+        Some rules differ: the right of withdrawal applies only to consumers and business customers have their own returns rule (section 6), the warranty differs
         (section 7), and liability and applicable law differ (sections 10 and 12). Nothing in these terms limits the
         rights consumers have under the law of their country.
       </p>
@@ -56,13 +56,19 @@ export default function TermsOfServicePage() {
         for your order until it is delivered.
       </p>
 
-      <PolicyHeading>6. Right of withdrawal (consumers only)</PolicyHeading>
+      <PolicyHeading>6. Right of withdrawal and returns</PolicyHeading>
       <p>
         Consumers can withdraw from a purchase within 14 days of receiving it, without giving a reason, and we extend
         this to 30 days as a returns promise. Custom-branded
         products made with your own logo or design are excluded. Full details and the model withdrawal form are in
-        our <Link to="/refund-policy#right-of-withdrawal" className={link}>Returns and Refunds policy</Link>. Business
-        customers don&apos;t have this right.
+        our <Link to="/refund-policy#right-of-withdrawal" className={link}>Returns and Refunds policy</Link>.
+      </p>
+      <p>
+        Business customers don&apos;t have the legal right of withdrawal, but can return products that are unused,
+        undamaged, in their original packaging and not activated within 30 days of receiving them. The business pays
+        the return shipping, and the original delivery cost is refunded only if the product is faulty; custom-branded
+        products are excluded. Faulty products are always covered by the warranty
+        (section 7). See <Link to="/refund-policy#business-returns" className={link}>Returns for business customers</Link>.
       </p>
 
       <PolicyHeading>7. Warranty</PolicyHeading>

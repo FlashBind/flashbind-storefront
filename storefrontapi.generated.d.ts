@@ -890,7 +890,10 @@ export type ProductByHandleQueryVariables = StorefrontAPI.Exact<{
 
 export type ProductByHandleQuery = {
   product?: StorefrontAPI.Maybe<
-    Pick<StorefrontAPI.Product, 'id' | 'title' | 'handle' | 'description'> & {
+    Pick<
+      StorefrontAPI.Product,
+      'id' | 'title' | 'handle' | 'description' | 'availableForSale'
+    > & {
       images: {
         nodes: Array<
           Pick<
@@ -901,7 +904,7 @@ export type ProductByHandleQuery = {
       };
       variants: {
         nodes: Array<
-          Pick<StorefrontAPI.ProductVariant, 'id'> & {
+          Pick<StorefrontAPI.ProductVariant, 'id' | 'availableForSale'> & {
             price: Pick<StorefrontAPI.MoneyV2, 'amount' | 'currencyCode'>;
           }
         >;
@@ -1430,7 +1433,7 @@ interface GeneratedQueryTypes {
     return: PageQuery;
     variables: PageQueryVariables;
   };
-  '#graphql\n  query ProductByHandle($handle: String!) {\n    product(handle: $handle) {\n      id\n      title\n      handle\n      description\n      images(first: 5) {\n        nodes {\n          id\n          url\n          altText\n          width\n          height\n        }\n      }\n      variants(first: 1) {\n        nodes {\n          id\n          price {\n            amount\n            currencyCode\n          }\n        }\n      }\n    }\n  }\n': {
+  '#graphql\n  query ProductByHandle($handle: String!) {\n    product(handle: $handle) {\n      id\n      title\n      handle\n      description\n      availableForSale\n      images(first: 5) {\n        nodes {\n          id\n          url\n          altText\n          width\n          height\n        }\n      }\n      variants(first: 10) {\n        nodes {\n          id\n          availableForSale\n          price {\n            amount\n            currencyCode\n          }\n        }\n      }\n    }\n  }\n': {
     return: ProductByHandleQuery;
     variables: ProductByHandleQueryVariables;
   };

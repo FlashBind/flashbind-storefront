@@ -1,6 +1,6 @@
 import {Await, useLoaderData, Link} from 'react-router';
 import type {Route} from './+types/_index';
-import {Suspense, useState, useEffect, useRef} from 'react';
+import {Suspense, useState, useEffect, useRef, type ReactNode} from 'react';
 import {Image} from '@shopify/hydrogen';
 import PhoneMockupCooper from '../components/PhoneMockupCooper';
 import PhoneMockupReviews from '../components/PhoneMockupReviews';
@@ -30,7 +30,7 @@ export const meta: Route.MetaFunction = ({data, matches}) => {
       (m) => !('name' in m && m.name === 'description') && !('title' in m)
     ),
     {title: 'FlashBind | Premium NFC Products'},
-    {name: 'description', content: 'FlashBind sells premium NFC-powered products — Google Review stands, digital menu cards, guest WiFi cards, and pet tags. Tap to connect instantly, no app required.'},
+    {name: 'description', content: 'FlashBind sells NFC products: the Google Review Stand, Digital Menu Stand, Guest Wi-Fi Stand and Smart Pet Tag. Tap with a phone, no app required.'},
     {property: 'og:title', content: 'FlashBind | Premium NFC Products'},
     {property: 'og:image', content: 'https://flashbind.com/hero_new_1.jpg'},
   ];
@@ -123,35 +123,36 @@ export default function Homepage() {
       />
 
       {/* Premium Hero Section */}
-      <section className="relative overflow-hidden bg-[#FDFCF8] flex flex-col lg:flex-row">
+      {/* Dark background = the header's "Get Started" colour (slate-900). */}
+      <section className="relative hero-screen bg-[#0F172A] flex flex-col lg:flex-row">
         {/* Abstract/Minimal Background Elements */}
         <AmbientGlow />
         
         {/* Left Half: Text Column */}
         <div className="w-full lg:w-1/2 relative z-10 flex justify-center lg:justify-end">
-          <div className="w-full max-w-[45rem] px-6 lg:pl-12 lg:pr-16 pt-16 pb-12 lg:py-20 mx-auto lg:ml-auto lg:mr-0 flex flex-col justify-center items-center lg:items-start text-center lg:text-left">
-            <div className="inline-block mb-8 px-4 py-2 rounded-full border border-black/5 bg-white/40 backdrop-blur-md self-center lg:self-start">
-              <span className="text-[13px] font-medium text-[#4A4A4A] flex items-center gap-2.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#1E3A8A] opacity-80"></span>
+          <div className="w-full max-w-[45rem] px-9 lg:pl-20 lg:pr-16 pt-16 pb-12 lg:py-20 mx-auto lg:ml-auto lg:mr-0 flex flex-col justify-center items-center lg:items-start text-center lg:text-left">
+            <div className="inline-block mb-8 px-4 py-2 rounded-full border border-white/10 bg-white/5 backdrop-blur-md self-center lg:self-start">
+              <span className="text-[13px] font-medium text-slate-300 flex items-center gap-2.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#869BD9] opacity-80"></span>
                 The future of interaction
               </span>
             </div>
             
-            <h1 className="text-5xl md:text-7xl lg:text-[5.5rem] font-medium mb-6 tracking-tighter text-[#1A1A1A] leading-tight lg:leading-[1.05]">
+            <h1 className="text-5xl md:text-7xl lg:text-[5.5rem] font-medium mb-6 tracking-tighter text-white leading-tight lg:leading-[1.05]">
               One Tap<br />
               Everything<br />
-              <span className="text-[#1E3A8A] italic font-serif">Connects</span>
+              <span className="text-[#869BD9] italic font-serif">Connects</span>
             </h1>
             
-            <p className="text-[#4A4A4A] text-lg md:text-xl max-w-2xl mb-10 font-light leading-relaxed tracking-tight">
-              Branded NFC stands and cards that connect customers to what matters most — the moment they arrive.
+            <p className="text-slate-300 text-lg md:text-xl max-w-2xl mb-10 font-light leading-relaxed tracking-tight">
+              Branded NFC stands and tags that connect customers to what matters most — the moment they arrive.
             </p>
             
             <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start w-full gap-4">
-              <Link to="/catalog" className="w-full sm:w-auto px-8 py-4 bg-[#1E3A8A] text-white font-bold rounded-full hover:bg-[#172A66] hover:scale-105 shadow-[0_10px_40px_rgba(30,58,138,0.3)] transition-all duration-300 text-base text-center">
+              <Link to="/catalog" className="w-full sm:w-auto px-8 py-4 bg-white text-[#0F172A] hover:bg-slate-100 shadow-[0_10px_40px_rgba(134,155,217,0.25)] font-bold rounded-full hover:scale-105 transition-all duration-300 text-base text-center">
                 Explore Catalog
               </Link>
-              <a href="#solutions" className="w-full sm:w-auto px-8 py-4 bg-white/80 backdrop-blur-sm border border-slate-200 text-slate-700 font-bold rounded-full hover:bg-slate-50 hover:border-[#1E3A8A]/30 hover:text-[#1E3A8A] hover:scale-105 shadow-sm hover:shadow-md transition-all duration-300 text-base text-center">
+              <a href="#solutions" className="w-full sm:w-auto px-8 py-4 backdrop-blur-sm border bg-white/5 border-white/25 text-white hover:bg-white/10 hover:border-white/40 font-bold rounded-full hover:scale-105 transition-all duration-300 text-base text-center">
                 View Solutions
               </a>
             </div>
@@ -159,8 +160,8 @@ export default function Homepage() {
         </div>
 
         {/* Right Half: Image Column */}
-        <div className="w-full lg:w-1/2 relative min-h-[50vh] lg:min-h-0 lg:h-auto lg:py-16 lg:pr-16 lg:pl-8 p-6 flex flex-col justify-center">
-          <div className="relative w-full h-full flex-1 rounded-[2.5rem] overflow-hidden shadow-[0_20px_50px_rgba(30,58,138,0.15)] border-4 border-white/60">
+        <div className="w-full lg:w-1/2 relative min-h-[50vh] lg:min-h-0 lg:h-auto lg:py-16 lg:pr-20 lg:pl-8 p-9 pb-24 flex flex-col justify-center">
+          <div className="relative w-full h-full flex-1 rounded-[2.5rem] overflow-hidden border-4 shadow-[0_20px_50px_rgba(0,0,0,0.45)] border-white/10">
             {HERO_IMAGES.map((src, idx) => (
               <img
                 key={src}
@@ -182,89 +183,49 @@ export default function Homepage() {
       </section>
 
       {/* Use Cases Grid Section */}
-      <section id="solutions" className="py-24 bg-gradient-to-b from-white to-blue-50/30 relative overflow-hidden">
+      <section id="solutions" className="py-24 bg-gradient-to-b from-white to-[#1E3A8A]/[0.015] relative overflow-hidden">
         {/* Background glow */}
         <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none -z-10">
-          <div className="absolute top-[10%] left-[5%] w-[30rem] h-[30rem] bg-purple-200/30 rounded-full blur-[100px]"></div>
+          <div className="absolute top-[10%] left-[5%] w-[30rem] h-[30rem] bg-[#1E3A8A]/[0.06] rounded-full blur-[100px]"></div>
           <div className="absolute bottom-[10%] right-[5%] w-[30rem] h-[30rem] bg-[#1E3A8A]/30 rounded-full blur-[100px]"></div>
         </div>
 
         <div className="container mx-auto px-6 max-w-7xl relative z-10">
           <div className="text-center mb-16">
-            <span className="text-purple-600 text-sm font-bold tracking-[0.2em] uppercase mb-4 block">Created for you</span>
-            <h2 className="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight mb-4">For professionals and businesses</h2>
-            <p className="text-slate-500 text-lg max-w-2xl mx-auto">Choose what your product opens, from Google reviews to digital business cards.</p>
+            <span className="text-slate-500 text-sm font-bold tracking-[0.2em] uppercase mb-4 block">Created for you</span>
+            <h2 className="text-4xl md:text-5xl font-medium text-slate-900 tracking-tighter mb-4">For <span className="text-[#1E3A8A] italic font-serif">individuals</span> and <span className="text-[#1E3A8A] italic font-serif">businesses</span></h2>
+            <p className="text-slate-500 text-lg max-w-2xl mx-auto">Choose what your tag opens: Google reviews, Wi-Fi, digital menus or your pet&apos;s profile.</p>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            
-            {/* Card 1: Google Reviews */}
-            <div className="bg-white rounded-[2.5rem] p-8 md:p-12 shadow-[0_8px_30px_rgb(0,0,0,0.08)] border border-slate-200 hover:border-[#1E3A8A]/30 hover:shadow-[0_8px_40px_rgb(0,0,0,0.12)] flex flex-col sm:flex-row items-center gap-8 group hover:-translate-y-2 transition-all duration-300">
-              <div className="flex-1 text-center sm:text-left">
-                <h3 className="text-2xl font-bold text-slate-900 mb-4">Google Reviews</h3>
-                <p className="text-slate-600 leading-relaxed mb-8 text-sm md:text-base">Direct customers instantly to your Google Review page with a single tap. Built for storefronts, cafes, and reception desks.</p>
-                <Link to={PRODUCT_ROUTES.googleReview} className="text-slate-900 font-bold text-sm inline-flex items-center gap-2 hover:text-[#1E3A8A] transition-colors">
-                  Learn more <span className="transform group-hover:translate-x-1 transition-transform">&rarr;</span>
-                </Link>
-              </div>
-              {/* Standardized Review Mockup */}
-              <div className="w-48 md:w-64 h-[220px] md:h-[280px] bg-gradient-to-br from-[#FDFCF8] to-[#F5F4EE] rounded-[2rem] md:rounded-[2.5rem] relative flex-shrink-0 transition-transform duration-500 flex items-center justify-center overflow-hidden border border-black/5 shadow-sm">
-                 <div className="absolute origin-center scale-[0.26] md:scale-[0.32] drop-shadow-[0_20px_25px_rgba(0,0,0,0.15)] transition-all duration-500 group-hover:scale-[0.28] md:group-hover:scale-[0.35] group-hover:-translate-y-2">
-                   <PhoneMockupReviews />
-                 </div>
-              </div>
-            </div>
-
-            {/* Card 2: Smart Pet Tags */}
-            <div className="bg-white rounded-[2.5rem] p-8 md:p-12 shadow-[0_8px_30px_rgb(0,0,0,0.08)] border border-slate-200 hover:border-[#1E3A8A]/30 hover:shadow-[0_8px_40px_rgb(0,0,0,0.12)] flex flex-col sm:flex-row items-center gap-8 group hover:-translate-y-2 transition-all duration-300">
-              <div className="flex-1 text-center sm:text-left">
-                <h3 className="text-2xl font-bold text-slate-900 mb-4">Smart Pet Tags</h3>
-                <p className="text-slate-600 leading-relaxed mb-8 text-sm md:text-base">Keep your best friend safe. A quick tap with a phone shows the owner's contact details. Works with nearly all modern smartphones.</p>
-                <Link to={PRODUCT_ROUTES.petTag} className="text-slate-900 font-bold text-sm inline-flex items-center gap-2 hover:text-[#1E3A8A] transition-colors">
-                  Learn more <span className="transform group-hover:translate-x-1 transition-transform">&rarr;</span>
-                </Link>
-              </div>
-              {/* Standardized Cooper Preview */}
-              <div className="w-48 md:w-64 h-[220px] md:h-[280px] bg-gradient-to-br from-[#FDFCF8] to-[#F5F4EE] rounded-[2rem] md:rounded-[2.5rem] relative flex-shrink-0 transition-transform duration-500 flex items-center justify-center overflow-hidden border border-black/5 shadow-sm">
-                 <div className="absolute origin-center scale-[0.26] md:scale-[0.32] drop-shadow-[0_20px_25px_rgba(0,0,0,0.15)] transition-all duration-500 group-hover:scale-[0.28] md:group-hover:scale-[0.35] group-hover:-translate-y-2">
-                   <PhoneMockupCooper />
-                 </div>
-              </div>
-            </div>
-
-            {/* Card 3: Tap-to-View Menus */}
-            <div className="bg-white rounded-[2.5rem] p-8 md:p-12 shadow-[0_8px_30px_rgb(0,0,0,0.08)] border border-slate-200 hover:border-[#1E3A8A]/30 hover:shadow-[0_8px_40px_rgb(0,0,0,0.12)] flex flex-col sm:flex-row items-center gap-8 group hover:-translate-y-2 transition-all duration-300">
-              <div className="flex-1 text-center sm:text-left">
-                <h3 className="text-2xl font-bold text-slate-900 mb-4">Tap-to-View Menus</h3>
-                <p className="text-slate-600 leading-relaxed mb-8 text-sm md:text-base">Modernize your hospitality business. Let customers tap your tabletop stands to view your digital menu instantly.</p>
-                <Link to={PRODUCT_ROUTES.menu} className="text-slate-900 font-bold text-sm inline-flex items-center gap-2 hover:text-[#1E3A8A] transition-colors">
-                  Learn more <span className="transform group-hover:translate-x-1 transition-transform">&rarr;</span>
-                </Link>
-              </div>
-              {/* Standardized Menu Mockup */}
-              <div className="w-48 md:w-64 h-[220px] md:h-[280px] bg-gradient-to-br from-[#FDFCF8] to-[#F5F4EE] rounded-[2rem] md:rounded-[2.5rem] relative flex-shrink-0 transition-transform duration-500 flex items-center justify-center overflow-hidden border border-black/5 shadow-sm">
-                 <div className="absolute origin-center scale-[0.26] md:scale-[0.32] drop-shadow-[0_20px_25px_rgba(0,0,0,0.15)] transition-all duration-500 group-hover:scale-[0.28] md:group-hover:scale-[0.35] group-hover:-translate-y-2">
-                   <PhoneMockupMenu />
-                 </div>
-              </div>
-            </div>
-
-            {/* Card 4: Guest Wi-Fi */}
-            <div className="bg-white rounded-[2.5rem] p-8 md:p-12 shadow-[0_8px_30px_rgb(0,0,0,0.08)] border border-slate-200 hover:border-[#1E3A8A]/30 hover:shadow-[0_8px_40px_rgb(0,0,0,0.12)] flex flex-col sm:flex-row items-center gap-8 group hover:-translate-y-2 transition-all duration-300">
-              <div className="flex-1 text-center sm:text-left">
-                <h3 className="text-2xl font-bold text-slate-900 mb-4">Guest Wi-Fi</h3>
-                <p className="text-slate-600 leading-relaxed mb-8 text-sm md:text-base">No more spelling out complex passwords. Guests tap or scan to see your network name and password.</p>
-                <Link to={PRODUCT_ROUTES.wifi} className="text-slate-900 font-bold text-sm inline-flex items-center gap-2 hover:text-[#1E3A8A] transition-colors">
-                  Learn more <span className="transform group-hover:translate-x-1 transition-transform">&rarr;</span>
-                </Link>
-              </div>
-              {/* Standardized Wifi Mockup */}
-              <div className="w-48 md:w-64 h-[220px] md:h-[280px] bg-gradient-to-br from-[#FDFCF8] to-[#F5F4EE] rounded-[2rem] md:rounded-[2.5rem] relative flex-shrink-0 transition-transform duration-500 flex items-center justify-center overflow-hidden border border-black/5 shadow-sm">
-                 <div className="absolute origin-center scale-[0.26] md:scale-[0.32] drop-shadow-[0_20px_25px_rgba(0,0,0,0.15)] transition-all duration-500 group-hover:scale-[0.28] md:group-hover:scale-[0.35] group-hover:-translate-y-2">
-                   <PhoneMockupWifi />
-                 </div>
-              </div>
-            </div>
+            <SolutionCard
+              to={PRODUCT_ROUTES.googleReview}
+              title="Google Reviews"
+              text="Direct customers instantly to your Google Review page with a single tap. Built for storefronts, cafes, and reception desks."
+            >
+              <PhoneMockupReviews />
+            </SolutionCard>
+            <SolutionCard
+              to={PRODUCT_ROUTES.petTag}
+              title="Smart Pet Tags"
+              text="Keep your best friend safe. A quick tap with a phone shows the owner's contact details. Works with nearly all modern smartphones."
+            >
+              <PhoneMockupCooper />
+            </SolutionCard>
+            <SolutionCard
+              to={PRODUCT_ROUTES.menu}
+              title="Tap-to-View Menus"
+              text="Modernize your hospitality business. Let customers tap your tabletop stands to view your digital menu instantly."
+            >
+              <PhoneMockupMenu />
+            </SolutionCard>
+            <SolutionCard
+              to={PRODUCT_ROUTES.wifi}
+              title="Guest Wi-Fi"
+              text="No more spelling out complex passwords. Guests tap or scan to see your network name and password."
+            >
+              <PhoneMockupWifi />
+            </SolutionCard>
 
           </div>
         </div>
@@ -291,7 +252,7 @@ export default function Homepage() {
 
             {/* Right Column (Content) */}
             <div className="flex flex-col text-left">
-              <h2 className="text-slate-900 text-3xl font-bold tracking-tight mb-4">
+              <h2 className="text-slate-900 text-3xl font-medium tracking-tighter mb-4">
                 Google Reviews
               </h2>
               <div className="text-gray-600 text-lg leading-relaxed mb-6 space-y-3">
@@ -316,7 +277,7 @@ export default function Homepage() {
             
             {/* Left Column (Content) */}
             <div className="flex flex-col text-left order-last md:order-first">
-              <h2 className="text-slate-900 text-3xl font-bold tracking-tight mb-4">
+              <h2 className="text-slate-900 text-3xl font-medium tracking-tighter mb-4">
                 Tap-to-View Menus
               </h2>
               <div className="text-gray-600 text-lg leading-relaxed mb-6 space-y-3">
@@ -355,11 +316,11 @@ export default function Homepage() {
 
             {/* Right Column (Content) */}
             <div className="flex flex-col text-left">
-              <h2 className="text-slate-900 text-3xl font-bold tracking-tight mb-4">
+              <h2 className="text-slate-900 text-3xl font-medium tracking-tighter mb-4">
                 Guest Wi-Fi
               </h2>
               <div className="text-gray-600 text-lg leading-relaxed mb-6 space-y-3">
-                <p><strong>1. Zero Friction:</strong> Visitors tap the Wi-Fi stand at the counter or table.</p>
+                <p><strong>1. Zero Friction:</strong> Visitors tap the Guest Wi-Fi Stand at the counter or table.</p>
                 <p><strong>2. Name and Password:</strong> Guests tap or scan to see your network name and password.</p>
                 <p><strong>3. No Spelling Out:</strong> Staff no longer need to read out or write up long passwords.</p>
               </div>
@@ -380,7 +341,7 @@ export default function Homepage() {
             
             {/* Left Column (Content) */}
             <div className="flex flex-col text-left order-last md:order-first">
-              <h2 className="text-slate-900 text-3xl font-bold tracking-tight mb-4">
+              <h2 className="text-slate-900 text-3xl font-medium tracking-tighter mb-4">
                 Smart Pet Tags
               </h2>
               <div className="text-gray-600 text-lg leading-relaxed mb-6 space-y-3">
@@ -410,12 +371,12 @@ export default function Homepage() {
         {/* Subtle Background Glows */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-3xl h-full opacity-30 pointer-events-none">
            <div className="absolute top-10 left-10 w-72 h-72 bg-[#1E3A8A] rounded-full mix-blend-multiply filter blur-[100px] animate-pulse"></div>
-           <div className="absolute bottom-10 right-10 w-72 h-72 bg-cyan-300 rounded-full mix-blend-multiply filter blur-[100px] animate-pulse" style={{ animationDelay: '2s' }}></div>
+           <div className="absolute bottom-10 right-10 w-72 h-72 bg-[#1E3A8A]/30 rounded-full mix-blend-multiply filter blur-[100px] animate-pulse" style={{ animationDelay: '2s' }}></div>
         </div>
 
         <div className="container mx-auto px-6 max-w-7xl relative z-10">
           <div className="text-center mb-20">
-            <h2 className="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight mb-4">Ready in Seconds</h2>
+            <h2 className="text-4xl md:text-5xl font-medium text-slate-900 tracking-tighter mb-4">Ready in <span className="text-[#1E3A8A] italic font-serif">Seconds</span></h2>
             <p className="text-slate-500 text-lg">No apps to download. No complicated software. Just tap and grow.</p>
           </div>
 
@@ -426,20 +387,20 @@ export default function Homepage() {
             {/* Step 1 */}
             <div className="relative z-10 flex flex-col items-center text-center group">
               <div className="w-24 h-24 bg-white rounded-[2rem] shadow-xl shadow-slate-200/50 border border-slate-100 flex items-center justify-center mb-8 relative transform group-hover:-translate-y-2 transition-transform duration-300">
-                <div className="absolute -inset-2 bg-gradient-to-r from-blue-400 to-cyan-300 rounded-[2.5rem] opacity-0 group-hover:opacity-20 blur-lg transition-opacity duration-300"></div>
+                <div className="absolute -inset-2 bg-gradient-to-r from-[#1E3A8A] to-[#1E3A8A]/30 rounded-[2.5rem] opacity-0 group-hover:opacity-20 blur-lg transition-opacity duration-300"></div>
                 <span className="absolute -top-3 -left-3 w-8 h-8 bg-[#1E3A8A] text-white font-bold rounded-full flex items-center justify-center shadow-lg border-2 border-white z-10">1</span>
                 <svg className="w-10 h-10 text-[#1E3A8A]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
                 </svg>
               </div>
               <h3 className="text-2xl font-bold text-slate-900 mb-3">Order Your Tech</h3>
-              <p className="text-slate-500 leading-relaxed max-w-xs">Choose a Google review, menu or Wi-Fi stand, or a pet tag.</p>
+              <p className="text-slate-500 leading-relaxed max-w-xs">Choose a Google Review Stand, Digital Menu Stand, Guest Wi-Fi Stand or Smart Pet Tag.</p>
             </div>
 
             {/* Step 2 */}
             <div className="relative z-10 flex flex-col items-center text-center group">
               <div className="w-24 h-24 bg-white rounded-[2rem] shadow-xl shadow-slate-200/50 border border-slate-100 flex items-center justify-center mb-8 relative transform group-hover:-translate-y-2 transition-transform duration-300">
-                <div className="absolute -inset-2 bg-gradient-to-r from-blue-400 to-cyan-300 rounded-[2.5rem] opacity-0 group-hover:opacity-20 blur-lg transition-opacity duration-300"></div>
+                <div className="absolute -inset-2 bg-gradient-to-r from-[#1E3A8A] to-[#1E3A8A]/30 rounded-[2.5rem] opacity-0 group-hover:opacity-20 blur-lg transition-opacity duration-300"></div>
                 <span className="absolute -top-3 -left-3 w-8 h-8 bg-[#1E3A8A] text-white font-bold rounded-full flex items-center justify-center shadow-lg border-2 border-white z-10">2</span>
                 <svg className="w-10 h-10 text-[#1E3A8A]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
@@ -452,7 +413,7 @@ export default function Homepage() {
             {/* Step 3 */}
             <div className="relative z-10 flex flex-col items-center text-center group">
               <div className="w-24 h-24 bg-white rounded-[2rem] shadow-xl shadow-slate-200/50 border border-slate-100 flex items-center justify-center mb-8 relative transform group-hover:-translate-y-2 transition-transform duration-300">
-                <div className="absolute -inset-2 bg-gradient-to-r from-blue-400 to-cyan-300 rounded-[2.5rem] opacity-0 group-hover:opacity-20 blur-lg transition-opacity duration-300"></div>
+                <div className="absolute -inset-2 bg-gradient-to-r from-[#1E3A8A] to-[#1E3A8A]/30 rounded-[2.5rem] opacity-0 group-hover:opacity-20 blur-lg transition-opacity duration-300"></div>
                 <span className="absolute -top-3 -left-3 w-8 h-8 bg-[#1E3A8A] text-white font-bold rounded-full flex items-center justify-center shadow-lg border-2 border-white z-10">3</span>
                 <svg className="w-10 h-10 text-[#1E3A8A]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
@@ -469,11 +430,11 @@ export default function Homepage() {
       <section className="py-24 bg-slate-50 relative overflow-hidden">
         {/* Subtle Background Gradients */}
         <div className="absolute top-1/4 left-0 w-96 h-96 bg-[#1E3A8A]/20 rounded-full blur-[100px] -z-10 mix-blend-multiply pointer-events-none"></div>
-        <div className="absolute bottom-0 right-0 w-[30rem] h-[30rem] bg-cyan-300/20 rounded-full blur-[120px] -z-10 mix-blend-multiply pointer-events-none"></div>
+        <div className="absolute bottom-0 right-0 w-[30rem] h-[30rem] bg-[#1E3A8A]/[0.06] rounded-full blur-[120px] -z-10 mix-blend-multiply pointer-events-none"></div>
 
         <div className="container mx-auto px-6 max-w-6xl">
           <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight mb-4">Flawless Technology</h2>
+            <h2 className="text-4xl md:text-5xl font-medium text-slate-900 tracking-tighter mb-4">Flawless Technology</h2>
             <p className="text-slate-500 text-lg max-w-2xl mx-auto">Simple NFC hardware you set up and update from your phone.</p>
           </div>
 
@@ -485,7 +446,7 @@ export default function Homepage() {
               
               <div className="relative z-10 mb-12">
                 <h3 className="text-3xl font-extrabold text-slate-900 mb-3">Universal Compatibility</h3>
-                <p className="text-slate-600 max-w-sm leading-relaxed">No app required. Works with nearly all modern smartphones. Menu and Wi-Fi plaques also have a QR code as backup.</p>
+                <p className="text-slate-600 max-w-sm leading-relaxed">No app required. Works with nearly all modern smartphones. The Digital Menu Stand and Guest Wi-Fi Stand also have a QR code as backup.</p>
               </div>
 
               {/* Visual Apple/Android Graphic */}
@@ -521,13 +482,13 @@ export default function Homepage() {
 
             {/* Dynamic Control Card */}
             <div className="bg-white border border-slate-200 shadow-xl rounded-[2rem] p-10 flex flex-col group hover:-translate-y-1 hover:border-[#1E3A8A]/30 transition-all duration-300">
-              <div className="w-14 h-14 bg-cyan-100 text-cyan-600 rounded-full flex items-center justify-center mb-8 shadow-inner">
+              <div className="w-14 h-14 bg-[#1E3A8A]/10 text-[#1E3A8A] rounded-full flex items-center justify-center mb-8 shadow-inner">
                 <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
                 </svg>
               </div>
               <h3 className="text-xl font-bold text-slate-900 mb-3">Dynamic Control</h3>
-              <p className="text-slate-600 leading-relaxed text-sm">Update your destination link anytime from our dashboard without needing a new physical card.</p>
+              <p className="text-slate-600 leading-relaxed text-sm">Update your destination link anytime from our dashboard without replacing the product.</p>
             </div>
 
             {/* Premium Chips Card */}
@@ -577,7 +538,7 @@ export default function Homepage() {
       <section className="py-24 bg-white relative">
         <div className="container mx-auto px-6 max-w-3xl">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-extrabold text-slate-900 tracking-tight mb-4">Frequently Asked Questions</h2>
+            <h2 className="text-4xl font-medium text-slate-900 tracking-tighter mb-4">Frequently Asked Questions</h2>
             <p className="text-slate-500 text-lg">Everything you need to know about the technology and billing.</p>
           </div>
           
@@ -591,7 +552,7 @@ export default function Homepage() {
                 </span>
               </summary>
               <p className="text-slate-600 px-6 pb-6 leading-relaxed">
-                No. Works with nearly all modern smartphones. Hold the top of the phone near the product and the page opens. Menu and Wi-Fi plaques also have a QR code as backup; Google Review stands and pet tags have no QR code.
+                No. Works with nearly all modern smartphones. Hold the top of the phone near the product and the page opens. The Digital Menu Stand and Guest Wi-Fi Stand also have a QR code as backup; the Google Review Stand and Smart Pet Tag have no QR code.
               </p>
             </details>
 
@@ -617,7 +578,7 @@ export default function Homepage() {
                 </span>
               </summary>
               <p className="text-slate-600 px-6 pb-6 leading-relaxed">
-                Yes! Your card uses dynamic linking technology. If you change your business name, get a new Google Review link, or want to link to your Instagram instead, you can easily update the destination URL from your account dashboard instantly.
+                Yes! Your product uses dynamic linking technology. If you change your business name, get a new Google Review link, or want to link to your Instagram instead, you can easily update the destination URL from your account dashboard instantly.
               </p>
             </details>
 
@@ -630,7 +591,7 @@ export default function Homepage() {
                 </span>
               </summary>
               <p className="text-slate-600 px-6 pb-6 leading-relaxed">
-                The tag only holds a web link. Tapping it opens that link in the phone's browser, and the tag cannot read anything from the phone that taps it.
+                The tag only holds a web link. Tapping it opens that link in the phone&apos;s browser, and the tag cannot read anything from the phone that taps it.
               </p>
             </details>
           </div>
@@ -638,6 +599,46 @@ export default function Homepage() {
       </section>
 
     </div>
+  );
+}
+
+/**
+ * One homepage solution card. The whole card is a single link (no nested
+ * links); "Learn more" is a styled span inside it. Movement is motion-safe only.
+ */
+function SolutionCard({
+  to,
+  title,
+  text,
+  children,
+}: {
+  to: string;
+  title: string;
+  text: string;
+  children: ReactNode;
+}) {
+  return (
+    <Link
+      to={to}
+      prefetch="intent"
+      className="group bg-white rounded-[2.5rem] p-8 md:p-12 shadow-[0_8px_30px_rgb(0,0,0,0.08)] border border-slate-200 flex flex-col sm:flex-row items-center gap-8 no-underline hover:no-underline transition-[box-shadow,border-color,transform] duration-300 hover:border-[#1E3A8A]/30 hover:shadow-[0_16px_40px_rgb(0,0,0,0.12)] motion-safe:hover:-translate-y-1 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#1E3A8A] focus-visible:ring-offset-4"
+    >
+      <div className="flex-1 text-center sm:text-left sm:self-start">
+        <h3 className="text-2xl font-bold text-slate-900 mb-4">{title}</h3>
+        <p className="text-slate-600 leading-relaxed mb-8 text-sm md:text-base">{text}</p>
+        <span className="inline-flex items-center gap-2 min-h-[44px] px-6 rounded-full border-2 border-[#1E3A8A] text-[#1E3A8A] font-bold text-sm transition-colors duration-300 group-hover:bg-[#1E3A8A] group-hover:text-white group-focus-visible:bg-[#1E3A8A] group-focus-visible:text-white">
+          Learn more
+          <span aria-hidden="true" className="motion-safe:transition-transform motion-safe:duration-300 motion-safe:group-hover:translate-x-1">
+            &rarr;
+          </span>
+        </span>
+      </div>
+      <div className="w-48 md:w-64 h-[220px] md:h-[280px] bg-gradient-to-br from-[#FDFCF8] to-[#F5F4EE] rounded-[2rem] md:rounded-[2.5rem] relative flex-shrink-0 flex items-center justify-center overflow-hidden border border-black/5 shadow-sm">
+        <div className="absolute origin-center scale-[0.26] md:scale-[0.32] drop-shadow-[0_20px_25px_rgba(0,0,0,0.15)] motion-safe:transition-transform motion-safe:duration-500 motion-safe:group-hover:scale-[0.28] md:motion-safe:group-hover:scale-[0.35] motion-safe:group-hover:-translate-y-2">
+          {children}
+        </div>
+      </div>
+    </Link>
   );
 }
 
@@ -707,7 +708,7 @@ function RecommendedProducts({
   return (
     <div className="w-full">
       <div className="text-center mb-16">
-        <h2 id="recommended-products" className="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight mb-4">Trending Solutions</h2>
+        <h2 id="recommended-products" className="text-4xl md:text-5xl font-medium text-slate-900 tracking-tighter mb-4">Trending Solutions</h2>
         <p className="text-slate-500 text-lg max-w-2xl mx-auto">Select a category to view tailored products.</p>
         
         <div className="mt-8 flex justify-center">
@@ -728,7 +729,7 @@ function RecommendedProducts({
         </div>
       </div>
       
-      <Suspense fallback={<div className="flex justify-center items-center h-64"><div className="w-12 h-12 border-4 border-indigo-200 border-[#1E3A8A] rounded-full animate-spin"></div></div>}>
+      <Suspense fallback={<div className="flex justify-center items-center h-64"><div className="w-12 h-12 border-4 border-[#1E3A8A]/20 border-[#1E3A8A] rounded-full animate-spin"></div></div>}>
         <Await resolve={products}>
           {(response) => {
             const allProducts = response?.products.nodes || [];

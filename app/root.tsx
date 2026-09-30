@@ -25,7 +25,7 @@ export type RootLoader = typeof loader;
 export const meta: Route.MetaFunction = () => {
   return [
     {title: 'FlashBind'},
-    {name: 'description', content: 'FlashBind sells NFC products that help hospitality businesses collect more Google reviews, share menus, and connect with guests instantly.'},
+    {name: 'description', content: 'FlashBind sells NFC products that help hospitality businesses make it easy for customers to leave a Google review, open your menu and get your Wi-Fi details.'},
   ];
 };
 

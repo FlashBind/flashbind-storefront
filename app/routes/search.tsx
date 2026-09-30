@@ -43,7 +43,7 @@ export default function SearchPage() {
   return (
     <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
       <div className="max-w-3xl mx-auto text-center mb-16">
-        <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight mb-8">
+        <h1 className="text-4xl md:text-5xl font-medium text-slate-900 tracking-tighter mb-8">
           Search Results
         </h1>
         <SearchForm className="w-full max-w-xl mx-auto flex items-center justify-center">
@@ -55,11 +55,11 @@ export default function SearchPage() {
                 placeholder="Search products, services, and more..."
                 ref={inputRef}
                 type="search"
-                className="w-full bg-white border-2 border-slate-200 text-slate-900 rounded-full py-4 pl-6 pr-32 text-lg focus:outline-none focus:border-[#1E40AF] focus:ring-4 focus:ring-blue-50 transition-all [&::-webkit-search-cancel-button]:appearance-none"
+                className="w-full bg-white border-2 border-slate-200 text-slate-900 rounded-full py-4 pl-6 pr-32 text-lg focus:outline-none focus:border-[#1E3A8A] focus:ring-4 focus:ring-[#1E3A8A]/5 transition-all [&::-webkit-search-cancel-button]:appearance-none"
               />
               <button 
                 type="submit"
-                className="absolute right-2 top-2 bottom-2 bg-[#0F172A] text-white px-8 rounded-full font-semibold hover:bg-[#1E40AF] hover:scale-105 transition-all duration-300 shadow-md"
+                className="absolute right-2 top-2 bottom-2 bg-[#0F172A] text-white px-8 rounded-full font-semibold hover:bg-[#1E3A8A] hover:scale-105 transition-all duration-300 shadow-md"
               >
                 Search
               </button>

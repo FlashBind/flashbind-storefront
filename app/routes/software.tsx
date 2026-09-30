@@ -16,11 +16,11 @@ export const meta: MetaFunction = () => [
   {
     name: 'description',
     content:
-      'FlashBind stands work today with no subscription. An optional business subscription for Google Review, Menu and Wi-Fi stands is in development. Request founding-customer pricing.',
+      'FlashBind stands work today with no subscription. An optional business subscription for the Google Review Stand, Digital Menu Stand and Guest Wi-Fi Stand is in development. Request founding-customer pricing.',
   },
 ];
 
-const PRODUCTS = ['Google Review stand', 'Menu stand', 'Wi-Fi stand'] as const;
+const PRODUCTS = ['Google Review Stand', 'Digital Menu Stand', 'Guest Wi-Fi Stand'] as const;
 const LOCATIONS = ['1', '2–5', '6 or more'] as const;
 const CONSENT_TEXT =
   'I agree that FlashBind may email me about founding-customer pricing and the subscription launch. I can unsubscribe at any time.';
@@ -115,11 +115,11 @@ export default function SubscriptionPage() {
       <section className="pt-16 md:pt-24 pb-10 px-4 sm:px-6 text-center">
         <div className="max-w-3xl mx-auto">
           <div className="mb-5"><Badge tone="soon">Business subscription · coming soon</Badge></div>
-          <h1 className="text-3xl sm:text-4xl md:text-6xl font-extrabold text-slate-900 tracking-tight mb-5 leading-tight">
+          <h1 className="text-3xl sm:text-4xl md:text-6xl font-medium text-slate-900 tracking-tighter mb-5 leading-tight">
             Your stands work today. More is on the way.
           </h1>
           <p className="text-slate-500 text-base md:text-xl leading-relaxed">
-            Google Review, Menu and Wi-Fi stands work on their own, with no subscription. We&apos;re building an optional
+            The Google Review Stand, Digital Menu Stand and Guest Wi-Fi Stand work on their own, with no subscription. We&apos;re building an optional
             subscription for businesses. Founding customers help shape it and get special pricing.
           </p>
         </div>
@@ -146,7 +146,7 @@ export default function SubscriptionPage() {
           <div className="lg:col-span-3 bg-white rounded-[2rem] p-6 md:p-8 border-2 border-[#1E3A8A]/15 shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
             <div className="mb-3"><Badge tone="soon">Coming soon · subscription</Badge></div>
             <h2 className="text-2xl font-extrabold text-slate-900 mb-1">In development</h2>
-            <p className="text-slate-500 text-sm mb-5">For Google Review, Menu and Wi-Fi stands. Not available to buy yet; order and timing may change.</p>
+            <p className="text-slate-500 text-sm mb-5">For the Google Review Stand, Digital Menu Stand and Guest Wi-Fi Stand. Not available to buy yet; order and timing may change.</p>
             <ul className="space-y-4">
               {COMING.map((item) => (
                 <li key={item.title} className="border-l-2 border-[#1E3A8A]/20 pl-4">
@@ -168,7 +168,7 @@ export default function SubscriptionPage() {
       {/* Founding-customer pricing */}
       <section id="founding-pricing" className="px-4 sm:px-6 py-12 md:py-16">
         <div className="max-w-2xl mx-auto bg-slate-900 text-white rounded-[2rem] p-6 sm:p-10 shadow-2xl">
-          <h2 className="text-2xl md:text-3xl font-extrabold mb-3">Request founding-customer pricing</h2>
+          <h2 className="text-2xl md:text-3xl font-medium tracking-tighter mb-3">Request founding-customer pricing</h2>
           <p className="text-slate-300 mb-6">
             Leave your email and we&apos;ll send you founding-customer pricing before the subscription launches. No
             payment and no commitment.
@@ -183,18 +183,18 @@ export default function SubscriptionPage() {
               <div>
                 <label htmlFor="fp-email" className="block text-sm font-semibold mb-1">Email <span className="text-red-400">*</span></label>
                 <input id="fp-email" name="email" type="email" required autoComplete="email" maxLength={254}
-                  className="w-full px-4 py-3 rounded-2xl bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-400" />
+                  className="w-full px-4 py-3 rounded-2xl bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#869BD9]" />
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label htmlFor="fp-business" className="block text-sm font-semibold mb-1">Business name</label>
                   <input id="fp-business" name="business" type="text" maxLength={120} autoComplete="organization"
-                    className="w-full px-4 py-3 rounded-2xl bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-400" />
+                    className="w-full px-4 py-3 rounded-2xl bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#869BD9]" />
                 </div>
                 <div>
                   <label htmlFor="fp-locations" className="block text-sm font-semibold mb-1">Locations</label>
                   <select id="fp-locations" name="locations" defaultValue=""
-                    className="w-full px-4 py-3 rounded-2xl bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-400">
+                    className="w-full px-4 py-3 rounded-2xl bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#869BD9]">
                     <option value="">Choose…</option>
                     {LOCATIONS.map((l) => <option key={l} value={l}>{l}</option>)}
                   </select>
@@ -220,7 +220,7 @@ export default function SubscriptionPage() {
                 <p className="bg-red-500/15 border border-red-400/40 rounded-2xl p-3 text-sm" role="alert">{actionData.error}</p>
               )}
               <button type="submit" disabled={submitting}
-                className="w-full min-h-[48px] rounded-full bg-white text-slate-900 font-bold hover:bg-blue-50 disabled:opacity-60">
+                className="w-full min-h-[48px] rounded-full bg-white text-slate-900 font-bold hover:bg-[#1E3A8A]/5 disabled:opacity-60">
                 {submitting ? 'Sending…' : 'Request founding-customer pricing'}
               </button>
             </Form>
@@ -231,7 +231,7 @@ export default function SubscriptionPage() {
       {/* FAQ */}
       <section className="px-4 sm:px-6 py-10 md:py-16 border-t border-slate-200/60">
         <div className="max-w-3xl mx-auto space-y-3">
-          <h2 className="text-2xl md:text-3xl font-extrabold text-slate-900 mb-6">Questions</h2>
+          <h2 className="text-2xl md:text-3xl font-medium tracking-tighter text-slate-900 mb-6">Questions</h2>
           {[
             ['Do the stands need a subscription?', 'No. Every stand works on its own with the free features above.'],
             ['What happens to my stand if I stop a subscription later?', 'It keeps working and points to its last direct link.'],

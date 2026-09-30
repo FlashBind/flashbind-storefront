@@ -154,11 +154,11 @@ function OrderItem({order}: {order: any}) {
   return (
     <Link 
       to={`/account/orders/${btoa(order.id)}`} 
-      className="block bg-white border border-slate-200 p-5 rounded-2xl mb-4 hover:border-blue-300 hover:shadow-md transition-all group"
+      className="block bg-white border border-slate-200 p-5 rounded-2xl mb-4 hover:border-[#1E3A8A]/30 hover:shadow-md transition-all group"
     >
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center">
         <div className="flex flex-col gap-1 mb-4 sm:mb-0">
-          <span className="text-lg font-bold text-slate-900 group-hover:text-blue-600 transition-colors">
+          <span className="text-lg font-bold text-slate-900 group-hover:text-[#1E3A8A] transition-colors">
             Order #{order.orderNumber}
           </span>
           <span className="text-slate-500 text-sm font-medium">

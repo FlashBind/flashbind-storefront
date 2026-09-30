@@ -32,8 +32,8 @@ export function Footer({
                     Bridging the physical and digital world. Upgrade your business presence in milliseconds with premium NFC technology.
                   </p>
                   <form className="flex gap-2 max-w-sm" onSubmit={(e) => e.preventDefault()}>
-                    <input type="email" placeholder="Enter your email" className="bg-slate-900 border border-slate-800 rounded-full px-4 py-3 flex-grow text-white focus:outline-none focus:border-blue-500 transition-colors" />
-                    <button type="submit" className="bg-[#1E3A8A] text-white font-bold rounded-full px-6 py-3 hover:bg-blue-500 transition-colors">Subscribe</button>
+                    <input type="email" placeholder="Enter your email" className="bg-slate-900 border border-slate-800 rounded-full px-4 py-3 flex-grow text-white focus:outline-none focus:border-[#1E3A8A] transition-colors" />
+                    <button type="submit" className="bg-[#1E3A8A] text-white font-bold rounded-full px-6 py-3 hover:bg-[#1E3A8A] transition-colors">Subscribe</button>
                   </form>
                 </div>
 
@@ -42,10 +42,10 @@ export function Footer({
                   <h4 className="text-white font-bold mb-6 tracking-widest uppercase text-sm">Shop</h4>
                   <ul className="space-y-4">
                     <li><NavLink to="/products" className="hover:text-white transition-colors">All Products</NavLink></li>
-                    <li><NavLink to="/products/google-review-stand" className="hover:text-white transition-colors">Review Stands</NavLink></li>
-                    <li><NavLink to="/products/nfc-restaurant-menu-stand" className="hover:text-white transition-colors">Menu Stands</NavLink></li>
-                    <li><NavLink to="/products/guest-wi-fi-hub" className="hover:text-white transition-colors">Wi-Fi Stands</NavLink></li>
-                    <li><NavLink to="/products/smart-pet-collar-tag" className="hover:text-white transition-colors">Pet Tags</NavLink></li>
+                    <li><NavLink to="/products/google-review-stand" className="hover:text-white transition-colors">Google Review Stand</NavLink></li>
+                    <li><NavLink to="/products/nfc-restaurant-menu-stand" className="hover:text-white transition-colors">Digital Menu Stand</NavLink></li>
+                    <li><NavLink to="/products/guest-wi-fi-hub" className="hover:text-white transition-colors">Guest Wi-Fi Stand</NavLink></li>
+                    <li><NavLink to="/products/smart-pet-collar-tag" className="hover:text-white transition-colors">Smart Pet Tag</NavLink></li>
                   </ul>
                 </div>
 
