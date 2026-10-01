@@ -27,6 +27,8 @@ CREATE TABLE public.business_entitlements (
             AND char_length(logo_data_url) <= 700000
         )
     ),
+    -- Accent colour of the Dual Choice page, lowercase #rrggbb.
+    brand_color text CHECK (brand_color IS NULL OR brand_color ~ '^#[0-9a-f]{6}$'),
     notes text CHECK (char_length(notes) <= 500),
     created_at timestamp with time zone DEFAULT timezone('utc'::text, now()) NOT NULL,
     updated_at timestamp with time zone DEFAULT timezone('utc'::text, now()) NOT NULL

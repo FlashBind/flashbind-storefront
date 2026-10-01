@@ -11,6 +11,7 @@
  * are account-level (business_entitlements).
  */
 import {escapeHtml} from '~/utils/email.server';
+import {normalizeBrandColor} from '~/utils/brandColor';
 import {getFormText, hashRateLimitIdentifier, normalizeEmail, normalizeTrustedClientIp} from '~/utils/requestSecurity.server';
 
 export const FEEDBACK_MESSAGE_MAX = 2000;
@@ -60,7 +61,7 @@ export function isEntitlementActive(row: Entitlement | null | undefined, now: Da
 export async function getEntitlement(admin: any, ownerEmail: string) {
   const {data, error} = await admin
     .from('business_entitlements')
-    .select('owner_email, plan, status, source, current_period_end, business_name, logo_data_url')
+    .select('owner_email, plan, status, source, current_period_end, business_name, logo_data_url, brand_color')
     .eq('owner_email', ownerEmail)
     .maybeSingle();
   if (error) {
@@ -68,7 +69,14 @@ export async function getEntitlement(admin: any, ownerEmail: string) {
     return null;
   }
   return data as
-    | (Entitlement & {owner_email: string; plan: string; source: string; business_name: string | null; logo_data_url: string | null})
+    | (Entitlement & {
+        owner_email: string;
+        plan: string;
+        source: string;
+        business_name: string | null;
+        logo_data_url: string | null;
+        brand_color: string | null;
+      })
     | null;
 }
 
@@ -77,6 +85,7 @@ export type DualChoiceView = {
   businessName: string;
   logo: string | null;
   locationLabel: string;
+  brandColor: string | null;
 };
 
 /**
@@ -98,6 +107,7 @@ export async function getDualChoiceView(
     businessName: entitlement?.business_name ?? '',
     logo: entitlement?.logo_data_url ?? null,
     locationLabel: stand.locationLabel,
+    brandColor: normalizeBrandColor(entitlement?.brand_color),
   };
 }
 

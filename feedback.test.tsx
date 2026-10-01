@@ -77,10 +77,10 @@ describe('Dual Choice: stand settings and public view', () => {
   const tag = {owner_email: 'owner@example.test', settings: {dual_choice_enabled: true, location_label: 'Centre', alert_email: 'm@example.test'}};
   const activeRow = {status: 'active', current_period_end: null, business_name: 'Café', logo_data_url: null};
 
-  it('returns only name, logo and branch label when entitled and switched on', async () => {
+  it('returns only name, logo, branch label and brand colour when entitled and switched on', async () => {
     const {chain} = recordingClient({data: activeRow, error: null});
     const view = await getDualChoiceView(chain, tag, 'https://g.page/r/x/review');
-    expect(view).toEqual({businessName: 'Café', logo: null, locationLabel: 'Centre'});
+    expect(view).toEqual({businessName: 'Café', logo: null, locationLabel: 'Centre', brandColor: null});
     expect(JSON.stringify(view)).not.toContain('@');
   });
 

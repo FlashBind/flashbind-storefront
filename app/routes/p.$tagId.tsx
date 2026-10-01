@@ -230,6 +230,7 @@ export default function PetTagLandingPage() {
         businessName={dualChoice.businessName}
         logo={dualChoice.logo}
         locationLabel={dualChoice.locationLabel}
+        brandColor={dualChoice.brandColor}
         initiallyShowForm={showForm}
         sent={sent}
       />

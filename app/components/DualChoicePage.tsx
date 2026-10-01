@@ -1,5 +1,6 @@
 import {Form, useActionData, useNavigation} from 'react-router';
-import {useState} from 'react';
+import {useState, type CSSProperties} from 'react';
+import {DEFAULT_BRAND_COLOR, inkOnBrandColor} from '~/utils/brandColor';
 
 // Google policy (no review gating): both options are always shown, with the
 // same size and style, in a fixed order, and nothing is asked before them.
@@ -10,6 +11,8 @@ type Props = {
   businessName: string;
   logo: string | null;
   locationLabel: string;
+  /** Lowercase #rrggbb, or null for the default. */
+  brandColor?: string | null;
   initiallyShowForm: boolean;
   sent: boolean;
 };
@@ -17,20 +20,23 @@ type Props = {
 type ActionResult = {error?: string} | undefined;
 
 const OPTION_CLASS =
-  'flex w-full items-center justify-center gap-3 rounded-2xl border-2 border-slate-900 bg-white px-5 py-4 text-lg font-bold text-slate-900 transition-colors hover:bg-slate-900 hover:text-white focus:outline-none focus-visible:ring-4 focus-visible:ring-blue-300';
+  'flex w-full items-center justify-center gap-3 rounded-2xl border-2 border-[color:var(--brand)] bg-white px-5 py-4 text-lg font-bold text-slate-900 transition-colors hover:bg-[color:var(--brand)] hover:text-[color:var(--brand-ink)] focus:outline-none focus-visible:ring-4 focus-visible:ring-blue-300';
 
 const INPUT_CLASS =
   'w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500';
 
-export function DualChoicePage({tagId, businessName, logo, locationLabel, initiallyShowForm, sent}: Props) {
+export function DualChoicePage({tagId, businessName, logo, locationLabel, brandColor, initiallyShowForm, sent}: Props) {
   const actionData = useActionData() as ActionResult;
   const navigation = useNavigation();
   const [showForm, setShowForm] = useState(initiallyShowForm || Boolean(actionData?.error));
   const sending = navigation.state === 'submitting';
   const name = businessName || 'this business';
+  // Both options get the same brand styling, so neither is favoured.
+  const brand = brandColor || DEFAULT_BRAND_COLOR;
+  const brandStyle = {'--brand': brand, '--brand-ink': inkOnBrandColor(brand)} as CSSProperties;
 
   return (
-    <div className="min-h-screen w-full bg-slate-50 p-4 font-sans md:flex md:items-center md:justify-center">
+    <div style={brandStyle} className="min-h-screen w-full bg-slate-50 p-4 font-sans md:flex md:items-center md:justify-center">
       <main className="mx-auto w-full max-w-[420px] rounded-[2rem] bg-white p-7 text-center shadow-xl md:p-9">
         {logo ? (
           <img src={logo} alt="" className="mx-auto mb-4 h-20 w-20 rounded-2xl object-contain" />
@@ -104,7 +110,7 @@ export function DualChoicePage({tagId, businessName, logo, locationLabel, initia
             <button
               type="submit"
               disabled={sending}
-              className="w-full rounded-full bg-slate-900 py-4 text-lg font-bold text-white transition-colors hover:bg-slate-700 disabled:opacity-70"
+              className="w-full rounded-full bg-[color:var(--brand)] py-4 text-lg font-bold text-[color:var(--brand-ink)] transition-opacity hover:opacity-90 disabled:opacity-70"
             >
               {sending ? 'Sending…' : 'Send privately'}
             </button>
