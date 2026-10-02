@@ -4,9 +4,16 @@ import { useEffect } from 'react';
 import type { LoaderFunctionArgs, ActionFunctionArgs } from 'react-router';
 import {
   getFormText,
+  normalizeEmail,
   normalizeHttpUrl,
 } from '~/utils/requestSecurity.server';
 import {sanitizeTagSettings} from '~/utils/tagSanitizer.server';
+import {
+  getEntitlement,
+  isEntitlementActive,
+  LOCATION_LABEL_MAX,
+  reviewStandSettings,
+} from '~/utils/feedback.server';
 
 
 export const handle = {
@@ -53,7 +60,12 @@ export async function loader({ params, context }: LoaderFunctionArgs) {
   const type = rawPet.type || 'pet_tag';
   const settings = sanitizeTagSettings(type, rawPet.settings);
 
-  return { tagId, pet, userEmail, type, settings };
+  // Review stands: branch settings (owner-only, never on the public page).
+  const stand = type === 'google_review' ? reviewStandSettings(rawPet.settings) : null;
+  const subscriptionActive =
+    type === 'google_review' && isEntitlementActive(await getEntitlement(adminSupabase, userEmail));
+
+  return { tagId, pet, userEmail, type, settings, stand, subscriptionActive };
 }
 
 export async function action({ request, params, context }: ActionFunctionArgs) {
@@ -123,6 +135,31 @@ export async function action({ request, params, context }: ActionFunctionArgs) {
     updatePayload = {
       settings: { ...rawPet.settings, destination_url: destinationUrl }
     };
+
+    if (type === 'google_review') {
+      const rawLabel = formData.get('locationLabel');
+      if (typeof rawLabel === 'string' && rawLabel.trim().length > LOCATION_LABEL_MAX) {
+        return { error: `Please keep the branch name under ${LOCATION_LABEL_MAX} characters.` };
+      }
+      const locationLabel = getFormText(formData, 'locationLabel', LOCATION_LABEL_MAX) ?? '';
+      const rawAlert = formData.get('alertEmail');
+      const hasAlert = typeof rawAlert === 'string' && rawAlert.trim() !== '';
+      const alertEmail = hasAlert ? normalizeEmail(rawAlert) : '';
+      if (hasAlert && !alertEmail) {
+        return { error: 'Enter a valid alert email, or leave it empty to use your account email.' };
+      }
+      // The Dual Choice switch only changes while the subscription is active.
+      const subscriptionActive = isEntitlementActive(await getEntitlement(adminSupabase, userEmail));
+      const dualChoiceEnabled = subscriptionActive
+        ? formData.get('dualChoice') === 'on'
+        : reviewStandSettings(rawPet.settings).dualChoiceEnabled;
+      updatePayload.settings = {
+        ...updatePayload.settings,
+        location_label: locationLabel,
+        alert_email: alertEmail,
+        dual_choice_enabled: dualChoiceEnabled,
+      };
+    }
   } else if (type === 'wifi') {
     const networkName = getFormText(formData, 'networkName', 64);
     const networkPassword = getFormText(formData, 'networkPassword', 128);
@@ -148,7 +185,7 @@ export async function action({ request, params, context }: ActionFunctionArgs) {
 }
 
 export default function EditTagPage() {
-  const { pet, userEmail, type, settings } = useLoaderData<typeof loader>();
+  const { pet, userEmail, type, settings, stand, subscriptionActive } = useLoaderData<typeof loader>();
   const actionData = useActionData<typeof action>();
   const navigation = useNavigation();
   const navigate = useNavigate();
@@ -346,6 +383,70 @@ export default function EditTagPage() {
                     This is the link your customers will be sent to when they tap the tag.
                   </p>
                 </div>
+              )}
+
+              {type === 'google_review' && stand && (
+                <>
+                  <div>
+                    <label htmlFor="locationLabel" className="block text-sm font-semibold text-slate-700 mb-1">
+                      Branch name
+                    </label>
+                    <input
+                      type="text"
+                      id="locationLabel"
+                      name="locationLabel"
+                      maxLength={80}
+                      defaultValue={stand.locationLabel}
+                      placeholder="e.g. Klaipėda centre"
+                      className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                    />
+                    <p className="text-xs text-slate-500 mt-2 font-medium">
+                      Tells your stands apart in your dashboard and feedback inbox. Shown on the Dual Choice page.
+                    </p>
+                  </div>
+
+                  <div>
+                    <label htmlFor="alertEmail" className="block text-sm font-semibold text-slate-700 mb-1">
+                      Feedback alert email <span className="font-normal text-slate-500">(optional, private)</span>
+                    </label>
+                    <input
+                      type="email"
+                      id="alertEmail"
+                      name="alertEmail"
+                      maxLength={254}
+                      defaultValue={stand.alertEmail}
+                      placeholder={userEmail}
+                      className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                    />
+                    <p className="text-xs text-slate-500 mt-2 font-medium">
+                      E.g. this branch&apos;s manager. Empty means your account email.
+                    </p>
+                  </div>
+
+                  <div className="rounded-2xl border border-slate-200 p-4">
+                    <label className="flex items-start gap-3">
+                      <input
+                        type="checkbox"
+                        name="dualChoice"
+                        defaultChecked={stand.dualChoiceEnabled}
+                        disabled={!subscriptionActive}
+                        className="mt-1 h-4 w-4"
+                      />
+                      <span>
+                        <span className="block text-sm font-semibold text-slate-700">Show the Dual Choice page on this stand</span>
+                        <span className="block text-xs text-slate-500 mt-1">
+                          Customers see two equal options: leave a Google review, or send private feedback to your inbox.
+                          When off, the stand goes straight to Google.
+                        </span>
+                        {!subscriptionActive && (
+                          <span className="block text-xs text-amber-700 mt-1">
+                            Needs the business subscription. <a href="/software" className="underline">Find out more</a>
+                          </span>
+                        )}
+                      </span>
+                    </label>
+                  </div>
+                </>
               )}
 
               {type === 'wifi' && (

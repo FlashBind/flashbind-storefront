@@ -61,8 +61,13 @@ export default function PrivacyPolicyPage() {
               <td className="p-3 border-b align-top">Steps before a contract (Art. 6(1)(b)); legitimate interest in answering enquiries (Art. 6(1)(f)); consent for founding-pricing emails (Art. 6(1)(a))</td>
             </tr>
             <tr>
-              <td className="p-3 border-b align-top"><strong>Security data:</strong> IP address and a scrambled account identifier when someone tries to activate a product.</td>
-              <td className="p-3 border-b align-top">To limit repeated guessing of activation codes.</td>
+              <td className="p-3 border-b align-top"><strong>Private feedback sent to a business</strong> through its FlashBind review stand: your message and, only if you tick the box, your name, email and phone number.</td>
+              <td className="p-3 border-b align-top">To deliver your message to that business. <strong>The business decides how it uses your feedback</strong> (it is the controller); we store and deliver it on the business&apos;s behalf. Contact the business, or us, to exercise your rights.</td>
+              <td className="p-3 border-b align-top">The business&apos;s legitimate interest in hearing from customers (Art. 6(1)(f)); your consent for being contacted (Art. 6(1)(a))</td>
+            </tr>
+            <tr>
+              <td className="p-3 border-b align-top"><strong>Security data:</strong> IP address and a scrambled account identifier when someone tries to activate a product; a scrambled form of your IP address when you send private feedback.</td>
+              <td className="p-3 border-b align-top">To limit repeated guessing of activation codes, and spam.</td>
               <td className="p-3 border-b align-top">Legitimate interest in security (Art. 6(1)(f))</td>
             </tr>
             <tr>
@@ -80,7 +85,7 @@ export default function PrivacyPolicyPage() {
         <li><strong>Shopify</strong>: online store, checkout, order emails and website hosting.</li>
         <li><strong>Payment providers</strong> offered at checkout (for example PayPal or Google Pay): payments.</li>
         <li><strong>Supabase</strong>: user accounts and login, and the database storing product settings, contact messages and attachments.</li>
-        <li><strong>Resend</strong>: sends us an email notification when you use the contact or quote form.</li>
+        <li><strong>Resend</strong>: sends us an email notification when you use the contact or quote form, and sends businesses an alert when they receive private feedback.</li>
         <li><strong>Delivery companies</strong>: your name, address and phone number, to deliver your order.</li>
       </ul>
       <p>
@@ -95,6 +100,7 @@ export default function PrivacyPolicyPage() {
         <li><strong>Account and product settings:</strong> while your account exists. You can delete your account yourself at any time from your dashboard (&ldquo;Delete account&rdquo;); this erases them immediately.</li>
         <li><strong>Orders and invoices:</strong> as long as tax and accounting law requires.</li>
         <li><strong>Contact and quote requests</strong> (including attachments): deleted automatically 2 years after they were sent.</li>
+        <li><strong>Private feedback:</strong> deleted automatically 12 months after it was sent. The business can delete it sooner.</li>
         <li><strong>Security data:</strong> deleted automatically after 30 days.</li>
       </ul>
 

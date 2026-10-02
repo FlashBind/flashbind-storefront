@@ -3,11 +3,13 @@
  *
  * There is no scheduler on Oxygen, so clean-up runs opportunistically:
  * rate-limit rows are purged on activation attempts, and contact/quote
- * messages on new contact or quote submissions. Failures are logged and
+ * messages on new contact or quote submissions, and private feedback on new
+ * feedback and when an owner opens the feedback inbox. Failures are logged and
  * never block the visitor's request.
  */
 export const RATE_LIMIT_RETENTION_DAYS = 30;
 export const CONTACT_MESSAGE_RETENTION_DAYS = 730; // 2 years
+export const FEEDBACK_RETENTION_DAYS = 365; // 12 months (owner decision 2026-09-27)
 
 const ATTACHMENTS_BUCKET = 'attachments';
 
@@ -69,5 +71,17 @@ export async function purgeExpiredContactMessages(admin: any): Promise<void> {
     if (deleteError) console.error('[RETENTION] contact_messages purge failed', deleteError.code || 'unknown');
   } catch {
     console.error('[RETENTION] contact_messages purge failed');
+  }
+}
+
+export async function purgeExpiredFeedback(admin: any): Promise<void> {
+  try {
+    const {error} = await admin
+      .from('private_feedback')
+      .delete()
+      .lt('created_at', retentionCutoff(FEEDBACK_RETENTION_DAYS));
+    if (error) console.error('[RETENTION] private_feedback purge failed', error.code || 'unknown');
+  } catch {
+    console.error('[RETENTION] private_feedback purge failed');
   }
 }

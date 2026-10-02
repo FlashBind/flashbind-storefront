@@ -2,6 +2,7 @@ import { Form, redirect, useLoaderData, type HeadersFunction } from 'react-route
 import type { LoaderFunctionArgs } from 'react-router';
 import { getSupabaseAdmin } from '~/utils/supabase.server';
 import { sanitizeTagSettings } from '~/utils/tagSanitizer.server';
+import { getEntitlement, isEntitlementActive, reviewStandSettings, unreadCountsByStand } from '~/utils/feedback.server';
 
 export const handle = {
   hideLayout: true, // Hide global header/footer to match app-like feel
@@ -41,6 +42,7 @@ export async function loader({ context }: LoaderFunctionArgs) {
       isClaimed: rawTag.is_claimed,
       type: type,
       settings: safeSettings,
+      locationLabel: type === 'google_review' ? reviewStandSettings(rawTag.settings).locationLabel : '',
       dogName: rawTag.pet_name,
       ownerName: rawTag.owner_name,
       ownerPhone: rawTag.phone,
@@ -50,11 +52,31 @@ export async function loader({ context }: LoaderFunctionArgs) {
     };
   });
 
-  return { userEmail, userTags };
+  // Review stands sorted by branch name, so many branches stay easy to scan.
+  userTags.sort((a: any, b: any) =>
+    a.type === 'google_review' && b.type === 'google_review'
+      ? (a.locationLabel || a.id).localeCompare(b.locationLabel || b.id)
+      : 0,
+  );
+
+  const hasReviewStands = userTags.some((tag: any) => tag.type === 'google_review');
+  const [entitlement, unread] = hasReviewStands
+    ? await Promise.all([getEntitlement(supabase, userEmail), unreadCountsByStand(supabase, userEmail)])
+    : [null, {} as Record<string, number>];
+  const unreadFeedback = Object.values(unread).reduce((sum, n) => sum + n, 0);
+
+  return {
+    userEmail,
+    userTags,
+    showFeedback: hasReviewStands && (Boolean(entitlement) || unreadFeedback > 0),
+    subscriptionActive: isEntitlementActive(entitlement),
+    hasSubscription: Boolean(entitlement),
+    unreadFeedback,
+  };
 }
 
 export default function DashboardPage() {
-  const { userEmail, userTags } = useLoaderData<typeof loader>();
+  const { userEmail, userTags, showFeedback, hasSubscription, unreadFeedback } = useLoaderData<typeof loader>();
 
   return (
     <div className="min-h-screen bg-slate-50 w-full font-sans pb-12">
@@ -93,6 +115,29 @@ export default function DashboardPage() {
 
       {/* Main Content Area */}
       <div className="max-w-2xl mx-auto px-4">
+        {showFeedback && (
+          <div className="mb-8 grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <a
+              href="/dashboard/feedback"
+              className="bg-white rounded-3xl shadow-sm border border-slate-100 p-5 hover:shadow-md transition-shadow"
+            >
+              <span className="block text-lg font-bold text-slate-900">Private feedback</span>
+              <span className="block text-sm text-slate-500">
+                {unreadFeedback > 0 ? `${unreadFeedback} unread` : 'No unread messages'}
+              </span>
+            </a>
+            {hasSubscription && (
+              <a
+                href="/dashboard/business"
+                className="bg-white rounded-3xl shadow-sm border border-slate-100 p-5 hover:shadow-md transition-shadow"
+              >
+                <span className="block text-lg font-bold text-slate-900">Business profile</span>
+                <span className="block text-sm text-slate-500">Name and logo on your Dual Choice pages</span>
+              </a>
+            )}
+          </div>
+        )}
+
         <div className="mb-6 flex items-center justify-between">
           <h2 className="text-lg font-bold text-slate-800">Your NFC Tags</h2>
           <span className="bg-[#1E3A8A]/10 text-[#172A66] text-xs font-bold px-3 py-1 rounded-full">
@@ -159,7 +204,7 @@ export default function DashboardPage() {
                     <div className="flex items-center gap-2 mb-1">
                       <h3 className="text-lg font-bold text-slate-900">
                         {tag.type === 'pet_tag' && (tag.dogName || 'Unnamed Pet')}
-                        {tag.type === 'google_review' && 'Google Review'}
+                        {tag.type === 'google_review' && (tag.locationLabel || 'Google Review')}
                         {tag.type === 'menu' && 'Smart Menu'}
                         {tag.type === 'wifi' && (tag.settings?.network_name || 'Wi-Fi Network')}
                       </h3>
