@@ -128,8 +128,9 @@ export default function Homepage() {
         {/* Abstract/Minimal Background Elements */}
         <AmbientGlow />
         
-        {/* Left Half: Text Column */}
-        <div className="w-full lg:w-1/2 relative z-10 flex justify-center lg:justify-end">
+        {/* Left Half: Text Column. Below lg it fills the hero on its own, so the
+            hero ends after the buttons. */}
+        <div className="w-full lg:w-1/2 max-lg:flex-1 relative z-10 flex justify-center lg:justify-end">
           <div className="w-full max-w-[45rem] px-9 lg:pl-20 lg:pr-16 pt-16 pb-12 lg:py-20 mx-auto lg:ml-auto lg:mr-0 flex flex-col justify-center items-center lg:items-start text-center lg:text-left">
             <div className="inline-block mb-8 px-4 py-2 rounded-full border border-white/10 bg-white/5 backdrop-blur-md self-center lg:self-start">
               <span className="text-[13px] font-medium text-slate-300 flex items-center gap-2.5">
@@ -159,8 +160,9 @@ export default function Homepage() {
           </div>
         </div>
 
-        {/* Right Half: Image Column */}
-        <div className="w-full lg:w-1/2 relative min-h-[50vh] lg:min-h-0 lg:h-auto lg:py-16 lg:pr-20 lg:pl-8 p-9 pb-24 flex flex-col justify-center">
+        {/* Right Half: Image Column (desktop only; on phones and tablets it
+            would peek into the first screen below the buttons). */}
+        <div className="hidden lg:flex w-full lg:w-1/2 relative min-h-[50vh] lg:min-h-0 lg:h-auto lg:py-16 lg:pr-20 lg:pl-8 p-9 pb-24 flex-col justify-center">
           <div className="relative w-full h-full flex-1 rounded-[2.5rem] overflow-hidden border-4 shadow-[0_20px_50px_rgba(0,0,0,0.45)] border-white/10">
             {HERO_IMAGES.map((src, idx) => (
               <img
