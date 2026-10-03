@@ -3,13 +3,12 @@ import {Link} from 'react-router';
 import {PolicyLayout, PolicyHeading} from '~/components/PolicyLayout';
 import {SellerDetails} from '~/components/SellerDetails';
 import {SELLER, sellerName} from '~/config/seller';
+import {pageMeta} from '~/config/seo';
 
 // DRAFT for legal review (LEGAL-001). GDPR privacy notice. The data list
 // matches what the code stores as of 2026-09-26; keep it in sync.
 
-export const meta: MetaFunction = () => {
-  return [{title: 'FlashBind | Privacy Policy'}];
-};
+export const meta: MetaFunction = () => pageMeta('privacy');
 
 const link = 'text-[#1E3A8A] underline';
 

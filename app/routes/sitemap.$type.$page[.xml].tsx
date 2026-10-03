@@ -10,7 +10,9 @@ export async function loader({
     storefront,
     request,
     params,
-    locales: ['EN-US', 'EN-CA', 'FR-CA'],
+    // No language versions yet. Add them with the /lt pages (roadmap step A1);
+    // listing locales that don't exist sends search engines to 404 pages.
+    locales: [],
     getLink: ({type, baseUrl, handle, locale}) => {
       if (!locale) return `${baseUrl}/${type}/${handle}`;
       return `${baseUrl}/${locale}/${type}/${handle}`;

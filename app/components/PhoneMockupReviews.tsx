@@ -16,10 +16,10 @@ export default function PhoneMockupReviews() {
 
         {/* Cover Photos */}
         <div className="flex w-full h-40 bg-gray-200">
-          <img src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&q=80&w=400" className="w-2/3 h-full object-cover border-r border-white" alt="Cafe interior" />
+          <img loading="lazy" decoding="async" src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&q=80&w=400" className="w-2/3 h-full object-cover border-r border-white" alt="Cafe interior" />
           <div className="w-1/3 flex flex-col">
-            <img src="https://images.unsplash.com/photo-1497935586351-b67a49e012bf?auto=format&fit=crop&q=80&w=200" className="h-1/2 w-full object-cover border-b border-white" alt="Coffee" />
-            <img src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&q=80&w=200" className="h-1/2 w-full object-cover" alt="Pastries" />
+            <img loading="lazy" decoding="async" src="https://images.unsplash.com/photo-1497935586351-b67a49e012bf?auto=format&fit=crop&q=80&w=200" className="h-1/2 w-full object-cover border-b border-white" alt="Coffee" />
+            <img loading="lazy" decoding="async" src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&q=80&w=200" className="h-1/2 w-full object-cover" alt="Pastries" />
           </div>
         </div>
 

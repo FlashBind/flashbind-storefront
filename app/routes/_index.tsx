@@ -14,6 +14,8 @@ import type {
 import {ProductItem} from '~/components/ProductItem';
 import {MockShopNotice} from '~/components/MockShopNotice';
 import {useAside} from '~/components/Aside';
+import {SELLER} from '~/config/seller';
+import {SITE_INTRO} from '~/config/seo';
 
 // Dedicated internal routing map for Product Detail Pages (PDPs)
 export const PRODUCT_ROUTES = {
@@ -82,11 +84,12 @@ function loadDeferredData({context}: Route.LoaderArgs) {
 }
 
 
+// WebP copies of hero_new_N.jpg (the JPGs stay for og:image).
 const HERO_IMAGES = [
-  '/hero_new_1.jpg',
-  '/hero_new_2.jpg',
-  '/hero_new_3.jpg',
-  '/hero_new_4.jpg'
+  '/hero_new_1.webp',
+  '/hero_new_2.webp',
+  '/hero_new_3.webp',
+  '/hero_new_4.webp'
 ];
 
 // Organization structured data for search engines. Only facts that are true
@@ -99,6 +102,16 @@ const ORGANIZATION_JSON_LD = {
   name: 'FlashBind',
   url: 'https://flashbind.com/',
   logo: 'https://flashbind.com/logo-transparent.png',
+  description: SITE_INTRO,
+  email: SELLER.email,
+  ...(SELLER.confirmed
+    ? {
+        legalName: SELLER.legalName,
+        vatID: SELLER.vatCode,
+        address: {'@type': 'PostalAddress', streetAddress: SELLER.address, addressCountry: 'LT'},
+      }
+    : {}),
+  founder: {'@type': 'Person', name: 'Valerij Golovatyj'},
   sameAs: [
     'https://www.instagram.com/flashbind_nfc/',
     'https://www.tiktok.com/@flashbind',
@@ -146,7 +159,7 @@ export default function Homepage() {
             </h1>
             
             <p className="text-slate-300 text-lg md:text-xl max-w-2xl mb-10 font-light leading-relaxed tracking-tight">
-              Branded NFC stands and tags that connect customers to what matters most — the moment they arrive.
+              NFC stands and tags that connect people to what matters, with one tap.
             </p>
             
             <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start w-full gap-4">
@@ -169,6 +182,10 @@ export default function Homepage() {
                 key={src}
                 src={src}
                 alt={`NFC Product Showcase ${idx + 1}`}
+                // Lazy: phones never show this column (hidden below lg), so
+                // they don't download it at all.
+                loading="lazy"
+                decoding="async"
                 className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ease-in-out ${idx === heroImageIndex ? 'opacity-100' : 'opacity-0'}`}
               />
             ))}
@@ -787,9 +804,12 @@ function RecommendedProducts({
                       <button 
                         key={idx} 
                         onClick={() => scrollToProduct(idx)}
-                        className={`w-2 h-2 rounded-full transition-all duration-300 ${activeProductIndex === idx ? 'bg-[#1E3A8A] w-6' : 'bg-slate-300'}`}
+                        className="group flex h-8 min-w-8 items-center justify-center px-1"
                         aria-label={`Go to product ${idx + 1}`}
-                      />
+                      >
+                        {/* Small visible dot, 32 px tap area. */}
+                        <span className={`block h-2 rounded-full transition-all duration-300 ${activeProductIndex === idx ? 'bg-[#1E3A8A] w-6' : 'bg-slate-300 w-2'}`} />
+                      </button>
                     ))}
                   </div>
                 )}

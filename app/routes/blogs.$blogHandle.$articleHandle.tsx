@@ -2,9 +2,17 @@ import {useLoaderData, Link} from 'react-router';
 import type {Route} from './+types/blogs.$blogHandle.$articleHandle';
 import {Image} from '@shopify/hydrogen';
 import {redirectIfHandleIsLocalized} from '~/lib/redirect';
+import {findJournalArticle} from '~/config/journal';
 
 export const meta: Route.MetaFunction = ({data}) => {
-  return [{title: `FlashBind | ${data?.article.title ?? ''} article`}];
+  const title = `${data?.article.title ?? 'Article'} | FlashBind`;
+  const description = data?.article.description || data?.article.seo?.description;
+  return [
+    {title},
+    ...(description ? [{name: 'description', content: description}] : []),
+    {property: 'og:title', content: title},
+    {property: 'og:type', content: 'article'},
+  ];
 };
 
 export async function loader(args: Route.LoaderArgs) {
@@ -36,39 +44,21 @@ async function loadCriticalData({context, request, params}: Route.LoaderArgs) {
   ]);
 
   if (!blog?.articleByHandle) {
-    // Return a mock article instead of throwing 404 for demo purposes
-    let mockTitle = articleHandle.split('-').map(word => word.toLowerCase() === 'seo' ? 'SEO' : word.toLowerCase() === 'nfc' ? 'NFC' : word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
-    let mockImageUrl = "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?q=80&w=2000&auto=format&fit=crop";
-    let mockPublishedAt = new Date().toISOString();
-
-    if (articleHandle === 'google-review-seo') {
-      mockTitle = "Google Reviews and Local SEO: How a Google Review Stand Helps";
-      mockImageUrl = "/seo_blog_featured.png";
-      mockPublishedAt = "2026-09-18T00:00:00Z";
-    } else if (articleHandle === 'nfc-hospitality') {
-      mockTitle = "Why NFC is Replacing QR Codes in Hospitality";
-      mockImageUrl = "/nfc_blog_featured_new.png";
-      mockPublishedAt = "2026-09-24T00:00:00Z";
-    } else if (articleHandle === 'smart-pet-tags') {
-      mockTitle = "Why Smart Pet Tags are the New Standard for Pet Safety";
-      mockImageUrl = "/pet_tags_blog_featured.png";
-      mockPublishedAt = "2026-09-05T00:00:00Z";
-    }
-
-    const mockArticle = {
-      handle: articleHandle,
-      title: mockTitle,
-      publishedAt: mockPublishedAt,
-      author: { name: "FlashBind Team" },
-      contentHtml: `<p>Placeholder</p>`,
-      image: {
-        url: mockImageUrl,
-        altText: mockTitle
-      },
-      blog: { handle: blogHandle }
+    // Not in Shopify: one of the articles written into this page, or a 404.
+    const journal = findJournalArticle(blogHandle, articleHandle);
+    if (!journal) throw new Response('Not found', {status: 404});
+    const article = {
+      handle: journal.handle,
+      title: journal.title,
+      description: journal.description,
+      publishedAt: journal.publishedAt,
+      author: {name: 'FlashBind Team'},
+      // The text is rendered from the handle further down, not from here.
+      contentHtml: '',
+      image: {url: journal.image, altText: journal.title},
+      blog: {handle: blogHandle},
     };
-    
-    return { article: mockArticle as any };
+    return {article: article as any};
   }
 
   redirectIfHandleIsLocalized(

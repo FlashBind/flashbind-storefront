@@ -8,13 +8,17 @@ import {AddToCartButton} from './AddToCartButton';
 import {useAside} from './Aside';
 import type {ProductFragment} from 'storefrontapi.generated';
 import {useState} from 'react';
+import {quoteUrl} from '~/config/products';
 
 export function ProductForm({
   productOptions,
   selectedVariant,
+  productHandle,
 }: {
   productOptions: MappedProductOptions[];
   selectedVariant: ProductFragment['selectedOrFirstAvailableVariant'];
+  /** Used for the "Request a quote" link when the product can't be bought online. */
+  productHandle: string;
 }) {
   const navigate = useNavigate();
   const {open} = useAside();
@@ -95,7 +99,8 @@ export function ProductForm({
         })}
       </div>
 
-      {/* Quantity Selector */}
+      {/* Quantity Selector (only when the product can be bought online) */}
+      {selectedVariant?.availableForSale ? (
       <div className="flex flex-col gap-3">
         <label className="text-sm font-bold uppercase tracking-wider text-slate-700">Quantity</label>
         <div className="flex items-center border-2 border-slate-200 rounded-lg w-fit overflow-hidden bg-white">
@@ -118,10 +123,12 @@ export function ProductForm({
           </button>
         </div>
       </div>
+      ) : null}
 
       {/* Action Buttons */}
       <div className="flex flex-col gap-3 mt-4">
-        {/* Mega CTA Button */}
+        {/* Mega CTA Button. Not for sale online: request a quote instead. */}
+        {selectedVariant?.availableForSale ? (
         <AddToCartButton
           disabled={!selectedVariant || !selectedVariant.availableForSale}
           onClick={() => {
@@ -144,11 +151,21 @@ export function ProductForm({
               : 'bg-slate-400 cursor-not-allowed opacity-80'
           }`}
         >
-          {selectedVariant?.availableForSale
-            ? <span>ADD TO CART &mdash; {formattedPrice}</span>
-            : <span>COMING SOON</span>
-          }
+          <span>ADD TO CART &mdash; {formattedPrice}</span>
         </AddToCartButton>
+        ) : (
+          <>
+            <Link
+              to={quoteUrl(productHandle)}
+              className="w-full bg-[#1E3A8A] text-white font-extrabold uppercase tracking-widest h-14 rounded-xl shadow-lg transition-all duration-300 flex justify-center items-center gap-2 text-sm sm:text-base hover:bg-[#172A66] hover:shadow-xl hover:-translate-y-1"
+            >
+              Request a quote
+            </Link>
+            <p className="text-center text-sm text-slate-500">
+              Available on request. We reply within one business day.
+            </p>
+          </>
+        )}
 
         {/* Instant Buy Button */}
         <div className="w-full cart-form-wrapper">

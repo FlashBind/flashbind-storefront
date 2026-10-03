@@ -2,6 +2,7 @@ import {Suspense} from 'react';
 import {Await, NavLink} from 'react-router';
 import type {FooterQuery, HeaderQuery} from 'storefrontapi.generated';
 import {SELLER} from '~/config/seller';
+import {SITE_INTRO} from '~/config/seo';
 import {CONSENT_STORAGE_KEY} from '~/lib/cookieConsent';
 
 interface FooterProps {
@@ -23,22 +24,30 @@ export function Footer({
             <div className="container mx-auto px-6 max-w-7xl">
               <div className="grid grid-cols-1 md:grid-cols-12 gap-12 mb-16">
                 
-                {/* Brand & Newsletter */}
-                <div className="md:col-span-5">
+                {/* Brand */}
+                <div className="md:col-span-4">
                   <NavLink prefetch="intent" to="/" className="inline-block mb-6">
-                    <img src="/logo-footer.png" alt="FlashBind Logo" className="h-12 md:h-16 object-contain" />
+                    <img src="/logo-footer.webp" alt="FlashBind Logo" width={520} height={159} loading="lazy" decoding="async" className="w-auto h-12 md:h-16 object-contain" />
                   </NavLink>
-                  <p className="text-slate-400 mb-8 leading-relaxed max-w-sm">
-                    Bridging the physical and digital world. Upgrade your business presence in milliseconds with premium NFC technology.
+                  <p className="text-slate-400 mb-4 leading-relaxed max-w-sm">
+                    {SITE_INTRO}
                   </p>
-                  <form className="flex gap-2 max-w-sm" onSubmit={(e) => e.preventDefault()}>
-                    <input type="email" placeholder="Enter your email" className="bg-slate-900 border border-slate-800 rounded-full px-4 py-3 flex-grow text-white focus:outline-none focus:border-[#1E3A8A] transition-colors" />
-                    <button type="submit" className="bg-[#1E3A8A] text-white font-bold rounded-full px-6 py-3 hover:bg-[#1E3A8A] transition-colors">Subscribe</button>
-                  </form>
+                  <p className="text-slate-500 text-sm">Klaipėda, Lithuania · <a href="mailto:info@flashbind.com" className="hover:text-white transition-colors">info@flashbind.com</a></p>
+                </div>
+
+                {/* Company */}
+                <div className="md:col-span-2 md:col-start-6">
+                  <h4 className="text-white font-bold mb-6 tracking-widest uppercase text-sm">Company</h4>
+                  <ul className="space-y-4">
+                    <li><NavLink to="/about" className="hover:text-white transition-colors">About</NavLink></li>
+                    <li><NavLink to="/contact" className="hover:text-white transition-colors">Contact</NavLink></li>
+                    <li><NavLink to="/quote" className="hover:text-white transition-colors">Request a quote</NavLink></li>
+                    <li><NavLink to="/blog" className="hover:text-white transition-colors">Blog</NavLink></li>
+                  </ul>
                 </div>
 
                 {/* Quick Links */}
-                <div className="md:col-span-2 md:col-start-7">
+                <div className="md:col-span-2">
                   <h4 className="text-white font-bold mb-6 tracking-widest uppercase text-sm">Shop</h4>
                   <ul className="space-y-4">
                     <li><NavLink to="/products" className="hover:text-white transition-colors">All Products</NavLink></li>

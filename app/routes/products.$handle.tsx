@@ -1,4 +1,4 @@
-import {redirect, useLoaderData} from 'react-router';
+import {Link, redirect, useLoaderData} from 'react-router';
 import {useState, useEffect} from 'react';
 import type {Route} from './+types/products.$handle';
 import {ProductTutorial} from '~/components/ProductTutorial';
@@ -16,6 +16,7 @@ import {ProductImage} from '~/components/ProductImage';
 import {ProductForm} from '~/components/ProductForm';
 import {redirectIfHandleIsLocalized} from '~/lib/redirect';
 import {PRODUCT_SEO} from '~/config/seo';
+import {CUSTOM_STAND_QUOTE, PHONE_COMPATIBILITY, quoteUrl} from '~/config/products';
 
 export const meta: Route.MetaFunction = ({data, matches}) => {
   const parentMeta = matches.flatMap((match) => match?.meta ?? []);
@@ -42,10 +43,7 @@ export const meta: Route.MetaFunction = ({data, matches}) => {
       content: title,
     },
     ...(ogImage ? [{property: 'og:image', content: ogImage}] : []),
-    {
-      rel: 'canonical',
-      href: `/products/${data?.product.handle}`,
-    },
+    // The canonical link is set for every page in root.tsx.
   ];
 };
 
@@ -168,7 +166,7 @@ export default function Product() {
           <div className="bg-white rounded-[3rem] p-8 md:p-12 shadow-[0_8px_40px_rgb(0,0,0,0.04)] border border-slate-100 flex flex-col md:flex-row gap-12 lg:gap-20 items-start">
             
             {/* Left Column: Image & Thumbnails */}
-            <div className="w-full md:w-1/2 flex flex-col gap-6 flex-shrink-0">
+            <div className="w-full md:w-1/2 flex flex-col gap-6 flex-shrink-0 md:sticky md:top-32">
               <div className="w-full bg-white rounded-[2rem] overflow-hidden flex items-center justify-center border border-slate-100 relative group aspect-square shadow-[0_4px_20px_rgb(0,0,0,0.04)]">
                 <div className="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-10"></div>
                 <div className="w-full h-full transform transition-transform duration-700 ease-out group-hover:scale-105 flex items-center justify-center">
@@ -227,7 +225,39 @@ export default function Product() {
                 <ProductForm
                   productOptions={productOptions}
                   selectedVariant={selectedVariant}
+                  productHandle={product.handle}
                 />
+                {product.handle === 'google-review-stand' ? (
+                  <div className="mt-5 flex items-start gap-3 rounded-2xl border border-[#1E3A8A]/15 bg-[#1E3A8A]/5 p-4">
+                    <svg aria-hidden="true" className="mt-0.5 h-5 w-5 flex-none text-[#1E3A8A]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M9.53 16.122a3 3 0 0 0-5.78 1.128 2.25 2.25 0 0 1-2.4 2.245 4.5 4.5 0 0 0 8.4-2.245c0-.399-.078-.78-.22-1.128Zm0 0a15.998 15.998 0 0 0 3.388-1.62m-5.043-.025a15.994 15.994 0 0 1 1.622-3.395m3.42 3.42a15.995 15.995 0 0 0 4.764-4.648l3.876-5.814a1.151 1.151 0 0 0-1.597-1.597L14.146 6.32a15.996 15.996 0 0 0-4.649 4.763m3.42 3.42a6.776 6.776 0 0 0-3.42-3.42" />
+                    </svg>
+                    <p className="text-sm leading-relaxed text-slate-700">
+                      <strong className="text-slate-900">Want it in your brand?</strong> Custom-designed stands with your own
+                      logo and colours are available on request.{' '}
+                      <Link to={quoteUrl(CUSTOM_STAND_QUOTE)} className="font-semibold text-[#1E3A8A] underline">
+                        Request a custom stand
+                      </Link>
+                    </p>
+                  </div>
+                ) : null}
+                <ul className="mt-5 grid gap-2 text-sm text-slate-600 sm:grid-cols-3">
+                  <li className="flex items-center gap-2">
+                    <svg aria-hidden="true" className="h-4 w-4 flex-none text-[#1E3A8A]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" /></svg>
+                    <Link to="/refund-policy" className="inline-block py-1.5 hover:text-slate-900 hover:underline">30-day returns</Link>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <svg aria-hidden="true" className="h-4 w-4 flex-none text-[#1E3A8A]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285Z" /></svg>
+                    <Link to="/warranty" className="inline-block py-1.5 hover:text-slate-900 hover:underline">2-year guarantee</Link>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <svg aria-hidden="true" className="h-4 w-4 flex-none text-[#1E3A8A]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244" /></svg>
+                    <span>Change the link anytime</span>
+                  </li>
+                </ul>
+                <p className="mt-2 text-xs text-slate-400">
+                  Returns: 30 days for consumers. Guarantee: 2 years for consumers, 12 months for business customers.
+                </p>
               </div>
               
               {/* Premium Icon Grid Carousel */}
@@ -294,7 +324,7 @@ export default function Product() {
                 </h3>
                 <div 
                   className="prose prose-slate prose-lg max-w-none text-slate-600 leading-relaxed"
-                  dangerouslySetInnerHTML={{__html: descriptionHtml}} 
+                  dangerouslySetInnerHTML={{__html: descriptionHtml}}
                 />
               </div>
 
@@ -322,6 +352,20 @@ export default function Product() {
                   <p>No app is needed. {product.handle === 'nfc-restaurant-menu-stand' || product.handle === 'guest-wi-fi-hub' ? 'Works with nearly all modern smartphones, with a QR code as backup.' : 'Works with nearly all modern smartphones.'}</p>
                 </div>
               </details>
+
+              <details className="group border border-slate-200 rounded-xl bg-white shadow-sm [&_summary::-webkit-details-marker]:hidden">
+                <summary className="flex cursor-pointer items-center justify-between gap-1.5 p-6 text-slate-900 font-bold transition-colors hover:text-[#1E3A8A]">
+                  Will it work with my phone?
+                  <span className="shrink-0 transition duration-300 group-open:-rotate-180 text-slate-400">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                      <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+                    </svg>
+                  </span>
+                </summary>
+                <div className="px-6 pb-6 text-slate-600 leading-relaxed text-base">
+                  <p>{PHONE_COMPATIBILITY}</p>
+                </div>
+              </details>
               
               <details className="group border border-slate-200 rounded-xl bg-white shadow-sm [&_summary::-webkit-details-marker]:hidden">
                 <summary className="flex cursor-pointer items-center justify-between gap-1.5 p-6 text-slate-900 font-bold transition-colors hover:text-[#1E3A8A]">
@@ -333,7 +377,7 @@ export default function Product() {
                   </span>
                 </summary>
                 <div className="px-6 pb-6 text-slate-600 leading-relaxed text-base">
-                  <p>Zero. This is a one-time purchase. You own the hardware and can update the destination link as many times as you like from our free dashboard.</p>
+                  <p>No. The product is a one-time purchase and works without a subscription. You own it and can change where it links to as often as you like from the free dashboard. An optional business subscription with extra features is planned.</p>
                 </div>
               </details>
 
@@ -350,6 +394,27 @@ export default function Product() {
                   <p>When you receive your product, you will tap it to create your account. From then on, you can log in to your dashboard to instantly update the URL destination.</p>
                 </div>
               </details>
+              {product.handle === 'google-review-stand' ? (
+              <details className="group border border-slate-200 rounded-xl bg-white shadow-sm [&_summary::-webkit-details-marker]:hidden">
+                  <summary className="flex cursor-pointer items-center justify-between gap-1.5 p-6 text-slate-900 font-bold transition-colors hover:text-[#1E3A8A]">
+                    Can I get the stand with my own logo?
+                    <span className="shrink-0 transition duration-300 group-open:-rotate-180 text-slate-400">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+                      </svg>
+                    </span>
+                  </summary>
+                  <div className="px-6 pb-6 text-slate-600 leading-relaxed text-base">
+                    <p>
+                      Yes. Custom-designed stands with your logo and colours are available on request.{' '}
+                      <Link to={quoteUrl(CUSTOM_STAND_QUOTE)} className="font-semibold text-[#1E3A8A] underline">
+                        Request a quote
+                      </Link>{' '}
+                      and attach your logo; we reply within one business day.
+                    </p>
+                  </div>
+                </details>
+              ) : null}
             </div>
           </div>
 

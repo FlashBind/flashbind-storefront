@@ -2,14 +2,13 @@ import type {MetaFunction} from 'react-router';
 import {Link} from 'react-router';
 import {PolicyLayout, PolicyHeading} from '~/components/PolicyLayout';
 import {SELLER} from '~/config/seller';
+import {pageMeta} from '~/config/seo';
 
 // DRAFT for legal review (LEGAL-001). Consumer part follows the EU legal
 // guarantee (Directive (EU) 2019/771). The 12-month business-customer
 // warranty was confirmed by the owner on 2026-09-26.
 
-export const meta: MetaFunction = () => {
-  return [{title: 'FlashBind | Warranty'}];
-};
+export const meta: MetaFunction = () => pageMeta('warranty');
 
 export default function WarrantyPage() {
   return (

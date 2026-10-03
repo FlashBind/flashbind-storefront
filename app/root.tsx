@@ -10,6 +10,7 @@ import {
   ScrollRestoration,
   useRouteLoaderData,
   useMatches,
+  useLocation,
 } from 'react-router';
 import type {Route} from './+types/root';
 import {FOOTER_QUERY, HEADER_QUERY} from '~/lib/fragments';
@@ -25,7 +26,7 @@ export type RootLoader = typeof loader;
 export const meta: Route.MetaFunction = () => {
   return [
     {title: 'FlashBind'},
-    {name: 'description', content: 'FlashBind sells NFC products that help hospitality businesses make it easy for customers to leave a Google review, open your menu and get your Wi-Fi details.'},
+    {name: 'description', content: 'NFC stands and tags that work with one tap of a phone, for businesses and pet owners. Google reviews, guest Wi-Fi, digital menus and smart pet tags.'},
   ];
 };
 
@@ -159,6 +160,10 @@ export function Layout({children}: {children?: React.ReactNode}) {
   const nonce = useNonce();
   // A page in another language (the Dual Choice page) says so in its data.
   const pageLanguage = (useMatches().at(-1)?.data as {pageLanguage?: string} | undefined)?.pageLanguage;
+  // One canonical address per page: the live origin and the path, without
+  // query strings (variant, sort and tracking parameters).
+  const {pathname} = useLocation();
+  const canonical = `https://flashbind.com${pathname === '/' ? '/' : pathname.replace(/\/+$/, '')}`;
 
   return (
     <html lang={pageLanguage === 'lt' ? 'lt' : 'en'}>
@@ -168,6 +173,7 @@ export function Layout({children}: {children?: React.ReactNode}) {
         <link rel="stylesheet" href={resetStyles}></link>
         <link rel="stylesheet" href={appStyles}></link>
         <Meta />
+        <link rel="canonical" href={canonical} />
         <Links />
       </head>
       <body className="overflow-x-hidden">

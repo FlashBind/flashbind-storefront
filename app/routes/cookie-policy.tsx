@@ -3,6 +3,7 @@ import {Link} from 'react-router';
 import {PolicyLayout, PolicyHeading} from '~/components/PolicyLayout';
 import {SellerDetails} from '~/components/SellerDetails';
 import {SELLER} from '~/config/seller';
+import {pageMeta} from '~/config/seo';
 
 // DRAFT for legal review (LEGAL-001, LEGAL-003). EU cookie notice. The list
 // matches what the site sets as of 2026-09-28: our login session cookie, the
@@ -12,9 +13,7 @@ import {SELLER} from '~/config/seller';
 // Shopify's cookies are taken from Shopify's published cookie list; confirm
 // them in the legal review. Keep this list in sync with the code.
 
-export const meta: MetaFunction = () => {
-  return [{title: 'FlashBind | Cookie Policy'}];
-};
+export const meta: MetaFunction = () => pageMeta('cookies');
 
 const link = 'text-[#1E3A8A] underline';
 const cell = 'p-3 border-b align-top';
