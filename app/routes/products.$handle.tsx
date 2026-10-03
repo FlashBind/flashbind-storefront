@@ -166,7 +166,7 @@ export default function Product() {
           <div className="bg-white rounded-[3rem] p-8 md:p-12 shadow-[0_8px_40px_rgb(0,0,0,0.04)] border border-slate-100 flex flex-col md:flex-row gap-12 lg:gap-20 items-start">
             
             {/* Left Column: Image & Thumbnails */}
-            <div className="w-full md:w-1/2 flex flex-col gap-6 flex-shrink-0 md:sticky md:top-32">
+            <div className="w-full md:w-1/2 flex flex-col gap-6 flex-shrink-0">
               <div className="w-full bg-white rounded-[2rem] overflow-hidden flex items-center justify-center border border-slate-100 relative group aspect-square shadow-[0_4px_20px_rgb(0,0,0,0.04)]">
                 <div className="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-10"></div>
                 <div className="w-full h-full transform transition-transform duration-700 ease-out group-hover:scale-105 flex items-center justify-center">
