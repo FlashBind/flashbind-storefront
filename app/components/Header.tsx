@@ -90,7 +90,7 @@ export function Header({
             `nav` breakpoint (tailwind.config.js) the hamburger menu takes over. */}
         <div className="px-6 py-3 nav:py-4 flex items-center justify-between nav:grid nav:grid-cols-[auto_1fr_auto] nav:gap-8 w-full relative">
           <NavLink prefetch="intent" to="/" className="flex items-center gap-3 relative z-10 justify-self-start" onClick={close}>
-            <img src="/logo-transparent.png" alt="FlashBind Logo" className="h-16 xl:h-20 max-w-none shrink-0 object-contain" />
+            <img src="/logo-header.webp" alt="FlashBind Logo" width={520} height={171} className="w-auto h-16 xl:h-20 max-w-none shrink-0 object-contain" />
           </NavLink>
           <div className="hidden nav:flex justify-center min-w-0 z-10">
             <HeaderMenu

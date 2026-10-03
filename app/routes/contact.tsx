@@ -1,13 +1,13 @@
 import type {MetaFunction, ActionFunctionArgs} from 'react-router';
 import {useState, useEffect, useRef} from 'react';
-import {useSearchParams, useActionData, useNavigation, Form} from 'react-router';
+import {useSearchParams, useActionData, useNavigation, Form, Link} from 'react-router';
 import {getSupabaseAdmin} from '~/utils/supabase.server';
 import {purgeExpiredContactMessages} from '~/utils/retention.server';
 import {sendEmailNotification} from '~/utils/email.server';
+import {pageMeta} from '~/config/seo';
+import {SellerDetails} from '~/components/SellerDetails';
 
-export const meta: MetaFunction = () => {
-  return [{title: 'FlashBind | Contact Us'}];
-};
+export const meta: MetaFunction = () => pageMeta('contact');
 
 export async function action({request, context}: ActionFunctionArgs) {
   const formData = await request.formData();
@@ -36,11 +36,11 @@ export async function action({request, context}: ActionFunctionArgs) {
   await purgeExpiredContactMessages(supabase);
 
   // 2. Send Email Notification
-  const adminEmail = (context.env as any).NOTIFICATION_EMAIL || (context.env as any).ADMIN_EMAIL || 'YOUR_GMAIL_ADDRESS_HERE';
+  const adminEmail = (context.env as any).NOTIFICATION_EMAIL || (context.env as any).ADMIN_EMAIL;
   const apiKey = (context.env as any).RESEND_API_KEY;
-  
-  if (!apiKey) {
-    console.error('RESEND_API_KEY is not set in environment variables');
+
+  if (!apiKey || !adminEmail) {
+    console.error('RESEND_API_KEY or the notification email is not set');
     return {error: 'Server misconfiguration: Email service unavailable.'};
   }
 
@@ -84,7 +84,7 @@ export default function ContactPage() {
           <div className="text-center mb-10">
             <h1 className="text-4xl font-medium text-slate-900 tracking-tighter mb-4">Contact Us</h1>
             <p className="text-slate-500 text-lg">
-              Have questions about bulk encoding, white-labeling, or anything else? Send us a message and we'll get right back to you.
+              Questions about our stands and tags, bulk orders or a custom design? Send a message. We reply within one business day.
             </p>
           </div>
 
@@ -146,10 +146,18 @@ export default function ContactPage() {
             </Form>
           )}
 
-          <div className="mt-8 text-center">
+          <div className="mt-8 text-center space-y-4">
             <p className="text-sm text-slate-500">
               Or email us directly at <a href="mailto:info@flashbind.com" className="text-[#1E3A8A] font-bold hover:underline">info@flashbind.com</a>
             </p>
+            <p className="text-sm text-slate-500">
+              Need a price for several stands or a custom design?{' '}
+              <Link to="/quote" className="text-[#1E3A8A] font-bold hover:underline">Request a quote</Link>
+            </p>
+            <div className="rounded-2xl border border-slate-200 bg-white/70 p-5 text-left text-sm text-slate-600">
+              <p className="mb-2 text-xs font-bold uppercase tracking-widest text-slate-400">Company details</p>
+              <SellerDetails className="leading-relaxed" />
+            </div>
           </div>
         </div>
       </div>

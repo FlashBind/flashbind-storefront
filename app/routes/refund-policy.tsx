@@ -3,12 +3,11 @@ import {Link} from 'react-router';
 import {EuWithdrawalNotice} from '~/components/EuWithdrawalNotice';
 import {PolicyLayout, PolicyHeading} from '~/components/PolicyLayout';
 import {SELLER} from '~/config/seller';
+import {pageMeta} from '~/config/seo';
 
 // DRAFT for legal review (LEGAL-001).
 
-export const meta: MetaFunction = () => {
-  return [{title: 'FlashBind | Returns and Refunds'}];
-};
+export const meta: MetaFunction = () => pageMeta('refunds');
 
 export default function RefundPolicyPage() {
   return (

@@ -1,8 +1,7 @@
 import {Link, type MetaFunction} from 'react-router';
+import {pageMeta} from '~/config/seo';
 
-export const meta: MetaFunction = () => {
-  return [{title: 'FlashBind | Blog'}];
-};
+export const meta: MetaFunction = () => pageMeta('blog');
 
 export default function BlogPage() {
   return (

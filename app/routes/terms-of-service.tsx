@@ -3,13 +3,12 @@ import {Link} from 'react-router';
 import {PolicyLayout, PolicyHeading, PolicySubheading} from '~/components/PolicyLayout';
 import {SellerDetails} from '~/components/SellerDetails';
 import {SELLER, sellerName} from '~/config/seller';
+import {pageMeta} from '~/config/seo';
 
 // DRAFT for legal review (LEGAL-001). Separate rules for consumers and
 // business customers; EU consumer law as the baseline.
 
-export const meta: MetaFunction = () => {
-  return [{title: 'FlashBind | Terms of Service'}];
-};
+export const meta: MetaFunction = () => pageMeta('terms');
 
 const link = 'text-[#1E3A8A] underline';
 

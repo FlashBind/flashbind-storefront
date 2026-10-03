@@ -4,10 +4,10 @@ import {useAside} from '~/components/Aside';
 import {Image, Money} from '@shopify/hydrogen';
 import {AddToCartButton} from '~/components/AddToCartButton';
 import type {MoneyV2} from '@shopify/hydrogen/storefront-api-types';
+import {pageMeta} from '~/config/seo';
+import {quoteUrl} from '~/config/products';
 
-export const meta: Route.MetaFunction = () => {
-  return [{title: 'FlashBind | Personal'}];
-};
+export const meta: Route.MetaFunction = () => pageMeta('personal');
 
 const PRODUCT_QUERY = `#graphql
   query ProductByHandle($handle: String!) {
@@ -56,7 +56,7 @@ export default function PersonalPage() {
   const {open} = useAside();
   
   // Buyable only when Shopify says so, same as the product page: use the
-  // first variant that is available for sale, otherwise show "Coming Soon".
+  // first variant that is available for sale, otherwise offer a quote.
   const variants: Array<{id: string; availableForSale: boolean; price: MoneyV2}> =
     product?.variants?.nodes ?? [];
   const variant = variants.find((v) => v.availableForSale) ?? variants[0];
@@ -129,9 +129,12 @@ export default function PersonalPage() {
                     Add to Cart
                   </AddToCartButton>
                 ) : (
-                  <button type="button" disabled className="w-full py-4 bg-slate-300 text-slate-500 rounded-2xl font-bold text-lg cursor-not-allowed">
-                    Coming Soon
-                  </button>
+                  <Link
+                    to={quoteUrl('smart-pet-collar-tag')}
+                    className="block w-full py-4 text-center bg-[#0F172A] text-white rounded-2xl font-bold text-lg hover:bg-[#1E3A8A] hover:-translate-y-1 transition-all duration-300 shadow-[0_4px_14px_0_rgb(0,0,0,0.1)] hover:shadow-[0_10px_20px_rgba(30,58,138,0.25)]"
+                  >
+                    Request a quote
+                  </Link>
                 )}
               </div>
             </div>
@@ -172,22 +175,6 @@ export default function PersonalPage() {
       {/* 3. Roadmap & Community Section (Footer-adjacent) */}
       <div className="bg-slate-50 border-t border-slate-200 py-20 px-6">
         <div className="max-w-7xl mx-auto">
-          {/* Future Roadmap Section */}
-          <div className="max-w-3xl mx-auto text-center mb-24">
-            <div className="inline-block mb-8 px-4 py-2 rounded-full border border-slate-200 bg-white shadow-sm text-slate-500 text-xs font-bold tracking-widest uppercase">
-              Future Roadmap
-            </div>
-            <div className="bg-white border border-slate-200 rounded-[2.5rem] p-8 md:p-12 flex flex-col items-center justify-center text-center transition-all duration-300 hover:shadow-lg max-w-2xl mx-auto">
-              <div className="w-20 h-20 mb-6 rounded-full bg-slate-100 flex items-center justify-center text-slate-400">
-                <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v12m-6-6h12" />
-                </svg>
-              </div>
-              <h3 className="text-2xl md:text-3xl font-extrabold text-slate-800 mb-4 tracking-tight">More Personal Tech</h3>
-              <p className="text-slate-500 text-lg leading-relaxed">Coming Soon. We're working on exciting new ways to seamlessly connect your physical and digital worlds.</p>
-            </div>
-          </div>
-
           {/* Community Section */}
           <div className="max-w-5xl mx-auto text-center py-16">
             <h2 className="text-3xl md:text-4xl font-medium text-slate-900 tracking-tighter mb-4">Join the FlashBind Community</h2>

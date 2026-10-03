@@ -4,10 +4,16 @@ import {useSearchParams, useActionData, useNavigation, Form} from 'react-router'
 import {getSupabaseAdmin} from '~/utils/supabase.server';
 import {purgeExpiredContactMessages} from '~/utils/retention.server';
 import {sendEmailNotification} from '~/utils/email.server';
+import {CUSTOM_STAND_QUOTE, QUOTE_OPTIONS, quoteOptionLabel} from '~/config/products';
+import {pageMeta} from '~/config/seo';
 
-export const meta: MetaFunction = () => {
-  return [{title: 'FlashBind | Request a Quote'}];
-};
+export const meta: MetaFunction = () => pageMeta('quote');
+
+/** Design files: the formats the form offers, up to 10 MB. */
+const ATTACHMENT_EXTENSIONS = ['png', 'jpg', 'jpeg', 'webp', 'svg', 'pdf', 'ai', 'eps', 'psd'];
+const ATTACHMENT_MAX_BYTES = 10 * 1024 * 1024;
+/** The bucket is private; the email gets a link that works for 7 days. */
+const ATTACHMENT_LINK_SECONDS = 7 * 24 * 60 * 60;
 
 export async function action({request, context}: ActionFunctionArgs) {
   const formData = await request.formData();
@@ -15,6 +21,7 @@ export async function action({request, context}: ActionFunctionArgs) {
   const message = formData.get('message') as string;
   const hasDesign = formData.get('has_design') === 'yes';
   const attachment = formData.get('attachment') as File | null;
+  const product = quoteOptionLabel(formData.get('product'));
 
   if (!email || !message) {
     return {error: 'Email and project details are required.'};
@@ -22,10 +29,17 @@ export async function action({request, context}: ActionFunctionArgs) {
 
   const supabase = getSupabaseAdmin(context);
   let attachmentUrl = null;
+  let attachmentLink: string | null = null;
 
   // Handle File Upload if present
   if (hasDesign && attachment && attachment.size > 0) {
-    const fileExt = attachment.name.split('.').pop();
+    const fileExt = (attachment.name.split('.').pop() || '').toLowerCase();
+    if (!ATTACHMENT_EXTENSIONS.includes(fileExt)) {
+      return {error: 'Please attach a PNG, JPG, SVG, PDF, AI, EPS or PSD file.'};
+    }
+    if (attachment.size > ATTACHMENT_MAX_BYTES) {
+      return {error: 'The file is larger than 10 MB. Please attach a smaller file or email it to us.'};
+    }
     const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
     
     // Supabase requires ArrayBuffer or Blob
@@ -43,14 +57,20 @@ export async function action({request, context}: ActionFunctionArgs) {
       return {error: 'Failed to upload your design file. Please try again or email it to us.'};
     }
 
+    // Stored in this form so the retention job can find and delete the file.
     const {data: publicUrlData} = supabase.storage.from('attachments').getPublicUrl(fileName);
     attachmentUrl = publicUrlData.publicUrl;
+    // The bucket is private, so the email needs a signed link.
+    const {data: signed} = await supabase.storage.from('attachments').createSignedUrl(fileName, ATTACHMENT_LINK_SECONDS);
+    attachmentLink = signed?.signedUrl ?? null;
   }
+
+  const fullMessage = product ? `Product: ${product}\n\n${message}` : message;
 
   // Save to Supabase DB
   const {error: dbError} = await supabase.from('contact_messages').insert([{
     email,
-    message,
+    message: fullMessage,
     type: 'quote',
     has_design: hasDesign,
     attachment_url: attachmentUrl
@@ -65,20 +85,20 @@ export async function action({request, context}: ActionFunctionArgs) {
   await purgeExpiredContactMessages(supabase);
 
   // Send Email Notification
-  const adminEmail = (context.env as any).NOTIFICATION_EMAIL || (context.env as any).ADMIN_EMAIL || 'YOUR_GMAIL_ADDRESS_HERE';
+  const adminEmail = (context.env as any).NOTIFICATION_EMAIL || (context.env as any).ADMIN_EMAIL;
   const apiKey = (context.env as any).RESEND_API_KEY;
 
-  if (!apiKey) {
-    console.error('RESEND_API_KEY is not set in environment variables');
+  if (!apiKey || !adminEmail) {
+    console.error('RESEND_API_KEY or the notification email is not set');
     return {error: 'Server misconfiguration: Email service unavailable.'};
   }
 
   await sendEmailNotification({
-    subject: 'New Quote Request from FlashBind',
+    subject: product ? `New Quote Request: ${product}` : 'New Quote Request from FlashBind',
     email,
-    message,
+    message: fullMessage,
     type: 'Quote Form',
-    attachmentUrl,
+    attachmentUrl: attachmentLink,
     adminEmail,
     apiKey,
   });
@@ -93,7 +113,12 @@ export default function QuotePage() {
   
   const [searchParams] = useSearchParams();
   const isSuccess = searchParams.get('success') === 'true' || actionData?.success;
-  const [hasDesign, setHasDesign] = useState<string>('no');
+  const requested = searchParams.get('product');
+  const preselected = quoteOptionLabel(requested) ? (requested as string) : '';
+  const [product, setProduct] = useState(preselected);
+  const isCustom = product === CUSTOM_STAND_QUOTE;
+  // A custom stand needs the logo, so offer the upload straight away.
+  const [hasDesign, setHasDesign] = useState<string>(preselected === CUSTOM_STAND_QUOTE ? 'yes' : 'no');
   const formRef = useRef<HTMLFormElement>(null);
 
   useEffect(() => {
@@ -116,7 +141,11 @@ export default function QuotePage() {
           <div className="text-center mb-10">
             <h1 className="text-4xl font-medium text-slate-900 tracking-tighter mb-4">Request a Quote</h1>
             <p className="text-slate-500 text-lg">
-              Looking for custom NFC solutions, white-labeling, or bulk orders? Tell us about your project and we'll get back to you with a custom quote.
+              Tell us what you need and how many. We reply within one business day with a quote.
+            </p>
+            <p className="mt-4 rounded-2xl border border-[#1E3A8A]/15 bg-[#1E3A8A]/5 px-4 py-3 text-sm text-slate-700">
+              <strong className="text-slate-900">Custom-designed stands</strong> with your own logo and colours are
+              available on request. Choose &ldquo;Custom-designed stand with your logo&rdquo; and attach your logo.
             </p>
           </div>
 
@@ -154,9 +183,32 @@ export default function QuotePage() {
                 />
               </div>
 
+              <div>
+                <label htmlFor="product" className="block text-sm font-bold text-slate-900 mb-2">
+                  Product
+                </label>
+                <select
+                  id="product"
+                  name="product"
+                  value={product}
+                  onChange={(event) => {
+                    setProduct(event.target.value);
+                    if (event.target.value === CUSTOM_STAND_QUOTE) setHasDesign('yes');
+                  }}
+                  className="w-full px-5 py-4 rounded-xl border border-slate-200 bg-white/50 focus:bg-white focus:border-[#1E3A8A] focus:ring-2 focus:ring-[#1E3A8A]/20 transition-all outline-none text-slate-900"
+                >
+                  <option value="">Choose a product (optional)</option>
+                  {QUOTE_OPTIONS.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
               <div className="space-y-3">
                 <label className="block text-sm font-bold text-slate-900">
-                  Do you already have a design ready?
+                  {isCustom ? 'Do you have your logo or design ready?' : 'Do you already have a design ready?'}
                 </label>
                 <div className="flex gap-6">
                   <label className="flex items-center gap-2 cursor-pointer">
@@ -193,11 +245,11 @@ export default function QuotePage() {
                     type="file"
                     id="design_attachment"
                     name="attachment"
-                    accept="image/*,.pdf,.ai,.eps,.psd"
+                    accept=".png,.jpg,.jpeg,.webp,.svg,.pdf,.ai,.eps,.psd"
                     className="w-full text-sm text-slate-500 file:mr-4 file:py-3 file:px-6 file:rounded-xl file:border-0 file:text-sm file:font-bold file:bg-[#1E3A8A]/10 file:text-[#1E3A8A] hover:file:bg-[#1E3A8A]/20 transition-all cursor-pointer border border-slate-200 rounded-xl bg-white/50"
                   />
                   <p className="text-xs text-slate-500 mt-2 font-medium">
-                    Upload your logo or design (PNG, JPG, PDF, AI). 
+                    Upload your logo or design (PNG, JPG, SVG, PDF, AI, EPS or PSD, up to 10 MB).
                   </p>
                 </div>
               )}
@@ -211,7 +263,7 @@ export default function QuotePage() {
                   name="message"
                   required
                   rows={5}
-                  placeholder="Tell us about your volume, requirements, and timeline..."
+                  placeholder={isCustom ? 'How many stands, your colours, and when you need them…' : 'How many you need, your requirements and timeline…'}
                   className="w-full px-5 py-4 rounded-xl border border-slate-200 bg-white/50 focus:bg-white focus:border-[#1E3A8A] focus:ring-2 focus:ring-[#1E3A8A]/20 transition-all outline-none text-slate-900 resize-none"
                 ></textarea>
               </div>

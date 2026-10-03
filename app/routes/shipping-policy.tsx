@@ -3,13 +3,12 @@ import {Link} from 'react-router';
 import {PolicyLayout, PolicyHeading} from '~/components/PolicyLayout';
 import {SELLER, sellerName} from '~/config/seller';
 import {SHIPPING} from '~/config/shipping';
+import {pageMeta} from '~/config/seo';
 
 // DRAFT for legal review (LEGAL-001). International shipping with EU
 // consumer law as the baseline.
 
-export const meta: MetaFunction = () => {
-  return [{title: 'FlashBind | Shipping Policy'}];
-};
+export const meta: MetaFunction = () => pageMeta('shipping');
 
 export default function ShippingPolicyPage() {
   return (

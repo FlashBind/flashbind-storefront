@@ -69,7 +69,7 @@ function TrendingProductCard({ product }: { product: any }) {
           <div className="absolute top-4 left-4 z-20 flex flex-col items-start gap-2">
             {isSoldOut ? (
               <div className="bg-slate-800/90 backdrop-blur-sm border border-slate-700/50 text-white text-[11px] font-extrabold uppercase tracking-widest py-1.5 px-3 rounded-full shadow-sm">
-                Coming Soon
+                Request a quote
               </div>
             ) : isSellingFast ? (
               <div className="bg-[#1E3A8A] text-white text-[11px] font-extrabold uppercase tracking-widest py-1.5 px-3 rounded-full shadow-sm flex items-center gap-1.5">

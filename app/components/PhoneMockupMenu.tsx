@@ -7,7 +7,7 @@ export default function PhoneMockupMenu() {
         
         {/* Header Image */}
         <div className="w-full h-56 relative">
-          <img src="https://images.unsplash.com/photo-1544148103-0773bf10d330?auto=format&fit=crop&q=80&w=800" className="w-full h-full object-cover opacity-60" alt="Restaurant interior" />
+          <img loading="lazy" decoding="async" src="https://images.unsplash.com/photo-1544148103-0773bf10d330?auto=format&fit=crop&q=80&w=800" className="w-full h-full object-cover opacity-60" alt="Restaurant interior" />
           <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-transparent to-transparent"></div>
           <div className="absolute bottom-6 w-full text-center">
             <h1 className="text-3xl font-serif tracking-[0.2em] uppercase">Bistro Luminance</h1>
