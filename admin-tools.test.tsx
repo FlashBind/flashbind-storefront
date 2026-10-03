@@ -9,7 +9,7 @@ import {
   parseDemoForm,
   requireAdminEmail,
 } from './app/utils/adminTools.server';
-import {inkOnBrandColor, normalizeBrandColor} from './app/utils/brandColor';
+import {brandTextOnWhite, inkOnBrandColor, normalizeBrandColor, tintBrandColor} from './app/utils/brandColor';
 import {getDualChoiceView} from './app/utils/feedback.server';
 import {DualChoicePage} from './app/components/DualChoicePage';
 
@@ -66,6 +66,19 @@ describe('brand colour', () => {
     expect(inkOnBrandColor('#1e3a8a')).toBe('#ffffff');
     expect(inkOnBrandColor('#facc15')).toBe('#0f172a');
     expect(inkOnBrandColor('#ffffff')).toBe('#0f172a');
+  });
+
+  it('uses the colour as text on white only when it is readable', () => {
+    expect(brandTextOnWhite('#1e3a8a')).toBe('#1e3a8a');
+    expect(brandTextOnWhite('#facc15')).toBe('#0f172a');
+    expect(brandTextOnWhite('not a colour')).toBe('#0f172a');
+  });
+
+  it('mixes the colour with white', () => {
+    expect(tintBrandColor('#000000', 0)).toBe('#ffffff');
+    expect(tintBrandColor('#000000', 1)).toBe('#000000');
+    expect(tintBrandColor('#000000', 0.5)).toBe('#808080');
+    expect(tintBrandColor('#1e3a8a', 2)).toBe('#1e3a8a');
   });
 });
 
@@ -146,29 +159,65 @@ describe('parseDemoForm', () => {
 
   it('returns clean values', () => {
     expect(
-      parseDemoForm(form({...valid, locationLabel: ' Old Town ', brandColor: '#AA3300', logo: 'data:image/png;base64,AAAA'})),
+      parseDemoForm(
+        form({
+          ...valid,
+          displayName: ' Melga ',
+          locationLabel: ' Old Town ',
+          brandColor: '#AA3300',
+          logo: 'data:image/png;base64,AAAA',
+          logoBackground: '#000000',
+        }),
+      ),
     ).toEqual({
       value: {
         businessName: 'Cafe Melga',
+        displayName: 'Melga',
         logo: 'data:image/png;base64,AAAA',
+        logoBackground: '#000000',
         locationLabel: 'Old Town',
         brandColor: '#aa3300',
         googleUrl: 'https://g.page/r/abc/review',
+        pageLanguage: 'lt',
       },
     });
     expect(parseDemoForm(form(valid))).toEqual({
-      value: {businessName: 'Cafe Melga', logo: null, locationLabel: '', brandColor: null, googleUrl: 'https://g.page/r/abc/review'},
+      value: {
+        businessName: 'Cafe Melga',
+        displayName: null,
+        logo: null,
+        logoBackground: null,
+        locationLabel: '',
+        brandColor: null,
+        googleUrl: 'https://g.page/r/abc/review',
+        pageLanguage: 'lt',
+      },
     });
+  });
+
+  it('ignores a logo background without a logo, and a malformed one', () => {
+    expect(parseDemoForm(form({...valid, logoBackground: '#000000'}))).toMatchObject({value: {logoBackground: null}});
+    expect(
+      parseDemoForm(form({...valid, logo: 'data:image/png;base64,AAAA', logoBackground: 'black'})),
+    ).toMatchObject({value: {logoBackground: null}});
+  });
+
+  it('takes the page language, Lithuanian by default', () => {
+    expect(parseDemoForm(form({...valid, pageLanguage: 'en'}))).toMatchObject({value: {pageLanguage: 'en'}});
+    expect('error' in parseDemoForm(form({...valid, pageLanguage: 'ru'}))).toBe(true);
   });
 });
 
 describe('createDemoPage', () => {
   const input = {
     businessName: 'Cafe Melga',
+    displayName: 'Melga',
     logo: null,
+    logoBackground: null,
     locationLabel: 'Old Town',
     brandColor: '#aa3300',
     googleUrl: 'https://g.page/r/abc/review',
+    pageLanguage: 'lt' as const,
   };
   const now = new Date('2026-10-01T12:00:00Z');
 
@@ -188,6 +237,9 @@ describe('createDemoPage', () => {
       business_name: 'Cafe Melga',
       logo_data_url: null,
       brand_color: '#aa3300',
+      page_language: 'lt',
+      display_name: 'Melga',
+      logo_background: null,
     });
     expect(new Date(ent.current_period_end).getTime() - now.getTime()).toBe(DEMO_DAYS * 86400000);
     expect(result.activeUntil).toBe(ent.current_period_end);
@@ -255,7 +307,7 @@ describe('brand colour on the Dual Choice page', () => {
       {
         path: '/p/:tagId',
         Component: () => (
-          <DualChoicePage tagId="t1" businessName="Cafe" logo={null} locationLabel="" brandColor={brandColor} initiallyShowForm={false} sent={false} />
+          <DualChoicePage tagId="t1" businessName="Cafe" logo={null} locationLabel="" brandColor={brandColor} language="en" initiallyShowForm={false} sent={false} />
         ),
       },
     ]);
@@ -266,7 +318,9 @@ describe('brand colour on the Dual Choice page', () => {
     const html = render('#facc15');
     expect(html).toContain('--brand:#facc15');
     expect(html).toContain('--brand-ink:#0f172a');
-    expect(html.match(/border-\[color:var\(--brand\)\]/g)).toHaveLength(2);
+    // One brand-tinted icon tile per option, nothing extra on either.
+    expect(html.match(/bg-\[color:var\(--brand-tint\)\]/g)).toHaveLength(2);
+    expect(html).toContain('--brand-text:#0f172a');
   });
 
   it('falls back to the default colour', () => {

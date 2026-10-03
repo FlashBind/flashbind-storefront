@@ -157,9 +157,11 @@ function loadDeferredData({context}: Route.LoaderArgs) {
 
 export function Layout({children}: {children?: React.ReactNode}) {
   const nonce = useNonce();
+  // A page in another language (the Dual Choice page) says so in its data.
+  const pageLanguage = (useMatches().at(-1)?.data as {pageLanguage?: string} | undefined)?.pageLanguage;
 
   return (
-    <html lang="en">
+    <html lang={pageLanguage === 'lt' ? 'lt' : 'en'}>
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width,initial-scale=1" />
@@ -181,8 +183,11 @@ export default function App() {
   const data = useRouteLoaderData<RootLoader>('root');
   const matches = useMatches();
   const hideLayout = matches.some((match) => (match.handle as any)?.hideLayout);
+  const standalonePage = matches.some((match) => (match.handle as any)?.standalonePage);
 
-  if (!data) {
+  // Public tag pages (/p/...) load no Shopify analytics and set no
+  // analytics or marketing cookies, so they need no cookie banner.
+  if (!data || standalonePage) {
     return <Outlet />;
   }
 

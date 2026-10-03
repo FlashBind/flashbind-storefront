@@ -22,9 +22,14 @@ import {
 } from '~/utils/feedback.server';
 import {purgeExpiredFeedback} from '~/utils/retention.server';
 import {DualChoicePage} from '~/components/DualChoicePage';
+import {pickPageLanguage} from '~/lib/dualChoiceText';
 
+// standalonePage: the public page a tag opens. It sets no analytics or
+// marketing cookies and loads no Shopify scripts, so it shows no cookie
+// banner (it would cover the page's options).
 export const handle = {
   hideLayout: true,
+  standalonePage: true,
 };
 
 // A feedback post that fails validation stays on the same URL and shows the
@@ -37,6 +42,8 @@ export const headers: HeadersFunction = () => {
   return new Headers({
     'Cache-Control': 'private, no-store, max-age=0',
     'X-Robots-Tag': 'noindex, nofollow, noarchive',
+    // The Dual Choice page's language follows the visitor's phone language.
+    Vary: 'Accept-Language',
   });
 };
 
@@ -95,8 +102,9 @@ export async function loader({ params, context, request }: LoaderFunctionArgs) {
         const sent = params.get('sent') === '1';
         // Count real page opens only: not the form view or the thank-you page.
         if (!showForm && !sent) await recordReviewStandEvent(adminSupabase, tagId, 'view');
+        const pageLanguage = pickPageLanguage(request.headers.get('Accept-Language'), dualChoice.defaultLanguage);
         // The Google link goes through /p/{id}/google, so no settings are sent.
-        return { pet: { ...pet, settings: {} }, isOwner: false, tagId, dualChoice, showForm, sent };
+        return { pet: { ...pet, settings: {} }, isOwner: false, tagId, dualChoice, showForm, sent, pageLanguage };
       }
     }
     if (dest) {
@@ -112,7 +120,7 @@ export async function loader({ params, context, request }: LoaderFunctionArgs) {
   const ownerEmail = isPetTag ? rawPet.owner_email : null;
   const isOwner = Boolean(userEmail && userEmail === ownerEmail);
 
-  return { pet, isOwner, tagId, dualChoice: null, showForm: false, sent: false };
+  return { pet, isOwner, tagId, dualChoice: null, showForm: false, sent: false, pageLanguage: 'en' as const };
 }
 
 // Private feedback from a review stand's Dual Choice page.
@@ -138,11 +146,23 @@ export async function action({ params, context, request }: ActionFunctionArgs) {
   const view = await getDualChoiceView(admin, tag, dest);
   if (!view) throw new Response('Not Found', { status: 404 });
 
+  // On an error the page shows the visitor's text again (also without JavaScript).
+  const text = (key: string) => {
+    const value = formData.get(key);
+    return typeof value === 'string' ? value.slice(0, 2000) : '';
+  };
+  const values = {
+    message: text('message'),
+    contactName: text('contact_name'),
+    contactEmail: text('contact_email'),
+    contactPhone: text('contact_phone'),
+  };
+
   const parsed = parseFeedbackForm(formData);
-  if ('error' in parsed) return { error: parsed.error };
+  if ('error' in parsed) return { error: parsed.error, values };
 
   if (!(await checkFeedbackRateLimit(admin, tagId, await feedbackIpBucket(request.headers)))) {
-    return { error: 'Too many messages were sent just now. Please try again later.' };
+    return { error: 'rate_limited' as const, values };
   }
 
   const stand = reviewStandSettings(tag.settings);
@@ -163,7 +183,7 @@ export async function action({ params, context, request }: ActionFunctionArgs) {
     .single();
   if (error || !saved) {
     console.error('[FEEDBACK] save failed', error?.code || 'unknown');
-    return { error: 'Something went wrong. Please try again.' };
+    return { error: 'save_failed' as const, values };
   }
 
   await recordReviewStandEvent(admin, tagId, 'feedback');
@@ -175,9 +195,10 @@ export async function action({ params, context, request }: ActionFunctionArgs) {
     tagId,
     to: stand.alertEmail || tag.owner_email,
     locationLabel: stand.locationLabel,
-    businessName: view.businessName,
+    businessName: view.displayName,
     feedback,
     origin: SITE_ORIGIN,
+    language: view.defaultLanguage,
   });
 
   // Post/redirect/get: a refresh can't resend, and the thank-you page isn't
@@ -221,16 +242,19 @@ function CopyPasswordButton({password}: {password: string}) {
 
 // Frontend UI
 export default function PetTagLandingPage() {
-  const { pet, isOwner, tagId, dualChoice, showForm, sent } = useLoaderData<typeof loader>();
+  const { pet, isOwner, tagId, dualChoice, showForm, sent, pageLanguage } = useLoaderData<typeof loader>();
 
   if (dualChoice) {
     return (
       <DualChoicePage
         tagId={tagId}
         businessName={dualChoice.businessName}
+        displayName={dualChoice.displayName}
         logo={dualChoice.logo}
+        logoBackground={dualChoice.logoBackground}
         locationLabel={dualChoice.locationLabel}
         brandColor={dualChoice.brandColor}
+        language={pageLanguage}
         initiallyShowForm={showForm}
         sent={sent}
       />

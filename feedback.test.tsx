@@ -4,6 +4,7 @@ import {createRoutesStub} from 'react-router';
 import {
   applyInboxOperation,
   buildFeedbackAlertHtml,
+  feedbackAlertSubject,
   checkFeedbackRateLimit,
   getDualChoiceView,
   isEntitlementActive,
@@ -17,6 +18,7 @@ import {
 import {FEEDBACK_RETENTION_DAYS} from './app/utils/retention.server';
 import {sanitizeTagSettings} from './app/utils/tagSanitizer.server';
 import {DualChoicePage} from './app/components/DualChoicePage';
+import {DUAL_CHOICE_TEXT, normalizePageLanguage, PAGE_LANGUAGES, pickPageLanguage} from './app/lib/dualChoiceText';
 
 /** Records every builder call so tests can assert on the filters applied. */
 function recordingClient(result: any = {data: [], error: null}) {
@@ -80,7 +82,15 @@ describe('Dual Choice: stand settings and public view', () => {
   it('returns only name, logo, branch label and brand colour when entitled and switched on', async () => {
     const {chain} = recordingClient({data: activeRow, error: null});
     const view = await getDualChoiceView(chain, tag, 'https://g.page/r/x/review');
-    expect(view).toEqual({businessName: 'Café', logo: null, locationLabel: 'Centre', brandColor: null});
+    expect(view).toEqual({
+      businessName: 'Café',
+      displayName: 'Café',
+      logo: null,
+      logoBackground: null,
+      locationLabel: 'Centre',
+      brandColor: null,
+      defaultLanguage: 'lt',
+    });
     expect(JSON.stringify(view)).not.toContain('@');
   });
 
@@ -190,6 +200,18 @@ describe('Dual Choice: alert email and logo', () => {
     expect(html).toContain('&lt;script&gt;');
     expect(html).toContain('Centre &lt;b&gt;');
   });
+  it('writes the alert email in the business language', () => {
+    const feedback = {message: 'Labas', contactName: 'Jonas', contactEmail: null, contactPhone: null, contactConsent: true};
+    const lt = buildFeedbackAlertHtml({locationLabel: '', businessName: 'Stasmila', feedback, inboxUrl: 'https://x.test', language: 'lt'});
+    expect(lt).toContain('Naujas privatus atsiliepimas: Stasmila');
+    expect(lt).toContain('Klientas sutiko, kad su juo susisiektumėte');
+    expect(lt).toContain('Atidaryti atsiliepimų dėžutę');
+    expect(feedbackAlertSubject('lt', 'Centras', 'Stasmila')).toBe('Naujas privatus atsiliepimas: Centras');
+    expect(feedbackAlertSubject('en', '', 'Stasmila')).toBe('New private feedback at Stasmila');
+    const en = buildFeedbackAlertHtml({locationLabel: '', businessName: 'Stasmila', feedback, inboxUrl: 'https://x.test'});
+    expect(en).toContain('The customer agreed to be contacted');
+  });
+
   it('accepts only JPEG/PNG data URLs for logos', () => {
     expect(parseLogo('')).toBeNull();
     expect(parseLogo('remove')).toEqual({logo: null});
@@ -211,7 +233,16 @@ describe('Dual Choice page (Google policy: no review gating)', () => {
       {
         path: '/p/:tagId',
         Component: () => (
-          <DualChoicePage tagId="TAG1" businessName="Café" logo={null} locationLabel="Centre" initiallyShowForm={false} sent={false} {...props} />
+          <DualChoicePage
+            tagId="TAG1"
+            businessName="Café"
+            logo={null}
+            locationLabel="Centre"
+            language="en"
+            initiallyShowForm={false}
+            sent={false}
+            {...props}
+          />
         ),
       },
     ]);
@@ -224,9 +255,9 @@ describe('Dual Choice page (Google policy: no review gating)', () => {
     const privateOption = html.indexOf('Send private feedback');
     expect(google).toBeGreaterThan(-1);
     expect(privateOption).toBeGreaterThan(google);
-    const classes = [...html.matchAll(/<a[^>]*class="([^"]*)"[^>]*>(Leave a Google review|Send private feedback)</g)].map((m) => m[1]);
-    expect(classes).toHaveLength(2);
-    expect(classes[0]).toBe(classes[1]);
+    const options = [...html.matchAll(/<a[^>]*data-option="(google|private)"[^>]*class="([^"]*)"/g)];
+    expect(options.map((m) => m[1])).toEqual(['google', 'private']);
+    expect(options[0][2]).toBe(options[1][2]);
     expect(html).toContain('href="/p/TAG1/google"');
   });
 
@@ -235,5 +266,61 @@ describe('Dual Choice page (Google policy: no review gating)', () => {
     for (const phrase of ['were you happy', 'how was', 'rate your', 'stars', 'satisf']) {
       expect(html).not.toContain(phrase);
     }
+  });
+
+  it('in Lithuanian: both options, identical styling, Google first, no rating question', () => {
+    const html = render({language: 'lt'});
+    expect(html).toContain('Ačiū, kad apsilankėte');
+    const google = html.indexOf('Atsiliepimas „Google“');
+    const privateOption = html.indexOf('Parašykite privačiai');
+    expect(google).toBeGreaterThan(-1);
+    expect(privateOption).toBeGreaterThan(google);
+    const options = [...html.matchAll(/<a[^>]*data-option="(google|private)"[^>]*class="([^"]*)"/g)];
+    expect(options.map((m) => m[1])).toEqual(['google', 'private']);
+    expect(options[0][2]).toBe(options[1][2]);
+    const lower = html.toLowerCase();
+    for (const phrase of ['ar buvote patenkint', 'kaip vertin', 'įvertinkite', 'žvaigžd']) {
+      expect(lower).not.toContain(phrase);
+    }
+  });
+
+  it('has every text in both languages', () => {
+    for (const language of PAGE_LANGUAGES) {
+      const t = DUAL_CHOICE_TEXT[language];
+      for (const [key, value] of Object.entries(t)) {
+        if (key === 'thanksBefore') continue;
+        const text = typeof value === 'function' ? value('Café') : value;
+        expect(text, `${language}.${key}`).toBeTruthy();
+      }
+      expect(Object.keys(t.errors).sort()).toEqual(Object.keys(DUAL_CHOICE_TEXT.en.errors).sort());
+    }
+  });
+});
+
+describe('Dual Choice page language', () => {
+  it("follows the phone's language when it is Lithuanian or English", () => {
+    expect(pickPageLanguage('lt-LT,lt;q=0.9,en-US;q=0.8', 'en')).toBe('lt');
+    expect(pickPageLanguage('en-GB,en;q=0.9', 'lt')).toBe('en');
+    expect(pickPageLanguage('EN', 'lt')).toBe('en');
+  });
+
+  it("uses the business default for any other phone language", () => {
+    expect(pickPageLanguage('ru-RU,ru;q=0.9,en;q=0.8', 'lt')).toBe('lt');
+    expect(pickPageLanguage('de-DE', 'en')).toBe('en');
+    expect(pickPageLanguage(null, 'lt')).toBe('lt');
+    expect(pickPageLanguage('', 'en')).toBe('en');
+    expect(pickPageLanguage('*', 'lt')).toBe('lt');
+  });
+
+  it('respects q-values over order', () => {
+    expect(pickPageLanguage('de;q=0.5,en;q=0.9', 'lt')).toBe('en');
+    expect(pickPageLanguage('lt;q=0,en', 'lt')).toBe('en');
+  });
+
+  it('reads a stored default and rejects anything else', () => {
+    expect(normalizePageLanguage('lt')).toBe('lt');
+    expect(normalizePageLanguage('en')).toBe('en');
+    expect(normalizePageLanguage('LT')).toBeNull();
+    expect(normalizePageLanguage(null)).toBeNull();
   });
 });
