@@ -60,11 +60,12 @@ export default async function handleRequest(
     customHeader = customHeader.replace('style-src', "style-src https://fonts.googleapis.com ");
   }
 
-  // Allow Google Fonts fonts
+  // Fonts: our self-hosted files, which Oxygen serves from cdn.shopify.com,
+  // and Google Fonts.
   if (!customHeader.includes('font-src')) {
-    customHeader += `; font-src 'self' https://fonts.gstatic.com;`;
+    customHeader += `; font-src 'self' https://cdn.shopify.com https://fonts.gstatic.com;`;
   } else {
-    customHeader = customHeader.replace('font-src', "font-src https://fonts.gstatic.com ");
+    customHeader = customHeader.replace('font-src', "font-src https://cdn.shopify.com https://fonts.gstatic.com ");
   }
 
   // Restrict form submissions to same-origin (missing from Hydrogen's CSP defaults)
