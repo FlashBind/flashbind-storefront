@@ -10,8 +10,9 @@
  */
 import {redirect} from 'react-router';
 import {generateActivationPin} from '~/utils/tagAdmin.server';
-import {BUSINESS_NAME_MAX, LOCATION_LABEL_MAX, parseLogo, SITE_ORIGIN} from '~/utils/feedback.server';
+import {BUSINESS_NAME_MAX, LOCATION_LABEL_MAX, parseLogo, parseLogoBackground, SITE_ORIGIN} from '~/utils/feedback.server';
 import {normalizeBrandColor} from '~/utils/brandColor';
+import {DEFAULT_PAGE_LANGUAGE, normalizePageLanguage, type PageLanguage} from '~/lib/dualChoiceText';
 import {getFormText, normalizeEmail, normalizeHttpUrl} from '~/utils/requestSecurity.server';
 
 /** Demo subscriptions end on their own; extend them on /admin/entitlements. */
@@ -55,10 +56,14 @@ export async function createReviewStand(admin: any): Promise<CreatedStand | {err
 
 export type DemoInput = {
   businessName: string;
+  /** Short name shown on the page; null shows businessName. */
+  displayName: string | null;
   logo: string | null;
+  logoBackground: string | null;
   locationLabel: string;
   brandColor: string | null;
   googleUrl: string;
+  pageLanguage: PageLanguage;
 };
 
 export function parseDemoForm(formData: FormData): {value: DemoInput} | {error: string} {
@@ -68,6 +73,11 @@ export function parseDemoForm(formData: FormData): {value: DemoInput} | {error: 
   }
   const businessName = getFormText(formData, 'businessName', BUSINESS_NAME_MAX);
   if (!businessName) return {error: 'Enter the business name.'};
+  const rawDisplayName = formData.get('displayName');
+  if (typeof rawDisplayName === 'string' && rawDisplayName.trim().length > BUSINESS_NAME_MAX) {
+    return {error: `Please keep the display name under ${BUSINESS_NAME_MAX} characters.`};
+  }
+  const displayName = getFormText(formData, 'displayName', BUSINESS_NAME_MAX);
 
   const rawLabel = formData.get('locationLabel');
   if (typeof rawLabel === 'string' && rawLabel.trim().length > LOCATION_LABEL_MAX) {
@@ -86,7 +96,23 @@ export function parseDemoForm(formData: FormData): {value: DemoInput} | {error: 
   const googleUrl = normalizeHttpUrl(formData.get('googleUrl'));
   if (!googleUrl) return {error: "Enter the Google review link (the demo's Google button opens it)."};
 
-  return {value: {businessName, logo: logo?.logo ?? null, locationLabel, brandColor, googleUrl}};
+  const rawLanguage = formData.get('pageLanguage');
+  const pageLanguage = rawLanguage ? normalizePageLanguage(rawLanguage) : DEFAULT_PAGE_LANGUAGE;
+  if (!pageLanguage) return {error: 'Choose the page language (Lithuanian or English).'};
+
+  const logoValue = logo?.logo ?? null;
+  return {
+    value: {
+      businessName,
+      displayName,
+      logo: logoValue,
+      logoBackground: logoValue ? parseLogoBackground(formData) : null,
+      locationLabel,
+      brandColor,
+      googleUrl,
+      pageLanguage,
+    },
+  };
 }
 
 export function demoOwnerEmail(): string {
@@ -113,8 +139,11 @@ export async function createDemoPage(
     source: 'manual',
     current_period_end: activeUntil,
     business_name: input.businessName,
+    display_name: input.displayName,
     logo_data_url: input.logo,
+    logo_background: input.logoBackground,
     brand_color: input.brandColor,
+    page_language: input.pageLanguage,
     notes: 'Demo page (created on /admin/demo-page)',
   });
   if (entitlementError) {

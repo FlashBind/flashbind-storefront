@@ -12,7 +12,7 @@ import {
 import {useState} from 'react';
 import {getSupabaseAdmin} from '~/utils/supabase.server';
 import {assertSameOrigin} from '~/utils/requestSecurity.server';
-import {resizeImageToDataUrl} from '~/utils/resizeImage';
+import {prepareLogo} from '~/utils/logoImage';
 import {createDemoPage, DEMO_DAYS, parseDemoForm, requireAdminEmail} from '~/utils/adminTools.server';
 
 // A Dual Choice demo for a sales visit: a demo account with the prospect's
@@ -45,6 +45,7 @@ export default function AdminDemoPage() {
   const result = useActionData<typeof action>();
   const busy = useNavigation().state === 'submitting';
   const [logoValue, setLogoValue] = useState('');
+  const [logoBackground, setLogoBackground] = useState<string | null>(null);
   const [color, setColor] = useState('#0f172a');
 
   return (
@@ -91,7 +92,14 @@ export default function AdminDemoPage() {
         <Form method="post" className="grid gap-4 rounded-2xl bg-white p-5 shadow-sm">
           <label className="text-sm font-semibold text-slate-700">
             Business name
-            <input name="businessName" required maxLength={120} className={INPUT_CLASS} />
+            <input name="businessName" required maxLength={120} placeholder="e.g. UAB Stasmila" className={INPUT_CLASS} />
+          </label>
+          <label className="text-sm font-semibold text-slate-700">
+            Display name (optional)
+            <input name="displayName" maxLength={120} placeholder="e.g. Stasmila" className={INPUT_CLASS} />
+            <span className="mt-1 block text-xs font-normal text-slate-500">
+              Shown on the page. Empty: the business name. The business name is still used in the privacy note.
+            </span>
           </label>
           <label className="text-sm font-semibold text-slate-700">
             Branch label (optional)
@@ -100,6 +108,16 @@ export default function AdminDemoPage() {
           <label className="text-sm font-semibold text-slate-700">
             Google review link
             <input name="googleUrl" type="url" required maxLength={2048} placeholder="https://g.page/r/…/review" className={INPUT_CLASS} />
+          </label>
+          <label className="text-sm font-semibold text-slate-700">
+            Page language
+            <select name="pageLanguage" defaultValue="lt" className={INPUT_CLASS}>
+              <option value="lt">Lithuanian</option>
+              <option value="en">English</option>
+            </select>
+            <span className="mt-1 block text-xs font-normal text-slate-500">
+              Phones set to Lithuanian or English see that language; all others see this one.
+            </span>
           </label>
           <div className="text-sm font-semibold text-slate-700">
             <span>Brand colour</span>
@@ -123,15 +141,27 @@ export default function AdminDemoPage() {
           </div>
           <div className="text-sm font-semibold text-slate-700">
             <span>Logo (optional, PNG or JPEG)</span>
-            {logoValue ? <img src={logoValue} alt="Logo preview" className="my-2 h-20 w-20 rounded-2xl border object-contain" /> : null}
+            {logoValue ? (
+              <img
+                src={logoValue}
+                alt="Logo preview"
+                style={logoBackground ? {backgroundColor: logoBackground} : undefined}
+                className="my-2 h-20 w-20 rounded-2xl border object-contain"
+              />
+            ) : null}
             <input type="hidden" name="logo" value={logoValue} />
+            <input type="hidden" name="logoBackground" value={logoBackground ?? ''} />
             <input
               type="file"
               accept="image/png,image/jpeg"
               aria-label="Choose a logo"
               onChange={(event) => {
                 const file = event.target.files?.[0];
-                if (file) void resizeImageToDataUrl(file, 400, 0.9).then((url) => setLogoValue(url ?? ''));
+                if (!file) return;
+                void prepareLogo(file).then((prepared) => {
+                  setLogoValue(prepared?.dataUrl ?? '');
+                  setLogoBackground(prepared?.background ?? null);
+                });
               }}
               className="mt-1 w-full text-sm font-normal text-slate-500"
             />

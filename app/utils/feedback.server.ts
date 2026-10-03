@@ -12,6 +12,7 @@
  */
 import {escapeHtml} from '~/utils/email.server';
 import {normalizeBrandColor} from '~/utils/brandColor';
+import {DEFAULT_PAGE_LANGUAGE, normalizePageLanguage, type FeedbackErrorCode, type PageLanguage} from '~/lib/dualChoiceText';
 import {getFormText, hashRateLimitIdentifier, normalizeEmail, normalizeTrustedClientIp} from '~/utils/requestSecurity.server';
 
 export const FEEDBACK_MESSAGE_MAX = 2000;
@@ -61,7 +62,7 @@ export function isEntitlementActive(row: Entitlement | null | undefined, now: Da
 export async function getEntitlement(admin: any, ownerEmail: string) {
   const {data, error} = await admin
     .from('business_entitlements')
-    .select('owner_email, plan, status, source, current_period_end, business_name, logo_data_url, brand_color')
+    .select('owner_email, plan, status, source, current_period_end, business_name, display_name, logo_data_url, logo_background, brand_color, page_language')
     .eq('owner_email', ownerEmail)
     .maybeSingle();
   if (error) {
@@ -74,18 +75,28 @@ export async function getEntitlement(admin: any, ownerEmail: string) {
         plan: string;
         source: string;
         business_name: string | null;
+        display_name: string | null;
         logo_data_url: string | null;
+        logo_background: string | null;
         brand_color: string | null;
+        page_language: string | null;
       })
     | null;
 }
 
 /** What the public Dual Choice page may show. Never includes emails. */
 export type DualChoiceView = {
+  /** Legal name, for where the controller must be named (privacy note, consent). */
   businessName: string;
+  /** Short name shown on the page; the legal name when none is set. */
+  displayName: string;
   logo: string | null;
+  /** The logo's solid background colour (fills the logo tile), or null. */
+  logoBackground: string | null;
   locationLabel: string;
   brandColor: string | null;
+  /** Shown when the visitor's phone language isn't Lithuanian or English. */
+  defaultLanguage: PageLanguage;
 };
 
 /**
@@ -105,9 +116,12 @@ export async function getDualChoiceView(
   if (!isEntitlementActive(entitlement)) return null;
   return {
     businessName: entitlement?.business_name ?? '',
+    displayName: entitlement?.display_name || entitlement?.business_name || '',
     logo: entitlement?.logo_data_url ?? null,
+    logoBackground: entitlement?.logo_data_url ? normalizeBrandColor(entitlement?.logo_background) : null,
     locationLabel: stand.locationLabel,
     brandColor: normalizeBrandColor(entitlement?.brand_color),
+    defaultLanguage: normalizePageLanguage(entitlement?.page_language) ?? DEFAULT_PAGE_LANGUAGE,
   };
 }
 
@@ -119,29 +133,32 @@ export type ParsedFeedback = {
   contactConsent: boolean;
 };
 
-/** Validates the public feedback form. Contact details need the consent tick. */
-export function parseFeedbackForm(formData: FormData): {value: ParsedFeedback} | {error: string} {
+/**
+ * Validates the public feedback form. Contact details need the consent tick.
+ * Errors are codes; the page shows them in the visitor's language.
+ */
+export function parseFeedbackForm(formData: FormData): {value: ParsedFeedback} | {error: FeedbackErrorCode} {
   const rawMessage = formData.get('message');
   const message = typeof rawMessage === 'string' ? rawMessage.trim() : '';
-  if (!message) return {error: 'Please write a message.'};
+  if (!message) return {error: 'message_required'};
   if (message.length > FEEDBACK_MESSAGE_MAX) {
-    return {error: `Please keep your message under ${FEEDBACK_MESSAGE_MAX.toLocaleString('en')} characters.`};
+    return {error: 'message_too_long'};
   }
 
   const contactName = getFormText(formData, 'contact_name', 100);
   const rawEmail = formData.get('contact_email');
   const hasEmail = typeof rawEmail === 'string' && rawEmail.trim() !== '';
   const contactEmail = hasEmail ? normalizeEmail(rawEmail) : null;
-  if (hasEmail && !contactEmail) return {error: 'Please check the email address, or leave it empty.'};
+  if (hasEmail && !contactEmail) return {error: 'email_invalid'};
   const contactPhone = getFormText(formData, 'contact_phone', 40);
   if (contactPhone && !/^[+\d][\d\s().-]{4,39}$/.test(contactPhone)) {
-    return {error: 'Please check the phone number, or leave it empty.'};
+    return {error: 'phone_invalid'};
   }
 
   const hasContact = Boolean(contactName || contactEmail || contactPhone);
   const contactConsent = formData.get('contact_consent') === 'yes';
   if (hasContact && !contactConsent) {
-    return {error: 'To leave contact details, tick the box so the business may contact you. Or leave them empty.'};
+    return {error: 'consent_required'};
   }
 
   return {
@@ -211,29 +228,57 @@ export async function recordReviewStandEvent(admin: any, tagId: string, event: '
   }
 }
 
+const ALERT_TEXT = {
+  en: {
+    fallbackWhere: 'your review stand',
+    subject: (where: string) => `New private feedback at ${where}`,
+    contactAgreed: 'The customer agreed to be contacted:',
+    openInbox: 'Open your feedback inbox',
+    footer: 'Sent by FlashBind because this address is set to receive alerts for this stand.',
+  },
+  lt: {
+    fallbackWhere: 'jūsų atsiliepimų stovas',
+    subject: (where: string) => `Naujas privatus atsiliepimas: ${where}`,
+    contactAgreed: 'Klientas sutiko, kad su juo susisiektumėte:',
+    openInbox: 'Atidaryti atsiliepimų dėžutę',
+    footer: 'Šį laišką išsiuntė FlashBind, nes šiuo adresu gaunami šio stovo pranešimai.',
+  },
+} satisfies Record<PageLanguage, unknown>;
+
+function alertWhere(language: PageLanguage, locationLabel: string, businessName: string) {
+  return locationLabel || businessName || ALERT_TEXT[language].fallbackWhere;
+}
+
+export function feedbackAlertSubject(language: PageLanguage, locationLabel: string, businessName: string): string {
+  return ALERT_TEXT[language].subject(alertWhere(language, locationLabel, businessName)).slice(0, 150);
+}
+
+/** The owner's alert email, in the business's page language. */
 export function buildFeedbackAlertHtml({
   locationLabel,
   businessName,
   feedback,
   inboxUrl,
+  language = 'en',
 }: {
   locationLabel: string;
   businessName: string;
   feedback: ParsedFeedback;
   inboxUrl: string;
+  language?: PageLanguage;
 }): string {
-  const where = locationLabel || businessName || 'your review stand';
-  let html = `<h2>New private feedback at ${escapeHtml(where)}</h2>`;
+  const text = ALERT_TEXT[language];
+  let html = `<h2>${escapeHtml(feedbackAlertSubject(language, locationLabel, businessName))}</h2>`;
   html += `<p style="white-space:pre-wrap">${escapeHtml(feedback.message).replace(/\n/g, '<br/>')}</p>`;
   if (feedback.contactConsent) {
-    html += '<p><strong>The customer agreed to be contacted:</strong><br/>';
+    html += `<p><strong>${text.contactAgreed}</strong><br/>`;
     if (feedback.contactName) html += `${escapeHtml(feedback.contactName)}<br/>`;
     if (feedback.contactEmail) html += `${escapeHtml(feedback.contactEmail)}<br/>`;
     if (feedback.contactPhone) html += `${escapeHtml(feedback.contactPhone)}<br/>`;
     html += '</p>';
   }
-  html += `<p><a href="${escapeHtml(inboxUrl)}">Open your feedback inbox</a></p>`;
-  html += '<p style="color:#64748b;font-size:12px">Sent by FlashBind because this address is set to receive alerts for this stand.</p>';
+  html += `<p><a href="${escapeHtml(inboxUrl)}">${text.openInbox}</a></p>`;
+  html += `<p style="color:#64748b;font-size:12px">${text.footer}</p>`;
   return html;
 }
 
@@ -251,6 +296,7 @@ export async function sendFeedbackAlert({
   businessName,
   feedback,
   origin,
+  language = 'en',
 }: {
   admin: any;
   env: Record<string, any>;
@@ -261,6 +307,8 @@ export async function sendFeedbackAlert({
   businessName: string;
   feedback: ParsedFeedback;
   origin: string;
+  /** The business's page language. */
+  language?: PageLanguage;
 }): Promise<void> {
   const apiKey = env.RESEND_API_KEY;
   if (!apiKey || !to) return;
@@ -274,7 +322,6 @@ export async function sendFeedbackAlert({
       .gte('alert_sent_at', dayStart.toISOString());
     if ((count ?? 0) >= DAILY_ALERT_CAP) return;
 
-    const where = locationLabel || businessName || 'your review stand';
     const response = await fetch('https://api.resend.com/emails', {
       method: 'POST',
       headers: {Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json'},
@@ -282,11 +329,12 @@ export async function sendFeedbackAlert({
         from: 'FlashBind <info@flashbind.com>',
         to,
         ...(feedback.contactConsent && feedback.contactEmail ? {reply_to: feedback.contactEmail} : {}),
-        subject: `New private feedback at ${where}`.slice(0, 150),
+        subject: feedbackAlertSubject(language, locationLabel, businessName),
         html: buildFeedbackAlertHtml({
           locationLabel,
           businessName,
           feedback,
+          language,
           inboxUrl: `${origin}/dashboard/feedback?stand=${encodeURIComponent(tagId)}`,
         }),
       }),
@@ -410,7 +458,12 @@ export async function statsByStand(admin: any, tagIds: string[]) {
   return totals;
 }
 
-/** Validates an uploaded logo (a data: URL made by resizeImageToDataUrl). */
+/** Validates an uploaded logo (a data: URL made by prepareLogo). */
+/** The logo's solid background colour sent with an uploaded logo (#rrggbb), or null. */
+export function parseLogoBackground(formData: FormData): string | null {
+  return normalizeBrandColor(formData.get('logoBackground'));
+}
+
 export function parseLogo(value: unknown): {logo: string | null} | {error: string} | null {
   if (typeof value !== 'string' || value === '') return null; // unchanged
   if (value === 'remove') return {logo: null};

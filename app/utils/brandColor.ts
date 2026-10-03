@@ -32,3 +32,20 @@ export function inkOnBrandColor(color: string): string {
   const brand = normalizeBrandColor(color) ?? DEFAULT_BRAND_COLOR;
   return contrastRatio(brand, LIGHT_INK) >= contrastRatio(brand, DARK_INK) ? LIGHT_INK : DARK_INK;
 }
+
+/** The brand colour when it's readable as text on white, otherwise near-black. */
+export function brandTextOnWhite(color: string): string {
+  const brand = normalizeBrandColor(color) ?? DEFAULT_BRAND_COLOR;
+  return contrastRatio(brand, LIGHT_INK) >= 4.5 ? brand : DARK_INK;
+}
+
+/** The brand colour mixed with white: amount 0 = white, 1 = the brand colour. */
+export function tintBrandColor(color: string, amount: number): string {
+  const brand = normalizeBrandColor(color) ?? DEFAULT_BRAND_COLOR;
+  const mix = Math.min(1, Math.max(0, amount));
+  const channels = [1, 3, 5].map((start) => {
+    const value = parseInt(brand.slice(start, start + 2), 16);
+    return Math.round(255 + (value - 255) * mix).toString(16).padStart(2, '0');
+  });
+  return `#${channels.join('')}`;
+}

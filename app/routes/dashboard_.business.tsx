@@ -13,10 +13,11 @@ import {
 import {useState} from 'react';
 import {getSupabaseAdmin} from '~/utils/supabase.server';
 import {assertSameOrigin, getFormText} from '~/utils/requestSecurity.server';
-import {resizeImageToDataUrl} from '~/utils/resizeImage';
-import {BUSINESS_NAME_MAX, getEntitlement, isEntitlementActive, parseLogo} from '~/utils/feedback.server';
+import {prepareLogo} from '~/utils/logoImage';
+import {BUSINESS_NAME_MAX, getEntitlement, isEntitlementActive, parseLogo, parseLogoBackground} from '~/utils/feedback.server';
+import {DEFAULT_PAGE_LANGUAGE, normalizePageLanguage} from '~/lib/dualChoiceText';
 
-// Business name and logo shown on every Dual Choice page of this account,
+// Business name, display name, logo and page language used on every Dual Choice page of this account,
 // so a business with many branches sets them once.
 
 export const handle = {hideLayout: true};
@@ -35,7 +36,10 @@ export async function loader({context}: LoaderFunctionArgs) {
     active: isEntitlementActive(entitlement),
     periodEnd: entitlement?.current_period_end ?? null,
     businessName: entitlement?.business_name ?? '',
+    displayName: entitlement?.display_name ?? '',
     logo: entitlement?.logo_data_url ?? null,
+    logoBackground: entitlement?.logo_background ?? null,
+    pageLanguage: normalizePageLanguage(entitlement?.page_language) ?? DEFAULT_PAGE_LANGUAGE,
   };
 }
 
@@ -54,11 +58,26 @@ export async function action({request, context}: ActionFunctionArgs) {
     return {error: `Please keep the business name under ${BUSINESS_NAME_MAX} characters.`};
   }
   const businessName = getFormText(formData, 'businessName', BUSINESS_NAME_MAX);
+  const rawDisplayName = formData.get('displayName');
+  if (typeof rawDisplayName === 'string' && rawDisplayName.trim().length > BUSINESS_NAME_MAX) {
+    return {error: `Please keep the display name under ${BUSINESS_NAME_MAX} characters.`};
+  }
+  const displayName = getFormText(formData, 'displayName', BUSINESS_NAME_MAX);
   const logo = parseLogo(formData.get('logo'));
   if (logo && 'error' in logo) return {error: logo.error};
+  const pageLanguage = normalizePageLanguage(formData.get('pageLanguage'));
+  if (!pageLanguage) return {error: 'Choose the page language.'};
 
-  const update: Record<string, unknown> = {business_name: businessName, updated_at: new Date().toISOString()};
-  if (logo) update.logo_data_url = logo.logo;
+  const update: Record<string, unknown> = {
+    business_name: businessName,
+    display_name: displayName,
+    page_language: pageLanguage,
+    updated_at: new Date().toISOString(),
+  };
+  if (logo) {
+    update.logo_data_url = logo.logo;
+    update.logo_background = logo.logo ? parseLogoBackground(formData) : null;
+  }
 
   const {error} = await admin.from('business_entitlements').update(update).eq('owner_email', userEmail);
   if (error) {
@@ -69,11 +88,14 @@ export async function action({request, context}: ActionFunctionArgs) {
 }
 
 export default function BusinessProfilePage() {
-  const {hasSubscription, active, periodEnd, businessName, logo} = useLoaderData<typeof loader>();
+  const {hasSubscription, active, periodEnd, businessName, displayName, logo, logoBackground, pageLanguage} =
+    useLoaderData<typeof loader>();
   const actionData = useActionData<typeof action>();
   const busy = useNavigation().state === 'submitting';
   const [logoValue, setLogoValue] = useState('');
+  const [newLogoBackground, setNewLogoBackground] = useState<string | null>(null);
   const preview = logoValue === 'remove' ? null : logoValue || logo;
+  const previewBackground = logoValue ? newLogoBackground : logoBackground;
 
   return (
     <div className="min-h-screen w-full bg-slate-50 p-4 font-sans">
@@ -95,7 +117,7 @@ export default function BusinessProfilePage() {
             <>
               <p className="mb-6 text-sm text-slate-500">
                 Subscription: <strong>{active ? 'active' : 'not active'}</strong>
-                {periodEnd ? ` (paid until ${periodEnd.slice(0, 10)})` : ''}. The name and logo appear on the Dual Choice
+                {periodEnd ? ` (paid until ${periodEnd.slice(0, 10)})` : ''}. The name, logo and language apply to the Dual Choice
                 page of every review stand in this account.
               </p>
               {actionData && 'error' in actionData ? (
@@ -118,16 +140,62 @@ export default function BusinessProfilePage() {
                   />
                 </div>
                 <div>
+                  <label htmlFor="displayName" className="mb-1 block text-sm font-semibold text-slate-700">
+                    Display name <span className="font-normal text-slate-400">(optional)</span>
+                  </label>
+                  <input
+                    id="displayName"
+                    name="displayName"
+                    maxLength={120}
+                    defaultValue={displayName}
+                    placeholder={businessName || 'e.g. Stasmila'}
+                    className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                  <p className="mt-1 text-xs text-slate-500">
+                    The short name guests see, e.g. &ldquo;Stasmila&rdquo; instead of &ldquo;UAB Stasmila&rdquo;. Empty: the
+                    business name is shown. The business name is still used in the privacy note.
+                  </p>
+                </div>
+                <div>
+                  <label htmlFor="pageLanguage" className="mb-1 block text-sm font-semibold text-slate-700">
+                    Page language
+                  </label>
+                  <select
+                    id="pageLanguage"
+                    name="pageLanguage"
+                    defaultValue={pageLanguage}
+                    className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  >
+                    <option value="lt">Lithuanian</option>
+                    <option value="en">English</option>
+                  </select>
+                  <p className="mt-1 text-xs text-slate-500">
+                    Visitors whose phone is set to Lithuanian or English see that language; everyone else sees this one.
+                  </p>
+                </div>
+                <div>
                   <span className="mb-1 block text-sm font-semibold text-slate-700">Logo</span>
-                  {preview ? <img src={preview} alt="Logo preview" className="mb-3 h-20 w-20 rounded-2xl border object-contain" /> : null}
+                  {preview ? (
+                    <img
+                      src={preview}
+                      alt="Logo preview"
+                      style={previewBackground ? {backgroundColor: previewBackground} : undefined}
+                      className="mb-3 h-20 w-20 rounded-2xl border object-contain"
+                    />
+                  ) : null}
                   <input type="hidden" name="logo" value={logoValue} />
+                  <input type="hidden" name="logoBackground" value={newLogoBackground ?? ''} />
                   <input
                     type="file"
                     accept="image/png,image/jpeg"
                     aria-label="Choose a logo"
                     onChange={(event) => {
                       const file = event.target.files?.[0];
-                      if (file) void resizeImageToDataUrl(file, 400, 0.9).then((url) => setLogoValue(url ?? ''));
+                      if (!file) return;
+                      void prepareLogo(file).then((prepared) => {
+                        setLogoValue(prepared?.dataUrl ?? '');
+                        setNewLogoBackground(prepared?.background ?? null);
+                      });
                     }}
                     className="w-full text-sm text-slate-500 file:mr-4 file:rounded-full file:border-0 file:bg-blue-50 file:px-6 file:py-3 file:text-sm file:font-semibold file:text-blue-700"
                   />
